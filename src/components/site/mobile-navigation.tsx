@@ -4,12 +4,19 @@ import { useEffect, useState } from "react";
 import { buttonVariants } from "#/components/ui/button";
 import { Button } from "#/components/ui/button";
 import type { SiteConfig } from "#/config/site";
+import type { Dictionary } from "#/i18n";
 
 import { SiteLink } from "./site-link";
 
 const menuId = "mobile-site-navigation";
 
-export function MobileNavigation({ config }: { readonly config: SiteConfig }) {
+export function MobileNavigation({
+  config,
+  dictionary,
+}: {
+  readonly config: SiteConfig;
+  readonly dictionary: Dictionary;
+}) {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -33,14 +40,14 @@ export function MobileNavigation({ config }: { readonly config: SiteConfig }) {
         type="button"
         aria-controls={menuId}
         aria-expanded={isOpen}
-        aria-label={isOpen ? "Close navigation" : "Open navigation"}
+        aria-label={isOpen ? dictionary.a11y.closeNavigation : dictionary.a11y.openNavigation}
         onClick={() => setIsOpen((open) => !open)}
       >
         {isOpen ? <XIcon aria-hidden="true" /> : <MenuIcon aria-hidden="true" />}
       </Button>
 
       <div id={menuId} className="mobile-navigation-panel" hidden={!isOpen}>
-        <nav aria-label="Mobile navigation">
+        <nav aria-label={dictionary.a11y.mobileNavigation}>
           {config.navigation.map((link) => (
             <SiteLink
               key={link.label}

@@ -7,6 +7,27 @@ understanding that pre-1.0 minor releases may contain documented breaking change
 
 No changes yet.
 
+## 0.2.0 — 2026-07-31
+
+### Added
+
+- A versioned `DESIGN.md` contract with official linting, Tailwind CSS export, diff support, and a
+  CI synchronization gate.
+- First-class English and Simplified Chinese routes, typed dictionaries, language switching,
+  locale metadata, canonical links, `hreflang`, and localized sitemap entries.
+- A Luminous Harbor homepage with language-safe type, restrained glass controls, original product
+  interface compositions, and a project-specific social preview image.
+- The `$reference-to-tansail` skill, guarded intake schema, deterministic SITE-BRIEF and proposed
+  DESIGN.md renderer, example intake, and clean-room validation.
+- Browser regression coverage for locale switching, metadata, overflow, composition, mobile
+  navigation, and footer readability.
+
+### Changed
+
+- Visual presets now keep geometry and composition stable across theme changes; Horizon and
+  Nightwatch are presented as the refined Luminous and Signal atmospheres.
+- Landing hero blocks use concrete product UI evidence instead of abstract concentric ornaments.
+
 ## 0.1.0 — 2026-07-28
 
 ### Added

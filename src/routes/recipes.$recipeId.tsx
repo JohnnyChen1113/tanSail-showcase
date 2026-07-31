@@ -32,7 +32,7 @@ function RecipeDetailPage() {
   return (
     <div className="recipe-detail-page">
       <header className="recipe-detail-header">
-        <Link from={Route.fullPath} to=".." className="gallery-back-link">
+        <Link to="/recipes/" className="gallery-back-link">
           <ArrowLeftIcon aria-hidden="true" /> All recipes
         </Link>
         <div>

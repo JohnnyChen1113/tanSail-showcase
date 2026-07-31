@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { getDictionary, type Dictionary, type Locale } from "#/i18n";
+
 const routeLinkSchema = z.object({
   kind: z.literal("route"),
   label: z.string().min(1),
@@ -80,100 +82,102 @@ export function defineSiteConfig(config: SiteConfig) {
   return siteConfigSchema.parse(config);
 }
 
-export const siteConfig = defineSiteConfig({
-  metadata: {
-    name: "TanSail",
-    title: "TanSail — 为下一个网站，设定更好的航向",
-    description: "设计优先、开源且可配置的 TanStack Start 网站起点，原生面向 Cloudflare Workers。",
-    siteUrl: "https://tansail-official.bioinfoark.workers.dev",
-    locale: "zh-CN",
-    themeColor: {
-      light: "#f6fbff",
-      dark: "#10182a",
-    },
-  },
-  announcement: {
-    text: "TanSail v0.1.0 已发布：一个干净、开放、可直接部署的起点。",
-    action: {
-      kind: "external",
-      label: "查看发布说明",
-      href: "https://github.com/JohnnyChen1113/tanSail/releases/tag/v0.1.0",
-      newTab: true,
-    },
-  },
-  navigation: [
-    { kind: "anchor", label: "核心能力", href: "#capabilities" },
-    { kind: "anchor", label: "适用场景", href: "#use-cases" },
-    { kind: "anchor", label: "项目数据", href: "#stats" },
-    { kind: "anchor", label: "常见问题", href: "#faq" },
-  ],
-  actions: {
-    primary: {
-      kind: "external",
-      label: "在 GitHub 查看",
-      href: "https://github.com/JohnnyChen1113/tanSail",
-      newTab: true,
-    },
-    secondary: {
-      kind: "anchor",
-      label: "探索核心能力",
-      href: "#capabilities",
-    },
-  },
-  socialLinks: [
-    {
-      kind: "external",
-      label: "GitHub",
-      href: "https://github.com/JohnnyChen1113/tanSail",
-      newTab: true,
-    },
-  ],
-  footer: {
-    tagline: "设计优先的 TanStack Start 起点，以 MIT 许可证开放。",
-    copyright: "© 2026 TanSail contributors",
-    groups: [
-      {
-        label: "产品",
-        links: [
-          { kind: "anchor", label: "核心能力", href: "#capabilities" },
-          { kind: "anchor", label: "适用场景", href: "#use-cases" },
-          { kind: "anchor", label: "常见问题", href: "#faq" },
-        ],
+export function createLocalizedSiteConfig(locale: Locale, dictionary: Dictionary) {
+  return defineSiteConfig({
+    metadata: {
+      name: "TanSail",
+      title: dictionary.meta.title,
+      description: dictionary.meta.description,
+      siteUrl: "https://tansail-official.bioinfoark.workers.dev",
+      locale,
+      themeColor: {
+        light: "#f4f7fa",
+        dark: "#07111f",
       },
-      {
-        label: "项目",
-        links: [
-          {
-            kind: "external",
-            label: "GitHub 仓库",
-            href: "https://github.com/JohnnyChen1113/tanSail",
-            newTab: true,
-          },
-          {
-            kind: "external",
-            label: "开发路线图",
-            href: "https://github.com/JohnnyChen1113/tanSail/blob/main/DEVELOPMENT_PLAN.md",
-            newTab: true,
-          },
-          {
-            kind: "external",
-            label: "贡献指南",
-            href: "https://github.com/JohnnyChen1113/tanSail/blob/main/CONTRIBUTING.md",
-            newTab: true,
-          },
-        ],
+    },
+    announcement: {
+      text: dictionary.announcement.text,
+      action: {
+        kind: "external",
+        label: dictionary.announcement.action,
+        href: "https://github.com/JohnnyChen1113/tanSail/blob/main/DESIGN.md",
+        newTab: true,
       },
+    },
+    navigation: [
+      { kind: "anchor", label: dictionary.navigation.system, href: "#system" },
+      { kind: "anchor", label: dictionary.navigation.workflow, href: "#workflow" },
+      { kind: "anchor", label: dictionary.navigation.quality, href: "#quality" },
+      { kind: "anchor", label: dictionary.navigation.faq, href: "#faq" },
     ],
-    legalLinks: [
+    actions: {
+      primary: {
+        kind: "external",
+        label: dictionary.actions.github,
+        href: "https://github.com/JohnnyChen1113/tanSail",
+        newTab: true,
+      },
+      secondary: {
+        kind: "anchor",
+        label: dictionary.actions.explore,
+        href: "#system",
+      },
+    },
+    socialLinks: [
       {
         kind: "external",
-        label: "MIT 许可证",
-        href: "https://github.com/JohnnyChen1113/tanSail/blob/main/LICENSE",
+        label: "GitHub",
+        href: "https://github.com/JohnnyChen1113/tanSail",
         newTab: true,
       },
     ],
-  },
-  seo: {
-    sitemap: [{ path: "/", changeFrequency: "monthly", priority: 1 }],
-  },
-});
+    footer: {
+      tagline: dictionary.footer.tagline,
+      copyright: dictionary.footer.copyright,
+      groups: [
+        {
+          label: dictionary.footer.product,
+          links: [
+            { kind: "anchor", label: dictionary.navigation.system, href: "#system" },
+            { kind: "anchor", label: dictionary.navigation.workflow, href: "#workflow" },
+          ],
+        },
+        {
+          label: dictionary.footer.project,
+          links: [
+            {
+              kind: "external",
+              label: dictionary.footer.designContract,
+              href: "https://github.com/JohnnyChen1113/tanSail/blob/main/DESIGN.md",
+              newTab: true,
+            },
+            {
+              kind: "external",
+              label: dictionary.footer.documentation,
+              href: "https://github.com/JohnnyChen1113/tanSail/tree/main/docs",
+              newTab: true,
+            },
+          ],
+        },
+      ],
+      legalLinks: [
+        {
+          kind: "external",
+          label: dictionary.footer.license,
+          href: "https://github.com/JohnnyChen1113/tanSail/blob/main/LICENSE",
+          newTab: true,
+        },
+      ],
+    },
+    seo: {
+      sitemap: [
+        { path: "/en/", changeFrequency: "monthly", priority: 1 },
+        { path: "/zh/", changeFrequency: "monthly", priority: 1 },
+        { path: "/gallery/", changeFrequency: "monthly", priority: 0.8 },
+        { path: "/docs/", changeFrequency: "monthly", priority: 0.7 },
+      ],
+    },
+  });
+}
+
+export const siteConfig = createLocalizedSiteConfig("en", getDictionary("en"));

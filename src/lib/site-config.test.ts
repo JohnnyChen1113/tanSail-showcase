@@ -37,7 +37,8 @@ describe("SEO output", () => {
     const sitemap = createSitemap(siteConfig);
     const robots = createRobotsText(siteConfig);
 
-    expect(sitemap).toContain(`<loc>${siteConfig.metadata.siteUrl}/</loc>`);
+    expect(sitemap).toContain(`<loc>${siteConfig.metadata.siteUrl}/en/</loc>`);
+    expect(sitemap).toContain(`<loc>${siteConfig.metadata.siteUrl}/zh/</loc>`);
     expect(sitemap).toContain("<priority>1.0</priority>");
     expect(robots).toContain(`Sitemap: ${siteConfig.metadata.siteUrl}/sitemap.xml`);
   });

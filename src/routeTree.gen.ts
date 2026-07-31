@@ -14,12 +14,14 @@ import { Route as BlogRouteImport } from './routes/blog'
 import { Route as ChangelogRouteImport } from './routes/changelog'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as DocsRouteImport } from './routes/docs'
+import { Route as EnRouteImport } from './routes/en'
 import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as GeneratedPreviewRouteImport } from './routes/generated-preview'
 import { Route as LegalRouteImport } from './routes/legal'
 import { Route as RecipesRouteImport } from './routes/recipes'
 import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as ZhRouteImport } from './routes/zh'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as DocsIndexRouteImport } from './routes/docs.index'
@@ -52,6 +54,11 @@ const DocsRoute = DocsRouteImport.update({
   path: '/docs',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EnRoute = EnRouteImport.update({
+  id: '/en',
+  path: '/en',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GalleryRoute = GalleryRouteImport.update({
   id: '/gallery',
   path: '/gallery',
@@ -80,6 +87,11 @@ const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ZhRoute = ZhRouteImport.update({
+  id: '/zh',
+  path: '/zh',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
@@ -119,12 +131,14 @@ export interface FileRoutesByFullPath {
   '/changelog': typeof ChangelogRoute
   '/contact': typeof ContactRoute
   '/docs': typeof DocsRouteWithChildren
+  '/en': typeof EnRoute
   '/gallery': typeof GalleryRoute
   '/generated-preview': typeof GeneratedPreviewRoute
   '/legal': typeof LegalRoute
   '/recipes': typeof RecipesRouteWithChildren
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/zh': typeof ZhRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/docs/$slug': typeof DocsSlugRoute
   '/recipes/$recipeId': typeof RecipesRecipeIdRoute
@@ -136,11 +150,13 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/changelog': typeof ChangelogRoute
   '/contact': typeof ContactRoute
+  '/en': typeof EnRoute
   '/gallery': typeof GalleryRoute
   '/generated-preview': typeof GeneratedPreviewRoute
   '/legal': typeof LegalRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/zh': typeof ZhRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/docs/$slug': typeof DocsSlugRoute
   '/recipes/$recipeId': typeof RecipesRecipeIdRoute
@@ -155,12 +171,14 @@ export interface FileRoutesById {
   '/changelog': typeof ChangelogRoute
   '/contact': typeof ContactRoute
   '/docs': typeof DocsRouteWithChildren
+  '/en': typeof EnRoute
   '/gallery': typeof GalleryRoute
   '/generated-preview': typeof GeneratedPreviewRoute
   '/legal': typeof LegalRoute
   '/recipes': typeof RecipesRouteWithChildren
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/zh': typeof ZhRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/docs/$slug': typeof DocsSlugRoute
   '/recipes/$recipeId': typeof RecipesRecipeIdRoute
@@ -176,12 +194,14 @@ export interface FileRouteTypes {
     | '/changelog'
     | '/contact'
     | '/docs'
+    | '/en'
     | '/gallery'
     | '/generated-preview'
     | '/legal'
     | '/recipes'
     | '/robots.txt'
     | '/sitemap.xml'
+    | '/zh'
     | '/blog/$slug'
     | '/docs/$slug'
     | '/recipes/$recipeId'
@@ -193,11 +213,13 @@ export interface FileRouteTypes {
     | '/'
     | '/changelog'
     | '/contact'
+    | '/en'
     | '/gallery'
     | '/generated-preview'
     | '/legal'
     | '/robots.txt'
     | '/sitemap.xml'
+    | '/zh'
     | '/blog/$slug'
     | '/docs/$slug'
     | '/recipes/$recipeId'
@@ -211,12 +233,14 @@ export interface FileRouteTypes {
     | '/changelog'
     | '/contact'
     | '/docs'
+    | '/en'
     | '/gallery'
     | '/generated-preview'
     | '/legal'
     | '/recipes'
     | '/robots.txt'
     | '/sitemap.xml'
+    | '/zh'
     | '/blog/$slug'
     | '/docs/$slug'
     | '/recipes/$recipeId'
@@ -231,12 +255,14 @@ export interface RootRouteChildren {
   ChangelogRoute: typeof ChangelogRoute
   ContactRoute: typeof ContactRoute
   DocsRoute: typeof DocsRouteWithChildren
+  EnRoute: typeof EnRoute
   GalleryRoute: typeof GalleryRoute
   GeneratedPreviewRoute: typeof GeneratedPreviewRoute
   LegalRoute: typeof LegalRoute
   RecipesRoute: typeof RecipesRouteWithChildren
   RobotsDottxtRoute: typeof RobotsDottxtRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  ZhRoute: typeof ZhRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -274,6 +300,13 @@ declare module '@tanstack/react-router' {
       path: '/docs'
       fullPath: '/docs'
       preLoaderRoute: typeof DocsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en': {
+      id: '/en'
+      path: '/en'
+      fullPath: '/en'
+      preLoaderRoute: typeof EnRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/gallery': {
@@ -316,6 +349,13 @@ declare module '@tanstack/react-router' {
       path: '/sitemap.xml'
       fullPath: '/sitemap.xml'
       preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/zh': {
+      id: '/zh'
+      path: '/zh'
+      fullPath: '/zh'
+      preLoaderRoute: typeof ZhRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog/': {
@@ -406,12 +446,14 @@ const rootRouteChildren: RootRouteChildren = {
   ChangelogRoute: ChangelogRoute,
   ContactRoute: ContactRoute,
   DocsRoute: DocsRouteWithChildren,
+  EnRoute: EnRoute,
   GalleryRoute: GalleryRoute,
   GeneratedPreviewRoute: GeneratedPreviewRoute,
   LegalRoute: LegalRoute,
   RecipesRoute: RecipesRouteWithChildren,
   RobotsDottxtRoute: RobotsDottxtRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  ZhRoute: ZhRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

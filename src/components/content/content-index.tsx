@@ -42,7 +42,7 @@ export function ContentIndex({
             <h2>{entry.metadata.title}</h2>
             <p>{entry.metadata.description}</p>
             <Link
-              to={kind === "blog" ? "/blog/$slug" : "/docs/$slug"}
+              to={kind === "blog" ? "/blog/$slug/" : "/docs/$slug/"}
               params={{ slug: entry.metadata.slug }}
             >
               Read {kind === "blog" ? "article" : "guide"} <ArrowRightIcon aria-hidden="true" />

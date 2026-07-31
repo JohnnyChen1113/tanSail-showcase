@@ -26,5 +26,8 @@ test("recipe detail renders its configured block sequence", async ({ page }) => 
   await expect(page.getByRole("heading", { level: 1, name: "SaaS product" })).toBeVisible();
   await expect(page.getByText("9 blocks")).toBeVisible();
   await expect(page.locator(".recipe-composition > .landing-block")).toHaveCount(9);
-  await expect(page.getByRole("link", { name: "All recipes" })).toHaveAttribute("href", "/recipes");
+  await expect(page.getByRole("link", { name: "All recipes" })).toHaveAttribute(
+    "href",
+    "/recipes/",
+  );
 });

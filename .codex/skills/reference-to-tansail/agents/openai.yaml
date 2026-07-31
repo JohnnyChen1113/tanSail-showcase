@@ -1,0 +1,4 @@
+interface:
+  display_name: "Reference to TanSail"
+  short_description: "Turn references into an original TanSail site"
+  default_prompt: "Use $reference-to-tansail to turn these URLs or screenshots into an original, bilingual TanSail site."

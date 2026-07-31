@@ -5,10 +5,9 @@ and metadata can render through three deliberately different presets:
 
 - **Harbor** — editorial typography, warm colors, generous spacing, and a classic two-column
   section rhythm.
-- **Horizon** — product-led typography, bright blue and teal, rounded geometry, centered hero
-  composition, and a compact content width.
-- **Nightwatch** — high contrast, acid-green accents, hard edges, dense spacing, and a technical
-  wide-screen composition.
+- **Luminous** (`horizon`) — cool blue and teal, product-led typography, and a soft radiant
+  atmosphere.
+- **Signal** (`nightwatch`) — graphite, violet, and a technically precise atmosphere.
 
 Visitors can select a preset from the palette control in the header. TanSail stores the choice in
 `localStorage` and restores the `data-preset` attribute with `ScriptOnce` before the application
@@ -23,6 +22,10 @@ hydrates, avoiding a flash of the default preset.
 3. shell and section density;
 4. control, panel, border, and ornament geometry;
 5. hero, section, footer, and ornament composition.
+
+Presets intentionally share density, geometry, and composition. Switching atmosphere must not
+move content, change reading order, or create overlap. Colors and typography may differ, while
+language-specific display rules remain authoritative for CJK content.
 
 `createPresetStyleSheet` converts the typed catalog into semantic CSS custom properties rendered
 in the document head. Components consume names such as `--background`, `--font-heading`,

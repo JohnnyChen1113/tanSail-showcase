@@ -32,8 +32,8 @@ test("preset selection persists across reloads", async ({ page }) => {
 
   await page.goto("/");
   await page.waitForLoadState("networkidle");
-  await page.getByRole("button", { name: /change design preset/i }).click();
-  await page.getByRole("menuitemcheckbox", { name: /horizon/i }).click();
+  await page.getByRole("button", { name: /change appearance.*current/i }).click();
+  await page.getByRole("menuitemcheckbox", { name: /luminous/i }).click();
 
   await expect(page.locator("html")).toHaveAttribute("data-preset", "horizon");
   await page.reload();

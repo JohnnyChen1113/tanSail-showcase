@@ -2,6 +2,10 @@
 
 TanSail turns an open-ended request into a constrained site brief before editing presentation code. The brief is versioned, validated with Zod, and limited to the presets, recipes, and block families maintained by the starter.
 
+When the request begins with URLs or screenshots, use the
+[Reference-to-TanSail workflow](reference-to-tansail.md) first. It produces an auditable
+clean-room brief and proposed design contract before the normal block-selection workflow.
+
 ## Generate a preview
 
 Start from a file in `examples/generation/`, then run:

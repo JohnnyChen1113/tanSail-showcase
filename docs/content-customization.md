@@ -5,7 +5,8 @@ required.
 
 ## 1. Edit the site contract
 
-Update `src/config/site.ts`. It is the source of truth for:
+Update `src/config/site.ts` for structural site configuration and `src/i18n.ts` for visible
+English and Chinese copy. Together they own:
 
 - site name, title, description, canonical URL, locale, and light/dark browser colors;
 - the announcement and its optional action;
@@ -24,14 +25,14 @@ before deploying. Use the origin only, without a trailing slash.
 
 ## 2. Edit page copy
 
-Update `src/config/home.ts` for the starter homepage headline, description, command, features, and
-principles. Page content is separate from the global shell so it can later move into MDX or a CMS
-without changing navigation components.
+Update the typed dictionaries in `src/i18n.ts` for homepage headlines, descriptions, actions,
+features, workflow, proof, FAQ, accessibility labels, and footer copy. Both locales satisfy the
+same `Dictionary` type, so missing copy fails type checking.
 
 ## 3. Understand link kinds
 
-- `route` uses a type-safe TanStack Router `Link`. The phase-two starter supports the `/` route;
-  extend the route-link schema when adding new file routes.
+- `route` uses a type-safe TanStack Router `Link`. Localized public links use explicit `/en` and
+  `/zh` routes; extend the route-link schema when adding configured file routes.
 - `anchor` points to a section ID on the current page, such as `#foundation`.
 - `external` requires an absolute URL and can control whether it opens a new tab.
 

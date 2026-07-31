@@ -37,6 +37,9 @@ jobs:
       - name: Check formatting, lint, and types
         run: pnpm exec vp check
 
+      - name: Validate design contract
+        run: pnpm run design:check
+
       - name: Run unit tests
         run: pnpm exec vp test run
 

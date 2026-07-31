@@ -4,19 +4,23 @@ import { presetCatalog, presetIds } from "#/config/presets";
 import { createPresetStyleSheet, isPresetId } from "#/lib/presets";
 
 describe("visual preset catalog", () => {
-  it("ships all named presets with a unique definition for every design dimension", () => {
+  it("keeps atmosphere distinct while preserving layout-safe geometry", () => {
     expect(presetCatalog.presets.map((preset) => preset.id)).toEqual(presetIds);
 
-    const dimensions = [
+    const atmosphericDimensions = [
       presetCatalog.presets.map((preset) => JSON.stringify(preset.tokens.colors)),
       presetCatalog.presets.map((preset) => JSON.stringify(preset.tokens.typography)),
-      presetCatalog.presets.map((preset) => JSON.stringify(preset.tokens.density)),
-      presetCatalog.presets.map((preset) => JSON.stringify(preset.tokens.geometry)),
-      presetCatalog.presets.map((preset) => JSON.stringify(preset.tokens.composition)),
     ];
 
-    for (const definitions of dimensions) {
+    for (const definitions of atmosphericDimensions) {
       expect(new Set(definitions).size).toBe(presetIds.length);
+    }
+
+    for (const dimension of ["density", "geometry", "composition"] as const) {
+      const definitions = presetCatalog.presets.map((preset) =>
+        JSON.stringify(preset.tokens[dimension]),
+      );
+      expect(new Set(definitions).size).toBe(1);
     }
   });
 

@@ -27,7 +27,7 @@ export function getGeneratedSiteBlocks(): Array<LandingBlockConfig> {
         eyebrow: generatedSiteBrief.audience.primary,
         title: generatedSiteBrief.brand.tagline,
         description: generatedSiteBrief.audience.outcome,
-        primaryAction: { label: `开始使用 ${generatedSiteBrief.brand.name}`, href: "#faq" },
+        primaryAction: { label: "Start with Northstar", href: "#pricing" },
       };
     }
 

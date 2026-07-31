@@ -82,3 +82,13 @@ projects that informed the product research.
 - [x] Publish the tagged `v0.1.0` release with migration notes.
 - [x] Publish a public TanSail showcase deployment.
 - [x] Review all bundled assets, fonts, examples, and dependencies for redistribution rights.
+
+## Phase 9 — design governance and bilingual release
+
+- [x] Add a machine-readable and human-readable `DESIGN.md` contract with CI enforcement.
+- [x] Introduce language-aware English and Simplified Chinese routes, dictionaries, SEO, and type.
+- [x] Replace abstract homepage decoration with original product interface compositions.
+- [x] Keep preset geometry stable while refining Luminous and Signal visual atmospheres.
+- [x] Add a clean-room Reference-to-TanSail skill and deterministic brief renderer.
+- [x] Add responsive browser coverage for locale, metadata, overflow, and mobile navigation.
+- [ ] Publish the independent showcase and the tagged `v0.2.0` release.

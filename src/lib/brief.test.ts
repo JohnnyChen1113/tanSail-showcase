@@ -6,7 +6,7 @@ import fixture from "#/config/generated/site.json";
 
 describe("site brief generation", () => {
   it("accepts the committed generated fixture", () => {
-    expect(siteBriefSchema.parse(fixture).brand.name).toBe("TanSail");
+    expect(siteBriefSchema.parse(fixture).brand.name).toBe("Northstar");
   });
 
   it("rejects unknown presets and sections", () => {
@@ -23,6 +23,6 @@ describe("site brief generation", () => {
     const blocks = getGeneratedSiteBlocks();
     expect(blocks[0]?.kind).toBe("hero");
     expect(blocks.at(-1)?.kind).toBe("cta");
-    expect(generatedSitePlan.unresolved).toEqual([]);
+    expect(generatedSitePlan.unresolved).toContain("Choose a production domain before deployment.");
   });
 });

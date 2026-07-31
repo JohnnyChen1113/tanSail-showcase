@@ -49,7 +49,7 @@ function RecipeIndexPage() {
             <p>{recipe.audience}</p>
             <h2>{recipe.label}</h2>
             <p>{recipe.summary}</p>
-            <Link to="/recipes/$recipeId" params={{ recipeId: recipe.id }}>
+            <Link to="/recipes/$recipeId/" params={{ recipeId: recipe.id }}>
               Preview recipe <ArrowRightIcon aria-hidden="true" />
             </Link>
           </article>

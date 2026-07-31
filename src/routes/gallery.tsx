@@ -56,7 +56,7 @@ function GalleryPage() {
           </p>
         </div>
         <div className="gallery-theme-controls" aria-label="Appearance controls">
-          <Link to="/recipes" className="gallery-recipe-link">
+          <Link to="/recipes/" className="gallery-recipe-link">
             Page recipes
           </Link>
           <PresetToggle />

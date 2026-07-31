@@ -1,13 +1,22 @@
 import type { SiteConfig } from "#/config/site";
+import type { Dictionary, Locale } from "#/i18n";
 
 import { Brand } from "./brand";
 import { SiteLink } from "./site-link";
 
-export function SiteFooter({ config }: { readonly config: SiteConfig }) {
+export function SiteFooter({
+  config,
+  dictionary,
+  locale,
+}: {
+  readonly config: SiteConfig;
+  readonly dictionary: Dictionary;
+  readonly locale: Locale;
+}) {
   return (
     <footer className="site-footer">
       <div className="footer-intro">
-        <Brand config={config} />
+        <Brand config={config} locale={locale} />
         <p>{config.footer.tagline}</p>
       </div>
 
@@ -21,8 +30,8 @@ export function SiteFooter({ config }: { readonly config: SiteConfig }) {
           </nav>
         ))}
         {config.socialLinks.length > 0 ? (
-          <nav aria-label="Social links">
-            <h2>Social</h2>
+          <nav aria-label={dictionary.footer.social}>
+            <h2>{dictionary.footer.social}</h2>
             {config.socialLinks.map((link) => (
               <SiteLink key={link.label} link={link} />
             ))}

@@ -1,12 +1,12 @@
 {
   "name": "tansail-official",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
-  "description": "The official website for the TanSail open-source TanStack Start starter.",
+  "description": "The bilingual official showcase for the TanSail starter.",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/JohnnyChen1113/tanSail.git"
+    "url": "git+https://github.com/JohnnyChen1113/tanSail-showcase.git"
   },
   "type": "module",
   "scripts": {
@@ -14,6 +14,7 @@
     "build": "vp build",
     "deploy": "vp build && wrangler deploy",
     "preview": "vp preview",
+    "reference:brief": "node --experimental-strip-types scripts/create-reference-brief.ts",
     "start": "wrangler dev",
     "test": "vp test run",
     "test:browser": "playwright test --grep-invert @visual",
@@ -26,6 +27,10 @@
     "generate:site": "node --experimental-strip-types scripts/generate-site.ts",
     "check": "vp check",
     "check:fix": "vp check --fix",
+    "design:check": "node --experimental-strip-types scripts/design-contract.ts check",
+    "design:diff": "designmd diff",
+    "design:export": "node --experimental-strip-types scripts/design-contract.ts export",
+    "design:lint": "node --experimental-strip-types scripts/design-contract.ts lint",
     "prepare": "vp config",
     "deps": "vpx taze@latest -Ilw --maturity-period 3",
     "tanstack": "vpx @tanstack/cli@latest",
@@ -49,6 +54,7 @@
   "devDependencies": {
     "@babel/core": "8.0.1",
     "@cloudflare/vite-plugin": "1.46.0",
+    "@google/design.md": "0.4.0",
     "@mdx-js/rollup": "3.1.1",
     "@playwright/test": "1.61.1",
     "@rolldown/plugin-babel": "0.2.3",

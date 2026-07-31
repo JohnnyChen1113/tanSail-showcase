@@ -1,4 +1,5 @@
 import type { SiteConfig } from "#/config/site";
+import { getLocalizedPath, type Dictionary, type Locale } from "#/i18n";
 
 export function createMetaTags(config: SiteConfig) {
   const { metadata } = config;
@@ -30,10 +31,61 @@ export function createMetaTags(config: SiteConfig) {
   ];
 }
 
+export function createBaseMetaTags(config: SiteConfig) {
+  return createMetaTags(config).filter(
+    (tag) =>
+      "charSet" in tag ||
+      tag.name === "viewport" ||
+      tag.name === "theme-color" ||
+      tag.property === "og:type" ||
+      tag.property === "og:site_name",
+  );
+}
+
 export function createHeadLinks(config: SiteConfig) {
   return [
     { rel: "canonical", href: config.metadata.siteUrl },
     { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+  ];
+}
+
+export function createBaseHeadLinks() {
+  return [{ rel: "icon", href: "/favicon.svg", type: "image/svg+xml" }];
+}
+
+export function createLocalizedMetaTags(
+  config: SiteConfig,
+  locale: Locale,
+  dictionary: Dictionary,
+) {
+  const url = `${config.metadata.siteUrl}${getLocalizedPath(locale)}`;
+
+  return [
+    { title: dictionary.meta.title },
+    { name: "description", content: dictionary.meta.description },
+    { property: "og:title", content: dictionary.meta.title },
+    { property: "og:description", content: dictionary.meta.description },
+    { property: "og:url", content: url },
+    { property: "og:locale", content: locale === "zh" ? "zh_CN" : "en_US" },
+    { property: "og:image", content: `${config.metadata.siteUrl}/og.png` },
+    {
+      property: "og:image:alt",
+      content: "TanSail design contract and live product preview",
+    },
+    { name: "twitter:title", content: dictionary.meta.title },
+    { name: "twitter:description", content: dictionary.meta.description },
+    { name: "twitter:image", content: `${config.metadata.siteUrl}/og.png` },
+  ];
+}
+
+export function createLocalizedHeadLinks(config: SiteConfig, locale: Locale) {
+  const origin = config.metadata.siteUrl;
+
+  return [
+    { rel: "canonical", href: `${origin}${getLocalizedPath(locale)}` },
+    { rel: "alternate", hrefLang: "en", href: `${origin}${getLocalizedPath("en")}` },
+    { rel: "alternate", hrefLang: "zh-CN", href: `${origin}${getLocalizedPath("zh")}` },
+    { rel: "alternate", hrefLang: "x-default", href: `${origin}${getLocalizedPath("en")}` },
   ];
 }
 

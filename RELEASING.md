@@ -29,8 +29,8 @@ Create an annotated tag on the verified `main` commit and push it:
 ```bash
 git switch main
 git pull --ff-only
-git tag -a v0.1.0 -m "TanSail v0.1.0"
-git push origin v0.1.0
+git tag -a v0.2.0 -m "TanSail v0.2.0"
+git push origin v0.2.0
 ```
 
 The `Release` workflow publishes a GitHub Release from `docs/releases/<tag>.md`. Verify the tag,

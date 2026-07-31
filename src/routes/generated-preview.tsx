@@ -30,7 +30,7 @@ function GeneratedPreviewPage() {
   return (
     <div className="recipe-detail-page generated-preview-page">
       <header className="recipe-detail-header generated-preview-header">
-        <Link to="/recipes" className="gallery-back-link">
+        <Link to="/recipes/" className="gallery-back-link">
           <ArrowLeftIcon aria-hidden="true" /> Page recipes
         </Link>
         <div>

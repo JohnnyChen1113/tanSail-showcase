@@ -2,6 +2,8 @@ import { ActionLink } from "#/components/blocks/action-link";
 import { MotionReveal } from "#/components/blocks/motion-reveal";
 import type { HeroBlockConfig } from "#/config/blocks";
 
+import { LandingProductVisual } from "./landing-product-visual";
+
 export function HeroBlock({ block }: { readonly block: HeroBlockConfig }) {
   const headingId = `${block.id}-title`;
 
@@ -22,11 +24,7 @@ export function HeroBlock({ block }: { readonly block: HeroBlockConfig }) {
         </div>
         {block.note ? <p className="hero-block-note">{block.note}</p> : null}
       </MotionReveal>
-      <div className="hero-block-art" aria-hidden="true">
-        <span />
-        <span />
-        <span />
-      </div>
+      {block.variant === "minimal" ? null : <LandingProductVisual />}
     </section>
   );
 }

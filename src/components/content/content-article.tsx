@@ -23,7 +23,7 @@ export function ContentArticle({ entry }: { readonly entry: ContentEntry }) {
     <div className="content-article-page">
       <StructuredData data={jsonLd} />
       <header className="content-article-toolbar">
-        <Link to={entry.kind === "blog" ? "/blog" : "/docs"}>
+        <Link to={entry.kind === "blog" ? "/blog/" : "/docs/"}>
           <ArrowLeftIcon aria-hidden="true" /> Back to {entry.kind}
         </Link>
         <div>
