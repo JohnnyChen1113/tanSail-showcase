@@ -91,4 +91,4 @@ projects that informed the product research.
 - [x] Keep preset geometry stable while refining Luminous and Signal visual atmospheres.
 - [x] Add a clean-room Reference-to-TanSail skill and deterministic brief renderer.
 - [x] Add responsive browser coverage for locale, metadata, overflow, and mobile navigation.
-- [ ] Publish the independent showcase and the tagged `v0.2.0` release.
+- [x] Publish the independent showcase and the tagged `v0.2.0` release.
