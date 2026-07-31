@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f7f4ec"/>
+  <path d="M0 80h1200M0 550h1200" stroke="#d5cdbd"/>
+  <circle cx="1010" cy="315" r="180" fill="none" stroke="#25354e" stroke-width="2"/>
+  <circle cx="1010" cy="315" r="112" fill="none" stroke="#d06a3d" stroke-width="2"/>
+  <circle cx="1010" cy="315" r="42" fill="#d06a3d" fill-opacity=".18"/>
+  <text x="88" y="130" fill="#d06a3d" font-family="Arial, sans-serif" font-size="22" letter-spacing="5">TANSAIL</text>
+  <text x="88" y="280" fill="#1d283b" font-family="Georgia, serif" font-size="76" font-weight="600">Set a better course</text>
+  <text x="88" y="370" fill="#1d283b" font-family="Georgia, serif" font-size="76" font-weight="600">for your next website.</text>
+  <text x="88" y="470" fill="#687180" font-family="Arial, sans-serif" font-size="28">Design-first TanStack Start for Cloudflare Workers</text>
+</svg>

@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "brand": {
+    "name": "TanSail",
+    "tagline": "为下一个网站，设定更好的航向。",
+    "description": "一个设计优先、开源且可配置的 TanStack Start 网站起点，面向 Cloudflare Workers 构建。"
+  },
+  "audience": {
+    "primary": "重视设计品质与工程可靠性的独立开发者、开源团队和产品工作室",
+    "problem": "从零拼装技术栈、设计系统和发布流程，会把产品团队困在重复的基础工作里。",
+    "outcome": "从一套精炼、类型安全且可直接部署的基础出发，更快做出有辨识度的网站。"
+  },
+  "pages": [
+    {
+      "name": "首页",
+      "path": "/",
+      "goal": "清楚介绍 TanSail 的定位、能力和开源原则，并引导访问者查看源码或开始使用。",
+      "sections": ["hero", "logo-cloud", "features", "use-cases", "stats", "faq", "cta"]
+    }
+  ],
+  "tone": ["direct", "technical", "warm"],
+  "preset": "horizon",
+  "recipe": "open-source",
+  "deployment": {
+    "target": "cloudflare-workers",
+    "domain": "tansail-official.bioinfoark.workers.dev"
+  }
+}

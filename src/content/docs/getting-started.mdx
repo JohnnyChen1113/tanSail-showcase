@@ -1,0 +1,43 @@
+export const metadata = {
+  slug: "getting-started",
+  title: "Getting started with TanSail",
+  description: "Install the starter, choose a preset, and make the first content changes.",
+  publishedAt: "2026-07-27",
+  readingMinutes: 4,
+};
+
+# Getting started with TanSail
+
+TanSail starts with a small TanStack Start core, a typed site shell, and three complete visual
+directions. It does not require authentication, a database, billing, or environment variables.
+
+## Run the project
+
+```bash
+pnpm install
+pnpm dev
+```
+
+Open the local URL printed by Vite+, then use the palette control to compare Harbor, Horizon, and
+Nightwatch.
+
+## Change the identity first
+
+Edit `src/config/site.ts` before changing components. The configuration owns metadata, navigation,
+actions, social links, footer groups, and sitemap entries.
+
+## Choose a starting composition
+
+Open `/recipes` to compare complete page narratives, or `/gallery` to inspect each block in
+isolation. Copy the closest recipe and replace content while preserving the validated block shape.
+
+## Verify before shipping
+
+```bash
+pnpm check
+pnpm test
+pnpm test:visual
+pnpm build
+```
+
+The production build prerenders public routes and creates the Cloudflare Worker bundle.

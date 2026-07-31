@@ -1,0 +1,8 @@
+interface:
+  display_name: "Build a TanSail Site"
+  short_description: "Turn a product brief into a checked TanSail landing site"
+  brand_color: "#315B4C"
+  default_prompt: "Use $build-tansail-site to turn my product brief into a polished TanSail site."
+
+policy:
+  allow_implicit_invocation: true

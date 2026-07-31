@@ -1,0 +1,39 @@
+name: Feature request
+description: Propose a focused improvement to the starter or its optional recipes.
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    attributes:
+      label: Problem
+      description: What project or user problem should TanSail solve?
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Proposed direction
+      description: Describe the smallest useful solution and whether it belongs in core or an optional recipe.
+    validations:
+      required: true
+  - type: dropdown
+    attributes:
+      label: Area
+      options:
+        - Site shell and configuration
+        - Visual presets
+        - Landing blocks and recipes
+        - Content and SEO
+        - Generation workflow
+        - Optional integration
+        - Documentation and tooling
+    validations:
+      required: true
+  - type: checkboxes
+    attributes:
+      label: Project constraints
+      options:
+        - label: This proposal keeps project-specific domains, credentials, and proprietary content out of the starter core.
+          required: true
+        - label: I have identified whether this should be removable from the default starter.
+          required: true

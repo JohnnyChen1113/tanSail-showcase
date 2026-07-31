@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "brand": {
+    "name": "Relay",
+    "tagline": "A small, dependable event layer for modern TypeScript apps.",
+    "description": "An open-source event toolkit with typed contracts and a deliberately narrow API."
+  },
+  "audience": {
+    "primary": "TypeScript maintainers and platform engineers",
+    "problem": "Application events become hard to trace as projects grow.",
+    "outcome": "Keep event flows explicit, typed, and easy to debug."
+  },
+  "pages": [
+    {
+      "name": "Home",
+      "path": "/",
+      "goal": "Explain the project and move developers toward the documentation.",
+      "sections": ["hero", "logo-cloud", "features", "stats", "testimonials", "faq", "cta"]
+    },
+    {
+      "name": "Documentation",
+      "path": "/docs",
+      "goal": "Help developers install the package and understand its core model.",
+      "sections": ["hero", "features", "faq", "cta"]
+    }
+  ],
+  "tone": ["technical", "direct"],
+  "preset": "nightwatch",
+  "recipe": "open-source",
+  "deployment": {
+    "target": "cloudflare-workers",
+    "domain": "relay.example.com"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "brand": {
+    "name": "Northstar",
+    "tagline": "Turn customer signals into confident product decisions.",
+    "description": "A generated TanSail example for a focused product intelligence platform."
+  },
+  "audience": {
+    "primary": "Product teams at growing software companies",
+    "problem": "Research, feedback, and product evidence are scattered across too many tools.",
+    "outcome": "Bring the signal together and decide what to build next with confidence."
+  },
+  "pages": [
+    {
+      "name": "Home",
+      "path": "/",
+      "goal": "Explain the product and invite qualified teams to start a trial.",
+      "sections": [
+        "hero",
+        "logo-cloud",
+        "features",
+        "use-cases",
+        "stats",
+        "testimonials",
+        "pricing",
+        "faq",
+        "cta"
+      ]
+    }
+  ],
+  "tone": ["direct", "warm"],
+  "preset": "horizon",
+  "recipe": "saas-product",
+  "deployment": {
+    "target": "cloudflare-workers"
+  }
+}

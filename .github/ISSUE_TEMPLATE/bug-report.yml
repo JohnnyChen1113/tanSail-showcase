@@ -1,0 +1,37 @@
+name: Bug report
+description: Report a reproducible problem in TanSail.
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: checkboxes
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues for the same problem.
+          required: true
+        - label: I reproduced the problem on the latest `main` branch.
+          required: true
+  - type: textarea
+    attributes:
+      label: What happened?
+      description: Describe the behavior and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Reproduction
+      description: Provide the smallest repository, branch, or exact steps that reproduce the problem.
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Environment
+      description: Include the OS, Node.js version, pnpm version, and browser when relevant.
+      placeholder: macOS 15, Node.js 24, pnpm 11, Chrome 140
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Additional context
+      description: Add logs, screenshots, or links that help explain the problem. Remove secrets first.

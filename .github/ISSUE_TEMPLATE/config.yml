@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security report
+    url: https://github.com/JohnnyChen1113/tanSail/security/advisories/new
+    about: Report suspected vulnerabilities privately instead of opening a public issue.
+  - name: Customization guides
+    url: https://github.com/JohnnyChen1113/tanSail/tree/main/docs
+    about: Review the guides before opening a usage question.
