@@ -119,7 +119,7 @@ export default defineConfig({
       prerender: {
         enabled: true,
         crawlLinks: true,
-        concurrency: 10,
+        concurrency: 1,
         failOnError: true,
       },
     }),

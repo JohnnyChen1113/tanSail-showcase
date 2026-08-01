@@ -1,7 +1,6 @@
 import { ArrowDownIcon, ArrowRightIcon, ArrowUpRightIcon } from "lucide-react";
 
 import { CopyCommand } from "#/components/home/copy-command";
-import { ProductPreview } from "#/components/home/product-preview";
 import { SiteLink } from "#/components/site/site-link";
 import { SiteShell } from "#/components/site/site-shell";
 import { buttonVariants } from "#/components/ui/button";
@@ -33,10 +32,11 @@ export function LocalizedHomePage({ locale }: { readonly locale: Locale }) {
               </SiteLink>
             ) : null}
           </div>
-          <CopyCommand label={dictionary.actions.copyCommand} />
-          <p className="luminous-hero-note">{dictionary.hero.note}</p>
+          <div className="hero-utility">
+            <CopyCommand label={dictionary.actions.copyCommand} />
+            <p className="luminous-hero-note">{dictionary.hero.note}</p>
+          </div>
         </div>
-        <ProductPreview locale={locale} />
       </section>
 
       <section className="proof-strip" aria-label={dictionary.proof.label}>

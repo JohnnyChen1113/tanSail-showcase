@@ -67,14 +67,14 @@ export function createLocalizedMetaTags(
     { property: "og:description", content: dictionary.meta.description },
     { property: "og:url", content: url },
     { property: "og:locale", content: locale === "zh" ? "zh_CN" : "en_US" },
-    { property: "og:image", content: `${config.metadata.siteUrl}/og.png` },
+    { property: "og:image", content: `${config.metadata.siteUrl}/og-centered.png` },
     {
       property: "og:image:alt",
-      content: "TanSail design contract and live product preview",
+      content: "TanSail — Design the direction. Ship the whole site.",
     },
     { name: "twitter:title", content: dictionary.meta.title },
     { name: "twitter:description", content: dictionary.meta.description },
-    { name: "twitter:image", content: `${config.metadata.siteUrl}/og.png` },
+    { name: "twitter:image", content: `${config.metadata.siteUrl}/og-centered.png` },
   ];
 }
 

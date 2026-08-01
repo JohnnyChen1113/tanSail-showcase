@@ -1382,19 +1382,66 @@
   }
 
   .luminous-hero {
-    display: grid;
+    position: relative;
+    isolation: isolate;
+    display: flex;
     width: min(100%, 90rem);
-    min-height: clamp(42rem, 80vh, 52rem);
+    min-height: clamp(44rem, calc(100svh - 8rem), 56rem);
     margin-inline: auto;
-    padding-block: clamp(5rem, 9vw, 8rem) clamp(4rem, 7vw, 6rem);
+    padding: clamp(6rem, 11vw, 9rem) clamp(1rem, 5vw, 4rem) clamp(5rem, 9vw, 7rem);
+    overflow: hidden;
     align-items: center;
-    gap: clamp(3rem, 6vw, 6rem);
+    justify-content: center;
+    border-bottom: 1px solid color-mix(in oklab, var(--border) 68%, transparent);
+    text-align: center;
+  }
+
+  .luminous-hero::before {
+    position: absolute;
+    z-index: -2;
+    inset: 5% 2% 0;
+    background:
+      radial-gradient(
+        ellipse 48% 38% at 50% 58%,
+        color-mix(in oklab, var(--accent-soft) 58%, transparent),
+        transparent 72%
+      ),
+      radial-gradient(
+        ellipse 32% 24% at 50% 62%,
+        color-mix(in oklab, var(--accent) 16%, transparent),
+        transparent 75%
+      );
+    filter: blur(5px);
+    content: "";
+    pointer-events: none;
+  }
+
+  .luminous-hero::after {
+    position: absolute;
+    z-index: -1;
+    inset: 13% 8% 4%;
+    background-image:
+      linear-gradient(color-mix(in oklab, var(--border) 23%, transparent) 1px, transparent 1px),
+      linear-gradient(
+        90deg,
+        color-mix(in oklab, var(--border) 23%, transparent) 1px,
+        transparent 1px
+      );
+    background-size: 2.75rem 2.75rem;
+    mask-image: radial-gradient(ellipse 62% 54% at 50% 55%, black 0%, transparent 78%);
+    opacity: 0.42;
+    content: "";
+    pointer-events: none;
   }
 
   .luminous-hero-copy {
     position: relative;
     z-index: 2;
-    max-width: 42rem;
+    display: flex;
+    width: 100%;
+    max-width: 76rem;
+    align-items: center;
+    flex-direction: column;
   }
 
   .luminous-eyebrow,
@@ -1409,31 +1456,34 @@
   }
 
   .luminous-hero h1 {
-    max-width: 13ch;
+    max-width: 20ch;
+    margin-inline: auto;
     font-family: var(--font-heading);
-    font-size: clamp(3.35rem, 6.2vw, 6.75rem);
+    font-size: clamp(3.75rem, 7vw, 7.4rem);
     font-weight: var(--heading-weight);
-    line-height: 0.96;
+    line-height: 0.94;
     letter-spacing: min(var(--heading-tracking), -0.035em);
     text-wrap: balance;
   }
 
   html[data-locale="zh"] .luminous-hero h1 {
-    max-width: 10.5em;
+    max-width: 12em;
     font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
-    font-size: clamp(2.75rem, 5vw, 5.25rem);
+    font-size: clamp(3.1rem, 5.8vw, 6rem);
     font-weight: 650;
-    line-height: 1.12;
+    line-height: 1.08;
     letter-spacing: -0.025em;
     text-wrap: pretty;
   }
 
   .luminous-hero-description {
-    max-width: 37rem;
+    max-width: 46rem;
     margin-top: 1.75rem;
+    margin-inline: auto;
     color: var(--muted-foreground);
     font-size: clamp(1rem, 1.3vw, 1.125rem);
     line-height: 1.75;
+    text-wrap: balance;
   }
 
   html[data-locale="zh"] .luminous-hero-description {
@@ -1445,6 +1495,7 @@
     display: flex;
     margin-top: 2rem;
     align-items: center;
+    justify-content: center;
     flex-wrap: wrap;
     gap: 0.75rem;
   }
@@ -1494,6 +1545,19 @@
     backdrop-filter: blur(12px);
   }
 
+  .hero-utility {
+    display: flex;
+    margin-top: 1.5rem;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.65rem 1rem;
+  }
+
+  .hero-utility .install-command {
+    margin-top: 0;
+  }
+
   .install-command:hover {
     color: var(--foreground);
   }
@@ -1504,7 +1568,7 @@
   }
 
   .luminous-hero-note {
-    margin-top: 0.9rem;
+    margin: 0;
     color: var(--muted-foreground);
     font-size: 0.72rem;
   }
@@ -2142,10 +2206,6 @@
 }
 
 @media (min-width: 64rem) {
-  .luminous-hero {
-    grid-template-columns: minmax(0, 0.78fr) minmax(34rem, 1.22fr);
-  }
-
   .luminous-section-heading {
     grid-template-columns: minmax(8rem, 0.3fr) minmax(0, 1fr);
   }
@@ -2182,7 +2242,7 @@
 
 @media (max-width: 63.999rem) {
   .luminous-hero {
-    min-height: 0;
+    min-height: clamp(42rem, calc(100svh - 6rem), 50rem);
   }
 
   .product-preview {
@@ -2249,21 +2309,23 @@
   }
 
   .luminous-hero {
-    padding-block: 4.5rem 3.5rem;
-    gap: 3rem;
+    min-height: clamp(40rem, calc(100svh - 5rem), 47rem);
+    padding: 5rem 0.25rem 4rem;
   }
 
   .luminous-hero h1 {
-    max-width: 11ch;
-    font-size: clamp(2.85rem, 14vw, 4.35rem);
+    max-width: 12ch;
+    font-size: clamp(3rem, 14vw, 4.4rem);
   }
 
   html[data-locale="zh"] .luminous-hero h1 {
-    max-width: 9em;
-    font-size: clamp(2.5rem, 11vw, 3.6rem);
+    max-width: 8.5em;
+    font-size: clamp(2.65rem, 12vw, 3.85rem);
   }
 
   .luminous-hero-actions {
+    width: min(100%, 22rem);
+    margin-inline: auto;
     align-items: stretch;
     flex-direction: column;
   }
@@ -2349,14 +2411,25 @@
   }
 
   .site-footer {
+    width: 100%;
+    min-width: 0;
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .footer-intro,
+  .footer-groups,
+  .footer-legal {
+    width: 100%;
+    min-width: 0;
+    grid-column: 1 / -1;
   }
 
   .footer-intro p {
     display: block;
-    width: 20rem;
-    max-width: 100%;
+    width: 100%;
+    max-width: 22rem;
     word-break: normal;
+    overflow-wrap: normal;
   }
 }
 

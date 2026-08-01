@@ -131,10 +131,13 @@ Hero copy is short: one promise, one supporting sentence, and at most two action
 ## Layout
 
 Use a 12-column content grid within a maximum width of 1200px. Major sections breathe at 72–112px
-depending on viewport. Alternate editorial asymmetry with stable product frames; do not center every
-section. Mobile layouts become one deliberate reading order, not compressed desktop compositions.
+depending on viewport. The default homepage hero is one centered focal point: one promise, one
+supporting sentence, and its actions. Do not place a decorative terminal, dashboard, or product
+frame beside the promise unless it demonstrates real behavior or evidence. Following sections may
+return to editorial asymmetry; do not center every section. Mobile layouts become one deliberate
+reading order, not compressed desktop compositions.
 
-Every landing page should show a believable product surface above the fold or immediately after it.
+Every landing page should show believable product evidence immediately after the focused hero.
 Prefer screenshots, live UI compositions, diagrams with a concrete meaning, and measurable proof
 over abstract concentric shapes.
 

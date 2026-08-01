@@ -136,15 +136,15 @@ const en = {
   },
   actions: {
     github: "View on GitHub",
-    explore: "Explore the system",
+    explore: "See the delivery path",
     copyCommand: "Copy install command",
   },
   hero: {
-    eyebrow: "Open source · Design governed · Cloudflare ready",
-    title: "A sharper starting point for your next product.",
+    eyebrow: "Design first · Open source · Cloudflare ready",
+    title: "Design the direction. Ship the whole site.",
     description:
-      "TanSail combines a durable TanStack foundation, language-aware typography, curated page systems, and quality gates that keep the finish intact.",
-    note: "MIT licensed · no required secrets · deploy when you are ready",
+      "TanSail turns one clear brief into an original bilingual site—with a governed design system, tested routes, and a deployable Cloudflare Worker.",
+    note: "MIT licensed · bilingual by default · browser tested",
   },
   proof: {
     label: "Built on a modern, durable web stack",
@@ -299,15 +299,15 @@ const zh = {
   },
   actions: {
     github: "在 GitHub 查看",
-    explore: "探索设计系统",
+    explore: "查看交付路径",
     copyCommand: "复制安装命令",
   },
   hero: {
-    eyebrow: "开源 · 设计契约 · Cloudflare 就绪",
-    title: "为下一个产品，选一个更好的起点。",
+    eyebrow: "设计优先 · 开源 · Cloudflare 就绪",
+    title: "先把方向设计好，再把整个网站交付。",
     description:
-      "TanSail 把可靠的 TanStack 工程基础、适合中英文的排版、精选页面系统和不会悄悄失效的质量门禁放在一起。",
-    note: "MIT 许可 · 无必需密钥 · 准备好再部署",
+      "TanSail 把一份清楚的简报变成原创双语网站——设计规则、页面路由、质量验证与 Cloudflare 部署，沿一条路径完成。",
+    note: "MIT 许可 · 默认双语 · 浏览器验证",
   },
   proof: {
     label: "建立在现代、耐用且开放的 Web 技术之上",

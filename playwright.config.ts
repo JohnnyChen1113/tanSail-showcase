@@ -6,6 +6,7 @@ const testPort = process.env.TANSAIL_TEST_PORT ?? "4173";
 export default defineConfig({
   testDir: "./tests/visual",
   outputDir: "./test-results/visual",
+  timeout: 60_000,
   fullyParallel: true,
   forbidOnly: true,
   retries: 0,
@@ -38,7 +39,7 @@ export default defineConfig({
   webServer: {
     command: `./node_modules/.bin/vp dev --host 127.0.0.1 --port ${testPort}`,
     url: `http://127.0.0.1:${testPort}`,
-    reuseExistingServer: false,
+    reuseExistingServer: !process.env.CI,
     timeout: 120_000,
   },
 });
