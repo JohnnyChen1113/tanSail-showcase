@@ -1,0 +1,110 @@
+export const metadata = {
+  slug: "content-and-i18n",
+  title: "内容与国际化",
+  description:
+    "管理 typed dictionaries、英文和中文路由、MDX metadata、语言排版、canonical 与 hreflang 对应关系。",
+  updatedAt: "2026-08-01",
+  readingMinutes: 12,
+  locale: "zh",
+  section: "build",
+  order: 8,
+  keywords: ["i18n", "中文", "locale", "MDX", "hreflang", "typed dictionary"],
+  toc: [
+    { id: "content-owners", label: "内容归属" },
+    { id: "locale-routes", label: "语言路由" },
+    { id: "mdx-metadata", label: "MDX metadata" },
+    { id: "typography", label: "语言排版" },
+    { id: "add-locale", label: "增加语言" },
+  ],
+};
+
+# 内容与国际化
+
+TanSail 把英文和简体中文视为同等重要的公开路由，而不是客户端翻译补丁。每种语言都有明确 URL、完整 dictionary、正确 `<html lang>`、独立 metadata 和可互相对应的 `hreflang`。
+
+<h2 id="content-owners">内容归属</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>内容</th>
+      <th>Source of truth</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>首页、导航、动作、FAQ、辅助功能文本</td>
+      <td>
+        <code>src/i18n.ts</code>
+      </td>
+    </tr>
+    <tr>
+      <td>站点结构、链接、SEO origin、sitemap</td>
+      <td>
+        <code>src/config/site.ts</code>
+      </td>
+    </tr>
+    <tr>
+      <td>文档和博客长文</td>
+      <td>
+        <code>src/content/**/*.mdx</code>
+      </td>
+    </tr>
+    <tr>
+      <td>Block catalog 示例内容</td>
+      <td>
+        <code>src/config/blocks.ts</code>
+      </td>
+    </tr>
+    <tr>
+      <td>生成预览输入</td>
+      <td>
+        <code>src/config/generated/*.json</code>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+两种语言应传达相同事实，但不要求逐字对齐。中文需要自然断句和更短标题；英文可以保留产品术语。不要在 JSX 中用 `locale === "zh"` 散布大段正文，除非是模板级极短 UI copy。
+
+<h2 id="locale-routes">语言路由</h2>
+
+首页使用 `/en/` 与 `/zh/`，文档使用 `/docs/en/` 与 `/docs/zh/`。`Locale` union 和 `isLocale` 负责验证动态参数；无效文档 locale 返回 not found，而公开链接始终使用明确语言路径。
+
+切换文档语言时应保持相同 slug。例如 `/docs/zh/design-contract/` 对应 `/docs/en/design-contract/`，不能把用户丢回文档首页。TanStack Router 链接使用 route template 与 `params`，确保编码和类型安全。
+
+<h2 id="mdx-metadata">MDX metadata</h2>
+
+```js
+export const metadata = {
+  slug: "design-contract",
+  title: "设计契约",
+  description: "用于索引卡片和搜索结果的简明摘要。",
+  updatedAt: "2026-08-01",
+  readingMinutes: 10,
+  locale: "zh",
+  section: "design",
+  order: 4,
+  keywords: ["DESIGN.md", "token"],
+  toc: [{ id: "commands", label: "检查命令" }],
+};
+```
+
+中英文必须共享 slug 和 order，section 也应一致。每个 TOC ID 需要与正文 `<h2 id="...">` 对应。路由层会用 page title、description 和 locale 生成符合长度要求的 SEO 文本，也允许通过 `seoTitle`、`seoDescription` 显式覆盖。
+
+<h2 id="typography">语言排版</h2>
+
+中文 display text 使用系统 CJK fallback、更小最大字号、更松行高和更少负字距。正文阅读宽度目标约 28–36 个汉字；英文约 60–72 个字符。不要仅因为中英文标题字符数相近，就给它们相同的 `letter-spacing` 和最大宽度。
+
+检查内容时同时观察：按钮是否换行、英文长词是否溢出、中文标点是否孤立、代码与拉丁术语是否破坏行高，以及系统缺少首选字体时 fallback 是否稳定。
+
+<h2 id="add-locale">增加语言</h2>
+
+1. 把新 locale 加入 `locales`，扩展所有依赖 `Locale` 的类型。
+2. 提供完整 dictionary，而不是运行时回退大部分英文。
+3. 增加首页 route、文档内容和语言切换映射。
+4. 更新 canonical、`hreflang`、sitemap、`<html lang>` 和 metadata。
+5. 定义适合该书写系统的字体 fallback 与 display metrics。
+6. 增加单元和 Playwright 覆盖，包括移动端 overflow。
+
+只有这些步骤全部完成，新语言才算 first-class。

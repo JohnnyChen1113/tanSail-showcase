@@ -1,0 +1,81 @@
+export const metadata = {
+  slug: "cloudflare-deployment",
+  title: "部署到 Cloudflare Workers",
+  description:
+    "使用官方 Cloudflare Vite 插件和 Wrangler 完成认证、生产配置、构建部署、上线验证与安全回退。",
+  updatedAt: "2026-08-01",
+  readingMinutes: 12,
+  locale: "zh",
+  section: "ship",
+  order: 12,
+  keywords: ["Cloudflare Workers", "Wrangler", "Vite plugin", "deploy", "prerender", "回退"],
+  toc: [
+    { id: "deployment-model", label: "部署模型" },
+    { id: "prepare", label: "发布前配置" },
+    { id: "authenticate", label: "认证与部署" },
+    { id: "bindings", label: "Bindings 与密钥" },
+    { id: "verify-and-rollback", label: "验证与回退" },
+  ],
+};
+
+# 部署到 Cloudflare Workers
+
+TanSail 通过官方 `@cloudflare/vite-plugin` 构建 TanStack Start 的 SSR Worker，并由 Wrangler 发布。公开页面在构建时预渲染，动态请求仍由 Worker 入口处理；默认核心不需要任何 binding 或 secret。
+
+<h2 id="deployment-model">部署模型</h2>
+
+`vite.config.ts` 中 Cloudflare plugin、TanStack Start plugin 和 React plugin 共同定义构建。`wrangler.jsonc` 指向 `@tanstack/react-start/server-entry`，启用 `nodejs_compat`，并声明 compatibility date 与 assets binding。
+
+```text
+typed config + routes + MDX
+          │ vp build
+          ▼
+prerendered assets + SSR Worker bundle
+          │ wrangler deploy
+          ▼
+Cloudflare Worker version + workers.dev/custom domain
+```
+
+不要把 Cloudflare 部署描述为单纯上传静态目录；Worker server entry、SSR environment 和 assets 都属于产物。
+
+<h2 id="prepare">发布前配置</h2>
+
+1. 在 `src/config/site.ts` 把 `https://example.com` 改成真实生产 origin，不带尾部 `/`。
+2. 在 `wrangler.jsonc` 设置属于项目的 Worker name；starter core 不保存专属域名。
+3. 检查 canonical、Open Graph、sitemap 和 robots 使用同一个 origin。
+4. 运行完整质量门禁，并确认 build prerender 没有失败 route。
+
+```bash
+vp run design:check
+vp check
+vp test run
+vp build
+```
+
+<h2 id="authenticate">认证与部署</h2>
+
+首次在机器上使用 Wrangler：
+
+```bash
+pnpm wrangler login
+```
+
+完成浏览器授权后发布：
+
+```bash
+pnpm deploy
+```
+
+`deploy` script 先运行 `vp build`，再执行 `wrangler deploy`。成功输出会包含 Worker 版本和访问 URL。CI 中应使用作用域最小的 Cloudflare API token，不要提交 token、account ID 私密配置或真实 `.env`。
+
+<h2 id="bindings">Bindings 与密钥</h2>
+
+默认项目没有 bindings。只有新增模块确实需要 KV、D1、R2、Queues 或环境变量时，才在自己的 Wrangler 配置和 Worker types 中声明。公开值和 secret 分开管理；secret 使用 Wrangler secret 或部署平台配置，而不是写入 Git。
+
+Cloudflare 的环境变量按请求注入。server-only secret 应在 server function、middleware 或 `cloudflare:workers` env boundary 中读取，不能在可能进入客户端 bundle 的模块顶层访问。
+
+<h2 id="verify-and-rollback">验证与回退</h2>
+
+上线后逐项请求 `/en/`、`/zh/`、`/docs/en/`、`/docs/zh/`、一篇动态 slug 文档、`/sitemap.xml` 和 `/robots.txt`。检查状态码、语言、canonical、静态资源、移动端导航和 404；workers.dev 正常不代表自定义域名和缓存已经正确。
+
+发布前记录当前可用 Worker version。新版本出现严重问题时，优先通过 Cloudflare version/rollback 能力恢复已验证版本，再在本地修复和重新通过门禁；不要在生产控制台临时编辑一份无法回到 Git 的代码。

@@ -1,0 +1,79 @@
+export const metadata = {
+  slug: "clean-room-references",
+  title: "Clean-room references",
+  description:
+    "Turn public websites or screenshots into auditable design observations, visible original transformations, and a TanSail brief without copying implementation or assets.",
+  updatedAt: "2026-08-01",
+  readingMinutes: 12,
+  locale: "en",
+  section: "build",
+  order: 10,
+  keywords: ["clean room", "reference website", "design research", "SITE-BRIEF", "DESIGN.proposed"],
+  toc: [
+    { id: "boundary", label: "Clean-room boundary" },
+    { id: "observations", label: "Record observations" },
+    { id: "transformations", label: "Original transformations" },
+    { id: "commands", label: "Generate guarded documents" },
+    { id: "review", label: "Review checklist" },
+  ],
+};
+
+# Clean-room references
+
+A reference is design research, not a source-code, copy, or asset library. TanSail separates observations from implementation in a structured intake so every reference-derived decision remains auditable.
+
+<h2 id="boundary">Clean-room boundary</h2>
+
+Every intake sets `copySourceCode: false`, `copyAssets: false`, and `exactReproduction: false`. Do not transfer logos, brand names, customer marks, paid illustrations, product screenshots, long-form copy, or proprietary bundles. Do not promise pixel-perfect reproduction.
+
+General principles are valid research: three-column documentation navigation, readable article measure, search placement, heading hierarchy, and mobile directory behavior. The final palette, type pairing, copy, components, and interaction details belong to the target project.
+
+<h2 id="observations">Record observations</h2>
+
+Record hierarchy, typography, color/material, interaction, and explicit elements to avoid. Use measurable statements such as “the desktop article is approximately 800px wide and the right TOC disappears below a wide breakpoint,” not vague requests to make a page feel premium.
+
+<h2 id="transformations">Original transformations</h2>
+
+Every intake needs at least three visible transformations: a different grid, original palette/type pairing, original product imagery, a different section sequence, or a different interaction detail.
+
+<table>
+  <thead>
+    <tr>
+      <th>Observation</th>
+      <th>Acceptable transformation</th>
+      <th>Not acceptable</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Grouped left navigation improves retrieval</td>
+      <td>Use TanSail's own five-group IA</td>
+      <td>Copy the source categories and titles</td>
+    </tr>
+    <tr>
+      <td>Articles contain commands and warnings</td>
+      <td>Document real repository scripts</td>
+      <td>Paraphrase the source text</td>
+    </tr>
+    <tr>
+      <td>Mobile navigation collapses</td>
+      <td>Implement it in TanSail's component system</td>
+      <td>Download and modify the source bundle</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="commands">Generate guarded documents</h2>
+
+```bash
+vp run reference:brief -- --input examples/reference/reference-brief.json
+vp run reference:brief -- --input examples/reference/reference-brief.json --apply
+```
+
+The first command validates and previews. `--apply` writes fixed outputs: root `SITE-BRIEF.md` and `DESIGN.proposed.md`. Inputs are restricted to `examples/reference/` and `src/config/generated/`; the brief cannot choose arbitrary output paths.
+
+Review the proposal before reconciling it with root `DESIGN.md`, then export and check accepted tokens.
+
+<h2 id="review">Review checklist</h2>
+
+Confirm sources and observations are traceable, three visible transformations survive implementation, no protected text or assets moved, claims have evidence, both locales use TanSail content, keyboard/touch/responsive/reduced-motion behavior works, and the full quality gate passes. Keep unknown customers, metrics, domains, and licenses as unresolved requirements.

@@ -1,0 +1,131 @@
+export const metadata = {
+  slug: "troubleshooting",
+  title: "Commands and troubleshooting",
+  description:
+    "Find common TanSail commands and diagnose toolchain, route, MDX, design-contract, browser-testing, and Cloudflare deployment failures.",
+  updatedAt: "2026-08-01",
+  readingMinutes: 13,
+  locale: "en",
+  section: "reference",
+  order: 13,
+  keywords: [
+    "troubleshooting",
+    "command reference",
+    "routeTree",
+    "MDX errors",
+    "Wrangler",
+    "Vite+",
+  ],
+  toc: [
+    { id: "commands", label: "Command reference" },
+    { id: "toolchain", label: "Toolchain problems" },
+    { id: "routes-and-mdx", label: "Routes and MDX" },
+    { id: "design-and-browser", label: "Design and browser tests" },
+    { id: "deployment", label: "Deployment problems" },
+  ],
+};
+
+# Commands and troubleshooting
+
+Use this page to diagnose common TanSail failures by symptom. Preserve the complete error output and fix the earliest root cause. Avoid changing dependencies, screenshot baselines, and product code at the same time.
+
+<h2 id="commands">Command reference</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Task</th>
+      <th>Command</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Development server</td>
+      <td>
+        <code>vpr dev</code>
+      </td>
+    </tr>
+    <tr>
+      <td>Format, lint, types</td>
+      <td>
+        <code>vp check</code>
+      </td>
+    </tr>
+    <tr>
+      <td>Unit tests</td>
+      <td>
+        <code>vp test run</code>
+      </td>
+    </tr>
+    <tr>
+      <td>Design contract</td>
+      <td>
+        <code>vp run design:check</code>
+      </td>
+    </tr>
+    <tr>
+      <td>Browser behavior</td>
+      <td>
+        <code>pnpm test:browser</code>
+      </td>
+    </tr>
+    <tr>
+      <td>Visual suite</td>
+      <td>
+        <code>pnpm test:visual</code>
+      </td>
+    </tr>
+    <tr>
+      <td>Production build</td>
+      <td>
+        <code>vp build</code>
+      </td>
+    </tr>
+    <tr>
+      <td>Cloudflare release</td>
+      <td>
+        <code>pnpm deploy</code>
+      </td>
+    </tr>
+    <tr>
+      <td>Site brief dry run</td>
+      <td>
+        <code>vp run generate:site -- --brief &lt;file&gt;</code>
+      </td>
+    </tr>
+    <tr>
+      <td>Reference dry run</td>
+      <td>
+        <code>vp run reference:brief -- --input &lt;file&gt;</code>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="toolchain">Toolchain problems</h2>
+
+**`vp`, `vpr`, or `vpx` is missing:** install Vite+, confirm the binary is on PATH, then confirm Node ≥24 and pnpm ≥11. Package scripts such as `pnpm dev` remain available, but repository workflows assume Vite+ behavior.
+
+**Dependency or lockfile mismatch:** do not delete the lockfile blindly. Run `vp install` and determine whether the cause is registry access, Node engines, or catalog resolution. Run the full gate after dependency changes.
+
+<h2 id="routes-and-mdx">Routes and MDX</h2>
+
+**A new route has no types:** run the dev server or build so the Router plugin updates `src/routeTree.gen.ts`. Do not edit it manually.
+
+**A dynamic Link fails:** keep `to="/docs/$locale/$slug/"` and pass `params={{ locale, slug }}`. Do not interpolate the path.
+
+**MDX fails to build:** check schema-valid metadata, closed JSX tags, lowercase kebab-case TOC IDs, and balanced code fences. Locale pairs share slug and order, and slugs are unique within a locale.
+
+<h2 id="design-and-browser">Design and browser tests</h2>
+
+**`design:check` reports a stale export:** if the contract change is intentional, run `vp run design:export`; if only generated CSS changed, move the decision to the contract source.
+
+**Playwright cannot find a browser:** run `pnpm exec playwright install chromium` or use `TANSAIL_BROWSER_CHANNEL=chrome`. If a port is busy, identify the existing server before stopping any process.
+
+**Screenshot mismatch:** separate font/OS noise from a real layout regression. Run `pnpm test:visual:update` only after reviewing the new result.
+
+<h2 id="deployment">Deployment problems</h2>
+
+Authenticate with `pnpm wrangler login`, or verify CI token scope. If the Worker builds but the URL shows unexpected content, check Worker name, environment, production origin, and cache. If canonical still uses example.com, update `siteConfig.metadata.siteUrl` and rebuild. A docs 404 usually means a missing locale import, wrong slug param, or sitemap path mismatch.
+
+For unresolved failures, record the command, complete error, Node/pnpm/Vite+ versions, operating system, browser channel, and minimal reproduction route.

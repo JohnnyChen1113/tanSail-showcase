@@ -1,0 +1,103 @@
+export const metadata = {
+  slug: "design-contract",
+  title: "设计契约",
+  description:
+    "把 DESIGN.md 当作版本化接口使用：理解 token、导出文件、检查命令和跨组件视觉变更的正确流程。",
+  updatedAt: "2026-08-01",
+  readingMinutes: 10,
+  locale: "zh",
+  section: "design",
+  order: 4,
+  keywords: ["DESIGN.md", "design token", "设计检查", "语义变量", "对比度"],
+  toc: [
+    { id: "contract-role", label: "契约的职责" },
+    { id: "source-and-output", label: "源文件与产物" },
+    { id: "commands", label: "检查命令" },
+    { id: "when-to-edit", label: "何时修改契约" },
+    { id: "safe-change", label: "安全变更流程" },
+  ],
+};
+
+# 设计契约
+
+根目录 `DESIGN.md` 不是 mood board，而是版本化设计接口。YAML frontmatter 保存机器可读的色彩、排版、圆角、间距和组件引用；正文解释为什么这些规则存在，以及哪些用法会破坏产品方向。
+
+<h2 id="contract-role">契约的职责</h2>
+
+设计契约负责跨页面、跨组件的稳定规则，例如品牌色角色、正文和标题字阶、内容宽度、玻璃材质边界、中文排版和无障碍要求。它不负责记录某张卡片临时增加的 `margin-top`，也不替代组件 API。
+
+当前契约的方向是 Luminous Harbor：内容保持不透明和清晰，玻璃只用于导航、切换器、浮动动作和 overlay；英文与中文使用不同 display metrics；装饰必须服务层级或交互。
+
+<h2 id="source-and-output">源文件与产物</h2>
+
+`DESIGN.md` 是 source of truth，`src/styles/design.generated.css` 是由脚本生成的 Tailwind CSS 变量。不要只修改生成文件，因为下一次 export 会覆盖它，也会让 CI 报告契约与产物不同步。
+
+```text
+DESIGN.md
+   │  vp run design:export
+   ▼
+src/styles/design.generated.css
+   │  imported by src/styles.css
+   ▼
+semantic CSS variables used by components
+```
+
+<h2 id="commands">检查命令</h2>
+
+```bash
+vp run design:lint
+vp run design:export
+vp run design:check
+vp run design:diff -- DESIGN.before.md DESIGN.md
+```
+
+<table>
+  <thead>
+    <tr>
+      <th>命令</th>
+      <th>验证内容</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>design:lint</code>
+      </td>
+      <td>frontmatter 结构、引用、颜色与对比度问题</td>
+    </tr>
+    <tr>
+      <td>
+        <code>design:export</code>
+      </td>
+      <td>重新生成 CSS token 产物</td>
+    </tr>
+    <tr>
+      <td>
+        <code>design:check</code>
+      </td>
+      <td>契约有效且生成文件没有过期</td>
+    </tr>
+    <tr>
+      <td>
+        <code>design:diff</code>
+      </td>
+      <td>比较两版契约的 token 与文字变化</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="when-to-edit">何时修改契约</h2>
+
+当变化影响 identity、palette、type scale、spacing、shape、depth 或多个组件的行为时，先修改契约。单个组件内部的局部布局修复通常不需要新 token；但如果同一个视觉角色在三个以上组件反复出现，应考虑把它提升为语义 token。
+
+不要在 block 里判断当前 preset ID，也不要把 `#0b67d1` 之类品牌值写进页面组件。组件只消费 `--background`、`--foreground`、`--accent`、`--section-space` 等语义变量。
+
+<h2 id="safe-change">安全变更流程</h2>
+
+1. 保存修改前的契约用于 diff。
+2. 在 `DESIGN.md` 修改 token 和对应设计理由。
+3. 运行 lint、export 和 check。
+4. 在四种 preset、两种主题和中英文页面中检查影响。
+5. 运行浏览器与视觉测试；只有确认变化是有意的，才更新截图基线。
+
+如果新设计只在某个 preset 中成立，应修改 `src/config/presets.ts` 的该 preset，而不是改根契约中所有方向共享的原则。

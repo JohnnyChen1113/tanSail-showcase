@@ -1,0 +1,103 @@
+export const metadata = {
+  slug: "agent-workflows",
+  title: "Agent workflows",
+  description:
+    "Choose build-tansail-site or reference-to-tansail and understand the brief schema, dry-run flow, guarded write boundaries, and completion gate.",
+  updatedAt: "2026-08-01",
+  readingMinutes: 12,
+  locale: "en",
+  section: "build",
+  order: 9,
+  keywords: ["Codex skill", "site brief", "site generation", "dry run", "agent"],
+  toc: [
+    { id: "choose", label: "Choose a workflow" },
+    { id: "brief-schema", label: "Brief schema" },
+    { id: "dry-run", label: "Dry run and apply" },
+    { id: "write-boundaries", label: "Write boundaries" },
+    { id: "completion", label: "Completion criteria" },
+  ],
+};
+
+# Agent workflows
+
+TanSail packages repository constraints into two Codex skills. They do not turn one prompt into arbitrary component edits. They first translate intent into a validated brief, then use maintained presets, recipes, and blocks.
+
+<h2 id="choose">Choose a workflow</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Input</th>
+      <th>Skill</th>
+      <th>Primary output</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Brand, audience, outcome, page needs</td>
+      <td>
+        <code>build-tansail-site</code>
+      </td>
+      <td>Validated site brief and generated preview</td>
+    </tr>
+    <tr>
+      <td>Reference URL or screenshot</td>
+      <td>
+        <code>reference-to-tansail</code>
+      </td>
+      <td>Clean-room intake, SITE-BRIEF, design proposal</td>
+    </tr>
+  </tbody>
+</table>
+
+After reference analysis, the result returns to the normal build workflow. Do not let both skills create separate implementations.
+
+<h2 id="brief-schema">Brief schema</h2>
+
+Version 1 records brand name, tagline, and description; primary audience, problem, and outcome; page paths, goals, and section families; one to three tones; a supported preset; a supported recipe; and Cloudflare Workers deployment with an optional domain.
+
+```json
+{
+  "version": 1,
+  "brand": {
+    "name": "Northwind",
+    "tagline": "Make releases understandable",
+    "description": "A bilingual release product"
+  },
+  "audience": {
+    "primary": "Product teams",
+    "problem": "Release facts are fragmented",
+    "outcome": "Publish one clear narrative"
+  },
+  "pages": [
+    {
+      "name": "Home",
+      "path": "/",
+      "goal": "Explain the product",
+      "sections": ["hero", "features", "faq", "cta"]
+    }
+  ],
+  "tone": ["technical", "editorial"],
+  "preset": "horizon",
+  "recipe": "saas-product",
+  "deployment": { "target": "cloudflare-workers" }
+}
+```
+
+<h2 id="dry-run">Dry run and apply</h2>
+
+```bash
+vp run generate:site -- --brief examples/generation/saas-brief.json
+vp run generate:site -- --brief examples/generation/saas-brief.json --apply
+vp run generate:site -- --brief examples/generation/saas-brief.json --check
+```
+
+The first command prints normalized JSON without changing the repository. `--apply` writes explicitly. `--check` confirms that committed output matches the source brief. Inspect `/generated-preview` after applying.
+
+<h2 id="write-boundaries">Write boundaries</h2>
+
+The generator can write only `src/config/generated/*.json`; output cannot escape the directory. Unknown presets, recipes, tones, paths, and sections fail validation. The workflow does not install packages, add auth, create a database, or configure external services, and it cannot invent customers, metrics, certifications, prices, or legal claims.
+
+<h2 id="completion">Completion criteria</h2>
+
+A generated result is complete only when unresolved facts are reported, both locales work, reference-derived choices remain original, `vp check`, `vp test run`, and `vp build` pass, and a real browser verifies desktop/mobile navigation, themes, links, and metadata.

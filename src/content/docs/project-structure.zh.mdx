@@ -1,0 +1,112 @@
+export const metadata = {
+  slug: "project-structure",
+  title: "项目结构",
+  description:
+    "读懂 TanSail 的目录分层、内容归属、路由生成机制和可删除模块，避免把改动放进错误的层级。",
+  updatedAt: "2026-08-01",
+  readingMinutes: 9,
+  locale: "zh",
+  section: "start",
+  order: 3,
+  keywords: ["目录结构", "配置", "路由", "MDX", "可选模块"],
+  toc: [
+    { id: "directory-map", label: "目录地图" },
+    { id: "ownership", label: "修改归属" },
+    { id: "routes", label: "路由与生成文件" },
+    { id: "optional-modules", label: "可选模块" },
+    { id: "decision-guide", label: "修改决策" },
+  ],
+};
+
+# 项目结构
+
+TanSail 的目录按“契约、配置、组件、内容、路由、验证”分层。先找清楚数据属于哪一层，再修改实现，可以显著减少重复文案、硬编码颜色和路由类型错误。
+
+<h2 id="directory-map">目录地图</h2>
+
+```text
+.
+├── DESIGN.md                 # 人和工具共享的设计契约
+├── src/config/               # 站点、preset、block、recipe 与 brief schema
+├── src/i18n.ts               # 英文和简体中文 typed dictionaries
+├── src/components/           # shell、blocks、内容模板和 UI primitives
+├── src/content/              # MDX 文档与博客及其注册表
+├── src/routes/               # TanStack Router 文件路由
+├── src/lib/                  # SEO、结构化数据和纯函数
+├── scripts/                  # 设计导出与受限生成脚本
+├── tests/visual/             # Playwright 行为与截图测试
+└── docs/                     # 维护者级工程指南
+```
+
+`src/content/docs/` 是访客看到的产品文档；根目录 `docs/` 是更接近源码的维护指南。两者可以共享事实，但受众和表达方式不同。
+
+<h2 id="ownership">修改归属</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>需求</th>
+      <th>首选位置</th>
+      <th>不要先改</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>改品牌、导航或 SEO</td>
+      <td>
+        <code>src/config/site.ts</code>
+      </td>
+      <td>Header JSX</td>
+    </tr>
+    <tr>
+      <td>改首页中英文文案</td>
+      <td>
+        <code>src/i18n.ts</code>
+      </td>
+      <td>路由组件</td>
+    </tr>
+    <tr>
+      <td>改全站颜色、字体或密度</td>
+      <td>
+        <code>DESIGN.md</code> 与 preset
+      </td>
+      <td>单个页面 class</td>
+    </tr>
+    <tr>
+      <td>改一个区块的内容结构</td>
+      <td>
+        <code>src/config/blocks.ts</code>
+      </td>
+      <td>复制一个新组件</td>
+    </tr>
+    <tr>
+      <td>新增公开页面</td>
+      <td>
+        <code>src/routes/</code>
+      </td>
+      <td>手改 route tree</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="routes">路由与生成文件</h2>
+
+文件名中的 `$locale`、`$slug` 和 `$recipeId` 是 typed path params。链接必须保留路由模板并通过 `params` 传值：
+
+```tsx
+<Link to="/docs/$locale/$slug/" params={{ locale, slug }}>
+  Read guide
+</Link>
+```
+
+不要把参数拼进 `to` 字符串。`src/routeTree.gen.ts` 由 TanStack Router 插件生成；新增或删除 route 文件后运行开发服务器或构建让插件更新它，不要手工维护。
+
+<h2 id="optional-modules">可选模块</h2>
+
+Gallery、Recipes、MDX 博客、Changelog、Legal 和 Contact 都是可删除的示例或内容模块。删除时同时处理导航、sitemap、测试和相关 route；核心站点 shell、preset 与 Cloudflare 构建不应因此失效。
+
+认证、数据库、支付、邮件、分析和 CMS 尚未作为核心代码存在。未来加入这些能力时，应把 server-only 代码放在明确边界中，并让默认 starter 在没有相应 binding 或 secret 时仍可运行。
+
+<h2 id="decision-guide">修改决策</h2>
+
+遇到修改时按顺序判断：它是文案、结构配置、跨页面视觉规则、单组件行为，还是新路由？优先修改最高层的真实 source of truth。只有当现有 schema 无法表达一个稳定需求时，才扩展 schema 和组件；不要为单个页面新增无法复用的全局 token。

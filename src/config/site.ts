@@ -1,11 +1,11 @@
 import { z } from "zod";
 
-import { getDictionary, type Dictionary, type Locale } from "#/i18n";
+import { getDictionary, type Dictionary, type Locale, locales } from "#/i18n";
 
 const routeLinkSchema = z.object({
   kind: z.literal("route"),
   label: z.string().min(1),
-  to: z.literal("/"),
+  to: z.enum(["/", "/generated-preview/", "/recipes/", "/docs/en/", "/docs/zh/"]),
 });
 
 const anchorLinkSchema = z.object({
@@ -29,8 +29,16 @@ const siteLinkSchema = z.discriminatedUnion("kind", [
 
 const metadataSchema = z.object({
   name: z.string().min(1),
-  title: z.string().min(1),
-  description: z.string().min(1).max(160),
+  title: z
+    .string()
+    .trim()
+    .min(40, "SEO titles should contain 40–60 characters")
+    .max(60, "SEO titles should contain 40–60 characters"),
+  description: z
+    .string()
+    .trim()
+    .min(140, "SEO descriptions should contain 140–160 characters")
+    .max(160, "SEO descriptions should contain 140–160 characters"),
   siteUrl: z.url().refine((url) => !url.endsWith("/"), "Use an origin without a trailing slash"),
   locale: z.string().min(2),
   themeColor: z.object({
@@ -44,6 +52,32 @@ const sitemapEntrySchema = z.object({
   changeFrequency: z.enum(["daily", "weekly", "monthly", "yearly"]),
   priority: z.number().min(0).max(1),
 });
+
+const docsSitemapSlugs = [
+  "introduction",
+  "getting-started",
+  "project-structure",
+  "design-contract",
+  "visual-presets",
+  "blocks-and-recipes",
+  "site-configuration",
+  "content-and-i18n",
+  "agent-workflows",
+  "clean-room-references",
+  "quality-and-testing",
+  "cloudflare-deployment",
+  "troubleshooting",
+];
+
+function createDocsSitemapEntries(): Array<z.infer<typeof sitemapEntrySchema>> {
+  return locales.flatMap((docsLocale) =>
+    docsSitemapSlugs.map((slug) => ({
+      path: `/docs/${docsLocale}/${slug}`,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    })),
+  );
+}
 
 export const siteConfigSchema = z.object({
   metadata: metadataSchema,
@@ -95,19 +129,16 @@ export function createLocalizedSiteConfig(locale: Locale, dictionary: Dictionary
         dark: "#07111f",
       },
     },
-    announcement: {
-      text: dictionary.announcement.text,
-      action: {
-        kind: "external",
-        label: dictionary.announcement.action,
-        href: "https://github.com/JohnnyChen1113/tanSail/blob/main/DESIGN.md",
-        newTab: true,
-      },
-    },
     navigation: [
+      {
+        kind: "route",
+        label: dictionary.navigation.docs,
+        to: locale === "zh" ? "/docs/zh/" : "/docs/en/",
+      },
+      { kind: "route", label: dictionary.navigation.recipes, to: "/generated-preview/" },
       { kind: "anchor", label: dictionary.navigation.system, href: "#system" },
+      { kind: "anchor", label: dictionary.navigation.scenarios, href: "#scenarios" },
       { kind: "anchor", label: dictionary.navigation.workflow, href: "#workflow" },
-      { kind: "anchor", label: dictionary.navigation.quality, href: "#quality" },
       { kind: "anchor", label: dictionary.navigation.faq, href: "#faq" },
     ],
     actions: {
@@ -120,7 +151,7 @@ export function createLocalizedSiteConfig(locale: Locale, dictionary: Dictionary
       secondary: {
         kind: "anchor",
         label: dictionary.actions.explore,
-        href: "#system",
+        href: "#paths",
       },
     },
     socialLinks: [
@@ -152,10 +183,9 @@ export function createLocalizedSiteConfig(locale: Locale, dictionary: Dictionary
               newTab: true,
             },
             {
-              kind: "external",
+              kind: "route",
               label: dictionary.footer.documentation,
-              href: "https://github.com/JohnnyChen1113/tanSail/tree/main/docs",
-              newTab: true,
+              to: locale === "zh" ? "/docs/zh/" : "/docs/en/",
             },
           ],
         },
@@ -175,6 +205,9 @@ export function createLocalizedSiteConfig(locale: Locale, dictionary: Dictionary
         { path: "/zh/", changeFrequency: "monthly", priority: 1 },
         { path: "/gallery/", changeFrequency: "monthly", priority: 0.8 },
         { path: "/docs/", changeFrequency: "monthly", priority: 0.7 },
+        { path: "/docs/en/", changeFrequency: "monthly", priority: 0.8 },
+        { path: "/docs/zh/", changeFrequency: "monthly", priority: 0.8 },
+        ...createDocsSitemapEntries(),
       ],
     },
   });

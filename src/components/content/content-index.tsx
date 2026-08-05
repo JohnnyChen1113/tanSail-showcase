@@ -3,17 +3,15 @@ import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
 
 import { PresetToggle } from "#/components/preset-toggle";
 import { ThemeToggle } from "#/components/theme-toggle";
-import type { ContentEntry } from "#/content/content";
+import type { BlogEntry } from "#/content/content";
 
 export function ContentIndex({
   description,
   entries,
-  kind,
   title,
 }: {
   readonly description: string;
-  readonly entries: Array<ContentEntry>;
-  readonly kind: "blog" | "docs";
+  readonly entries: Array<BlogEntry>;
   readonly title: string;
 }) {
   return (
@@ -41,11 +39,8 @@ export function ContentIndex({
             </div>
             <h2>{entry.metadata.title}</h2>
             <p>{entry.metadata.description}</p>
-            <Link
-              to={kind === "blog" ? "/blog/$slug/" : "/docs/$slug/"}
-              params={{ slug: entry.metadata.slug }}
-            >
-              Read {kind === "blog" ? "article" : "guide"} <ArrowRightIcon aria-hidden="true" />
+            <Link to="/blog/$slug/" params={{ slug: entry.metadata.slug }}>
+              Read article <ArrowRightIcon aria-hidden="true" />
             </Link>
           </article>
         ))}

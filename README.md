@@ -24,7 +24,7 @@ or required secrets.
 - Light, dark, and system themes without a flash of the wrong theme
 - Zod-validated site identity, navigation, calls to action, social links, and footer config
 - Reusable accessible announcement, header, mobile navigation, section, and footer components
-- Harbor, Luminous, and Signal atmospheres with stable geometry and a flash-free selector
+- Harbor, Luminous, Signal, and structurally distinct Ledger systems with a flash-free selector
 - Typed hero, proof, feature, pricing, FAQ, and CTA blocks with a local design Gallery
 - Optional MDX docs/blog plus Changelog, Legal, Contact, JSON-LD, and share-image recipes
 - A guarded one-prompt workflow plus reference-to-original-site Codex skills

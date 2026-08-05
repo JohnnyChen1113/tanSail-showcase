@@ -9,7 +9,7 @@ Update `src/config/site.ts` for structural site configuration and `src/i18n.ts` 
 English and Chinese copy. Together they own:
 
 - site name, title, description, canonical URL, locale, and light/dark browser colors;
-- the announcement and its optional action;
+- the optional announcement and its optional action;
 - desktop and mobile navigation;
 - primary and secondary calls to action;
 - social links;
@@ -18,7 +18,12 @@ English and Chinese copy. Together they own:
 
 The exported `defineSiteConfig` function validates the configuration with Zod when the app
 starts. Invalid URLs, empty labels, malformed anchors, and out-of-range sitemap priorities fail
-early instead of producing broken navigation or metadata.
+early instead of producing broken navigation or metadata. SEO titles must contain 40–60
+characters and descriptions 140–160 characters so generated sites start inside common search
+display recommendations.
+
+Announcements are opt-in. The default config omits `announcement`; add the optional object only
+for a timely, site-wide message that deserves space above the primary navigation.
 
 The starter deliberately uses `https://example.com`. Replace it with the final production origin
 before deploying. Use the origin only, without a trailing slash.

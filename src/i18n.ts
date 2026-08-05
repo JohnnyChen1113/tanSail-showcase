@@ -1,3 +1,5 @@
+import type { PresetId } from "#/config/presets";
+
 export const locales = ["en", "zh"] as const;
 export type Locale = (typeof locales)[number];
 
@@ -30,14 +32,17 @@ export type Dictionary = {
     light: string;
     dark: string;
     system: string;
-    descriptions: Record<"harbor" | "horizon" | "nightwatch", string>;
+    descriptions: Record<PresetId, string>;
   };
   announcement: {
     text: string;
     action: string;
   };
   navigation: {
+    docs: string;
+    recipes: string;
     system: string;
+    scenarios: string;
     workflow: string;
     quality: string;
     faq: string;
@@ -56,6 +61,12 @@ export type Dictionary = {
   proof: {
     label: string;
     values: string[];
+  };
+  paths: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    items: Array<{ kicker: string; title: string; description: string; command: string }>;
   };
   system: {
     eyebrow: string;
@@ -99,9 +110,9 @@ export type Dictionary = {
 
 const en = {
   meta: {
-    title: "TanSail — A design-first TanStack starter",
+    title: "TanSail v0.2.0 — Design direction. Ship bilingual websites.",
     description:
-      "A refined, bilingual TanStack Start foundation with curated landing blocks and Cloudflare deployment.",
+      "Build original bilingual product websites with TanSail v0.2.0 using governed design contracts, typed routes, browser-tested UI, SEO, and Cloudflare Workers.",
   },
   a11y: {
     skipToContent: "Skip to content",
@@ -122,16 +133,20 @@ const en = {
       harbor: "Editorial, warm, and quietly confident.",
       horizon: "Cool, product-led, and quietly radiant.",
       nightwatch: "Graphite, violet, and technically precise.",
+      ledger: "Graphic, compact, and structured like a working manual.",
     },
   },
   announcement: {
-    text: "TanSail is evolving into a design-governed, bilingual starter.",
-    action: "Read the design contract",
+    text: "TanSail v0.2.0 is live: design contracts, bilingual routes, and clean-room references.",
+    action: "Read the release",
   },
   navigation: {
+    docs: "Docs",
+    recipes: "Ledger demo",
     system: "System",
-    workflow: "Workflow",
-    quality: "Quality",
+    scenarios: "Scenarios",
+    workflow: "Delivery",
+    quality: "Proof",
     faq: "FAQ",
   },
   actions: {
@@ -147,80 +162,126 @@ const en = {
     note: "MIT licensed · bilingual by default · browser tested",
   },
   proof: {
-    label: "Built on a modern, durable web stack",
-    values: ["TanStack", "React 19", "Cloudflare", "Tailwind CSS", "shadcn/ui", "Vite+"],
+    label: "TanSail v0.2.0, in working parts",
+    values: [
+      "DESIGN.md",
+      "/en + /zh",
+      "9 block families",
+      "6 page recipes",
+      "Cloudflare Workers",
+      "0 required secrets",
+    ],
   },
-  system: {
-    eyebrow: "Curated system",
-    title: "More direction. Fewer arbitrary knobs.",
+  paths: {
+    eyebrow: "Three ways in",
+    title: "Start with the context you actually have.",
     description:
-      "Every layer has a clear job, from the design contract to the product-facing compositions.",
+      "A prompt, a reference, or a clean foundation can enter the same governed workflow without turning into the same-looking website.",
     items: [
       {
-        kicker: "01 · Identity",
-        title: "Language-aware type",
+        kicker: "01 · Prompt",
+        title: "A product idea",
         description:
-          "Latin and Chinese typography use separate display metrics, fallbacks, and reading measures.",
+          "Translate audience, outcome, pages, tone, and deployment into a validated site brief before touching presentation code.",
+        command: "$ build-tansail-site",
+      },
+      {
+        kicker: "02 · Reference",
+        title: "A URL or screenshot",
+        description:
+          "Record high-level design observations, require visible transformations, and rebuild with original copy, assets, and composition.",
+        command: "$ reference-to-tansail",
+      },
+      {
+        kicker: "03 · Starter",
+        title: "A clean foundation",
+        description:
+          "Begin with React 19, typed routes, curated blocks, themes, checks, and a Cloudflare-native production target.",
+        command: "$ vp dev",
+      },
+    ],
+  },
+  system: {
+    eyebrow: "Governed system",
+    title: "The page stays flexible. The standards stay put.",
+    description:
+      "The v0.2.0 contracts keep identity, language, composition, and delivery aligned without coupling them to one website.",
+    items: [
+      {
+        kicker: "01 · Direction",
+        title: "A design contract that travels",
+        description:
+          "DESIGN.md stores machine-readable tokens beside the reasoning that keeps them coherent.",
+        metric: "1 source",
+      },
+      {
+        kicker: "02 · Language",
+        title: "Routes built for both languages",
+        description:
+          "English and Chinese share structure while keeping independent copy, metadata, type metrics, and accessible controls.",
         metric: "2 locales",
       },
       {
-        kicker: "02 · Material",
-        title: "Restrained glass",
-        description:
-          "Luminous surfaces clarify controls and navigation while content stays calm and opaque.",
-        metric: "AA contrast",
-      },
-      {
         kicker: "03 · Composition",
-        title: "Real product evidence",
+        title: "Curated blocks, not a page builder",
         description:
-          "Product frames, workflows, and measurable proof replace decorative placeholder geometry.",
-        metric: "9 blocks",
+          "Typed blocks and six narrative recipes create range without a proprietary runtime or arbitrary canvas.",
+        metric: "9 families",
       },
       {
-        kicker: "04 · Governance",
-        title: "A contract that travels",
+        kicker: "04 · Delivery",
+        title: "A Worker is the default output",
         description:
-          "DESIGN.md keeps tokens and design rationale readable by people, tools, and coding agents.",
-        metric: "1 source",
+          "The official Cloudflare Vite plugin, prerendering, Wrangler, and SEO routes share one documented path.",
+        metric: "1 target",
       },
     ],
   },
   workflow: {
-    eyebrow: "One clear workflow",
-    title: "From reference to an original, deployable site.",
+    eyebrow: "One delivery path",
+    title: "From intent to a live Worker, with evidence at every step.",
     description:
-      "Capture intent, establish constraints, compose from tested primitives, then verify the result in a real browser.",
+      "Each phase leaves a typed or versioned artifact behind, so the finish is reproducible instead of accidental.",
     steps: [
       {
         number: "01",
-        title: "Describe the outcome",
-        description:
-          "Start from audience, product promise, content, and reference URLs or screenshots.",
+        title: "Brief the outcome",
+        description: "Define the audience, promise, pages, tone, locales, and production target.",
       },
       {
         number: "02",
-        title: "Generate the brief",
+        title: "Lock design intent",
         description:
-          "Translate references into an original SITE-BRIEF and a project-specific DESIGN.md.",
+          "Record tokens, material rules, type metrics, and explicit clean-room boundaries.",
       },
       {
         number: "03",
-        title: "Compose and verify",
+        title: "Compose the routes",
         description:
-          "Build with curated blocks, then run type, behavior, accessibility, and design checks.",
+          "Build English and Chinese pages from typed content and original product surfaces.",
+      },
+      {
+        number: "04",
+        title: "Check and deploy",
+        description:
+          "Verify design, types, tests, browser behavior, build output, and the live Worker.",
       },
     ],
   },
   quality: {
-    eyebrow: "Quality is part of the starter",
-    title: "Fast to begin, difficult to accidentally degrade.",
+    eyebrow: "Proof, not promises",
+    title: "The useful numbers are the ones the repository can verify.",
     description:
-      "The same workflow checks the design contract, TypeScript, behavior, production output, and browser essentials.",
+      "TanSail avoids invented customers, vanity metrics, and hidden service dependencies. Its evidence lives in the codebase.",
     items: [
       { value: "0", label: "required services", detail: "No auth, database, or secret needed." },
-      { value: "AA", label: "contrast target", detail: "Controls remain legible across themes." },
       { value: "2", label: "first-class locales", detail: "English and Simplified Chinese." },
+      { value: "3", label: "visual atmospheres", detail: "Harbor, Luminous, and Signal." },
+      {
+        value: "6",
+        label: "page recipes",
+        detail: "Product, open-source, expert, and studio paths.",
+      },
     ],
   },
   faq: {
@@ -228,9 +289,9 @@ const en = {
     title: "What TanSail is—and what it deliberately is not.",
     items: [
       {
-        question: "Is TanSail a SaaS boilerplate?",
+        question: "Is TanSail a SaaS boilerplate or a page builder?",
         answer:
-          "No. It is a browser-first product and marketing foundation. Authentication, billing, and databases stay optional.",
+          "Neither. It is a browser-first product and marketing foundation built from ordinary typed React compositions. Authentication, billing, and databases stay optional.",
       },
       {
         question: "Can it reproduce a reference website?",
@@ -238,16 +299,16 @@ const en = {
           "It can analyze composition, typography, rhythm, and interaction patterns, then generate an original implementation without copying proprietary code or assets.",
       },
       {
-        question: "Why is glass used sparingly?",
+        question: "What changed in v0.2.0?",
         answer:
-          "Glass works best as a functional layer for controls and navigation. Opaque content surfaces preserve hierarchy, contrast, and performance.",
+          "The release added the DESIGN.md contract, English and Chinese routes, language-aware typography, original product surfaces, and the clean-room Reference-to-TanSail workflow.",
       },
     ],
   },
   cta: {
-    eyebrow: "Set a better course",
-    title: "Start with a system that already has a point of view.",
-    description: "Clone the starter, replace the content, and keep the quality gates.",
+    eyebrow: "Set the course",
+    title: "Give the next website a direction before it gets more files.",
+    description: "Start from the v0.2.0 repository. Keep the contracts, replace the product.",
   },
   footer: {
     tagline: "Design-first TanStack Start, released under MIT.",
@@ -263,8 +324,9 @@ const en = {
 
 const zh = {
   meta: {
-    title: "TanSail — 设计优先的 TanStack 起点",
-    description: "精炼、双语、可部署到 Cloudflare 的 TanStack Start 网站基础与精品页面区块。",
+    title: "TanSail v0.2.0｜先定设计方向，再交付双语 TanStack Start 产品官网",
+    description:
+      "TanSail v0.2.0 帮助团队把清晰简报转化为原创双语产品官网，覆盖 DESIGN.md 设计契约、类型安全的 TanStack Start 路由、中英文 SEO、响应式界面与无障碍默认值、真实浏览器质量验证，以及 Cloudflare Workers 构建、预览和部署，全程不要求登录、数据库或密钥。",
   },
   a11y: {
     skipToContent: "跳到主要内容",
@@ -285,16 +347,20 @@ const zh = {
       harbor: "编辑感、温暖而克制。",
       horizon: "冷静、产品导向，带一点柔和光感。",
       nightwatch: "石墨与紫色，精确而技术化。",
+      ledger: "硬朗、紧凑，像一本可直接工作的编目手册。",
     },
   },
   announcement: {
-    text: "TanSail 正在成为一个由设计契约管理的双语起点。",
-    action: "查看设计契约",
+    text: "TanSail v0.2.0 已发布：设计契约、双语路由与 clean-room 参考流程。",
+    action: "查看版本说明",
   },
   navigation: {
+    docs: "使用文档",
+    recipes: "Ledger 方案",
     system: "设计系统",
-    workflow: "工作流",
-    quality: "质量",
+    scenarios: "适用场景",
+    workflow: "交付路径",
+    quality: "项目证据",
     faq: "常见问题",
   },
   actions: {
@@ -310,70 +376,111 @@ const zh = {
     note: "MIT 许可 · 默认双语 · 浏览器验证",
   },
   proof: {
-    label: "建立在现代、耐用且开放的 Web 技术之上",
-    values: ["TanStack", "React 19", "Cloudflare", "Tailwind CSS", "shadcn/ui", "Vite+"],
+    label: "组成 TanSail v0.2.0 的真实部件",
+    values: [
+      "DESIGN.md",
+      "/en + /zh",
+      "9 类区块",
+      "6 套页面 recipe",
+      "Cloudflare Workers",
+      "0 个必需密钥",
+    ],
   },
-  system: {
-    eyebrow: "精选系统",
-    title: "方向更清楚，随意的旋钮更少。",
-    description: "从设计契约到面向产品的构图，每一层都只有一个明确职责。",
+  paths: {
+    eyebrow: "三种入口",
+    title: "从你手上真正拥有的上下文开始。",
+    description:
+      "无论是一段想法、一个参考站，还是一套干净的基础，都能进入同一条受约束的流程，但不会长成千篇一律的网站。",
     items: [
       {
-        kicker: "01 · 识别",
-        title: "真正适合双语的排版",
-        description: "中文和英文分别使用合适的标题比例、字体回退、字距和阅读宽度。",
+        kicker: "01 · 一段需求",
+        title: "从产品想法开始",
+        description:
+          "先把受众、结果、页面、语气和部署目标整理成通过校验的 brief，再触碰表现层代码。",
+        command: "$ build-tansail-site",
+      },
+      {
+        kicker: "02 · 一个参考",
+        title: "从网址或截图开始",
+        description: "只记录高层设计观察，明确要求可见转化，再用原创文案、素材和构图重新实现。",
+        command: "$ reference-to-tansail",
+      },
+      {
+        kicker: "03 · 一套基础",
+        title: "从干净 starter 开始",
+        description:
+          "直接获得 React 19、类型安全路由、精选区块、主题、质量检查和 Cloudflare 生产目标。",
+        command: "$ vp dev",
+      },
+    ],
+  },
+  system: {
+    eyebrow: "受治理的系统",
+    title: "页面可以灵活，标准不会漂移。",
+    description: "v0.2.0 的契约让品牌、语言、构图和交付始终对齐，却不把它们锁死在某一个网站里。",
+    items: [
+      {
+        kicker: "01 · 方向",
+        title: "可以随项目迁移的设计契约",
+        description: "DESIGN.md 把机器可读的 token 与保持系统一致的设计理由放在同一个地方。",
+        metric: "1 个源头",
+      },
+      {
+        kicker: "02 · 语言",
+        title: "真正为两种语言设计的路由",
+        description: "中英文共享结构，但各自拥有自然文案、元数据、排版尺度和无障碍控件。",
         metric: "2 种语言",
       },
       {
-        kicker: "02 · 材质",
-        title: "克制的动态玻璃",
-        description: "发光半透明材质只用于导航与控件，正文区域保持安静、扎实。",
-        metric: "AA 对比度",
-      },
-      {
         kicker: "03 · 构图",
-        title: "看得懂的产品画面",
-        description: "用真实界面、工作流和数据证据，替代没有含义的抽象同心图形。",
-        metric: "9 类区块",
+        title: "精选区块，而不是页面构建器",
+        description: "类型安全区块与六套叙事 recipe 提供变化，不需要专有运行时或任意拖拽画布。",
+        metric: "9 个家族",
       },
       {
-        kicker: "04 · 治理",
-        title: "可以随项目迁移的契约",
-        description: "DESIGN.md 让设计取舍同时对人、工具和编程 Agent 清晰可读。",
-        metric: "1 个源头",
+        kicker: "04 · 交付",
+        title: "默认产物就是一个 Worker",
+        description: "官方 Cloudflare Vite 插件、预渲染、Wrangler 与 SEO 路由共用一条清楚路径。",
+        metric: "1 个目标",
       },
     ],
   },
   workflow: {
-    eyebrow: "一条清楚的工作流",
-    title: "从参考网站，到原创、可部署的成品。",
-    description: "先提取意图与约束，再用经过测试的组件构图，最后在真实浏览器里验证。",
+    eyebrow: "一条交付路径",
+    title: "从意图到在线 Worker，每一步都有证据。",
+    description: "每个阶段都会留下类型安全或可版本化的产物，让完成度可以复现，而不是偶然出现。",
     steps: [
       {
         number: "01",
-        title: "说清要达成什么",
-        description: "从受众、产品承诺、内容，以及参考网址或截图开始。",
+        title: "定义结果",
+        description: "明确受众、承诺、页面、语气、语言与生产环境。",
       },
       {
         number: "02",
-        title: "生成设计简报",
-        description: "把参考转译成原创 SITE-BRIEF 和项目专属 DESIGN.md。",
+        title: "锁定设计意图",
+        description: "记录 token、材质规则、排版尺度和明确的 clean-room 边界。",
       },
       {
         number: "03",
-        title: "构建并验证",
-        description: "用精选区块完成页面，再检查类型、行为、无障碍与设计质量。",
+        title: "构建双语路由",
+        description: "用类型安全内容与原创产品画面完成中英文页面。",
+      },
+      {
+        number: "04",
+        title: "检查并部署",
+        description: "验证设计、类型、测试、浏览器行为、构建产物和线上 Worker。",
       },
     ],
   },
   quality: {
-    eyebrow: "质量是起点的一部分",
-    title: "开始很快，但不容易被随手改坏。",
-    description: "同一套工作流检查设计契约、TypeScript、页面行为、生产构建与浏览器基础。",
+    eyebrow: "证据，而不是口号",
+    title: "真正有用的数字，都应该能在仓库里验证。",
+    description: "TanSail 不虚构客户与指标，也不隐藏服务依赖；它的证据就在代码里。",
     items: [
       { value: "0", label: "必需服务", detail: "不依赖登录、数据库或密钥。" },
-      { value: "AA", label: "对比度目标", detail: "控件在各种主题下都清晰可读。" },
       { value: "2", label: "一等语言", detail: "英文与简体中文。" },
+      { value: "3", label: "视觉氛围", detail: "Harbor、Luminous 与 Signal。" },
+      { value: "6", label: "页面 recipe", detail: "覆盖产品、开源、专家与工作室。" },
     ],
   },
   faq: {
@@ -381,23 +488,25 @@ const zh = {
     title: "TanSail 是什么，以及它刻意不做什么。",
     items: [
       {
-        question: "TanSail 是 SaaS 模板吗？",
-        answer: "不是。它是浏览器优先的产品与营销网站基础；登录、付费和数据库始终是可选项。",
+        question: "TanSail 是 SaaS 模板或页面构建器吗？",
+        answer:
+          "都不是。它是由普通、类型安全 React 构图组成的浏览器优先产品站基础；登录、付费和数据库始终可选。",
       },
       {
         question: "它能克隆参考网站吗？",
         answer: "它可以分析构图、排版、节奏与交互模式，再生成原创实现，但不会复制专有代码或素材。",
       },
       {
-        question: "为什么玻璃效果用得这么克制？",
-        answer: "玻璃最适合导航和控件等功能层；不透明的内容表面能保住层级、对比度和性能。",
+        question: "v0.2.0 新增了什么？",
+        answer:
+          "这一版加入 DESIGN.md 契约、中英文路由、语言感知排版、原创产品画面，以及 clean-room 的 Reference-to-TanSail 流程。",
       },
     ],
   },
   cta: {
-    eyebrow: "设定更好的航向",
-    title: "从一个已经有设计立场的系统开始。",
-    description: "克隆起点，替换内容，同时保留质量门禁。",
+    eyebrow: "设定航向",
+    title: "在文件变多之前，先给下一个网站一个方向。",
+    description: "从 v0.2.0 仓库开始。保留契约，替换产品。",
   },
   footer: {
     tagline: "设计优先的 TanStack Start，采用 MIT 许可。",
@@ -427,7 +536,8 @@ export function getAlternateLocale(locale: Locale): Locale {
 }
 
 export function resolveLocaleFromPath(pathname: string): Locale {
-  const [, candidate] = pathname.split("/");
+  const segments = pathname.split("/").filter(Boolean);
+  const candidate = segments[0] === "docs" ? segments[1] : segments[0];
   return candidate && isLocale(candidate) ? candidate : defaultLocale;
 }
 

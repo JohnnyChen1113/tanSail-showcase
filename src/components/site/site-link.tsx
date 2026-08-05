@@ -14,6 +14,14 @@ export function SiteLink({ children, className, link, onClick }: SiteLinkProps) 
   const content = children ?? link.label;
 
   if (link.kind === "route") {
+    if (link.to === "/docs/en/" || link.to === "/docs/zh/") {
+      return (
+        <a className={className} href={link.to} onClick={onClick}>
+          {content}
+        </a>
+      );
+    }
+
     return (
       <Link className={className} to={link.to} onClick={onClick}>
         {content}

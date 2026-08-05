@@ -92,3 +92,49 @@ projects that informed the product research.
 - [x] Add a clean-room Reference-to-TanSail skill and deterministic brief renderer.
 - [x] Add responsive browser coverage for locale, metadata, overflow, and mobile navigation.
 - [x] Publish the independent showcase and the tagged `v0.2.0` release.
+
+## Phase 10 — official showcase refresh
+
+- [x] Regenerate the official showcase brief against the v0.2.0 schema and Horizon preset.
+- [x] Reframe the bilingual homepage around the Course Control delivery narrative.
+- [x] Add factual entry paths for prompts, clean-room references, and the starter.
+- [x] Replace the hero workspace with v0.2.0 brief, locale, quality, and Worker evidence.
+- [x] Keep English and Chinese structure, metadata, responsive behavior, and tests aligned.
+- [x] Pass design, static, unit, browser, and production-build validation.
+- [x] Deploy the refreshed English and Chinese pages to Cloudflare Workers.
+
+## Phase 11 — shared shell hardening
+
+- [x] Adopt the starter's opt-in announcement behavior and left-aligned desktop navigation.
+- [x] Adopt schema-enforced SEO title and description display ranges.
+- [x] Raise supporting-copy minimum sizes without enlarging the product mock interface.
+- [x] Protect the footer introduction from narrow-column character wrapping.
+- [x] Pass static, unit, browser, screenshot, and production-build validation.
+- [x] Deploy and verify the hardened shared shell on Cloudflare Workers.
+
+## Phase 12 — Ledger concept and structural variety
+
+- [x] Adopt the fourth Ledger visual system from the starter.
+- [x] Generate a consulting-studio concept with a different section order and content emphasis.
+- [x] Link the Ledger concept directly from the bilingual homepage navigation.
+- [x] Keep the full recipe catalog reachable from the concept page.
+- [x] Pass static, unit, browser, screenshot, and production-build validation.
+- [x] Deploy and verify the Ledger concept on Cloudflare Workers.
+
+## Phase 13 — bilingual technical documentation
+
+- [x] Produce a clean-room reference brief from the public ShipAny documentation experience.
+- [x] Publish thirteen subsystem-focused TanSail chapters in both English and Simplified Chinese.
+- [x] Replace the Ledger field-guide presentation with a neutral technical-documentation shell, searchable five-group navigation, readable typography, tables, and code copy controls.
+- [x] Link localized docs from the homepage navigation and footer with canonical, alternate-language, and sitemap coverage.
+- [x] Verify desktop and mobile layout, bilingual switching, SEO ranges, route prerendering, code copy, and shared mobile navigation behavior.
+- [x] Deploy and verify the documentation routes on Cloudflare Workers.
+
+## Phase 14 — homepage ecosystem and scenario proof
+
+- [x] Add a verified technology rail using original lettermarks instead of third-party assets.
+- [x] Publish bilingual, filterable site scenarios including research and education use cases.
+- [x] Add a masonry testimonial template whose fictional content is visibly marked as sample data.
+- [x] Keep the shared block schema, Gallery, recipes, and documentation synchronized with the starter.
+- [x] Pass design, static, unit, browser, responsive visual, and production-build validation.
+- [x] Deploy and verify the refreshed bilingual homepage on Cloudflare Workers.

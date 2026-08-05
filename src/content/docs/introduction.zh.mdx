@@ -1,0 +1,106 @@
+export const metadata = {
+  slug: "introduction",
+  title: "认识 TanSail",
+  description:
+    "了解 TanSail 的定位、能力边界、技术基础，以及从设计 brief 到 Cloudflare 上线的完整路径。",
+  updatedAt: "2026-08-01",
+  readingMinutes: 8,
+  locale: "zh",
+  section: "start",
+  order: 1,
+  keywords: ["TanStack Start", "React 19", "Cloudflare Workers", "设计优先", "双语网站"],
+  toc: [
+    { id: "what-is-tansail", label: "TanSail 是什么" },
+    { id: "included", label: "默认包含什么" },
+    { id: "not-in-core", label: "核心不包含什么" },
+    { id: "architecture", label: "技术架构" },
+    { id: "delivery-path", label: "完整交付路径" },
+  ],
+};
+
+# 认识 TanSail
+
+TanSail 是一个面向产品官网和内容型网站的设计优先 TanStack Start starter。它把设计契约、双语路由、可组合页面区块、质量检查和 Cloudflare Workers 部署放在同一条工作流里，目标不是提供最多的后台模块，而是让一个新网站从第一天起就具备清晰的视觉方向和可维护的工程边界。
+
+<h2 id="what-is-tansail">TanSail 是什么</h2>
+
+TanSail 适合开源项目、SaaS、AI 工具、独立产品、知识业务和咨询工作室。你可以从现成 recipe 开始，也可以把自然语言 brief 交给仓库内置 Skill。两种方式最终都会回到相同的 typed config、React 组件和测试体系，不存在只能由生成器理解的私有页面格式。
+
+它的核心原则是：**内容有归属、视觉有契约、路由有类型、发布有验证**。页面文案放在配置或 MDX 中；视觉规则由 `DESIGN.md` 与 preset token 管理；内部导航使用 TanStack Router；公开页面在构建阶段被预渲染并由 Cloudflare Worker 提供服务。
+
+<h2 id="included">默认包含什么</h2>
+
+- React 19、React Compiler、TanStack Start 与 TanStack Router。
+- Tailwind CSS 4、shadcn/ui、Base UI 与 Lucide 图标。
+- Harbor、Horizon、Nightwatch、Ledger 四套视觉预设及 light、dark、system 主题。
+- 17 个稳定 block ID、9 类页面区块和 6 种完整页面 recipe。
+- 英文和简体中文路由、字典、canonical、`hreflang`、sitemap 与 robots。
+- MDX 文档和博客、Changelog、Legal、Contact、JSON-LD 等可移除内容模块。
+- 设计契约检查、类型检查、单元测试、浏览器测试、视觉回归和生产构建。
+- 官方 Cloudflare Vite 插件、Wrangler 配置及 Worker 部署命令。
+
+<h2 id="not-in-core">核心不包含什么</h2>
+
+TanSail 默认没有数据库、登录、支付、邮件、分析、对象存储或 CMS，也不要求 `.env`。这些能力只有在产品确实需要时才应作为可移除模块加入。这样做可以保持 starter 可理解、无密钥可运行，并避免在营销网站里提前绑定供应商。
+
+> 如果某篇教程声称 TanSail 已经内置用户表、支付 Webhook 或积分账本，应把它视为错误信息。当前仓库只把这些列入未来的可选 recipe，不属于核心能力。
+
+<h2 id="architecture">技术架构</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>层级</th>
+      <th>主要位置</th>
+      <th>职责</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>站点契约</td>
+      <td>
+        <code>src/config/site.ts</code>
+      </td>
+      <td>metadata、导航、动作、页脚与 sitemap</td>
+    </tr>
+    <tr>
+      <td>本地化内容</td>
+      <td>
+        <code>src/i18n.ts</code>
+      </td>
+      <td>中英文文案、辅助功能文本和外观描述</td>
+    </tr>
+    <tr>
+      <td>设计系统</td>
+      <td>
+        <code>DESIGN.md</code>、<code>src/config/presets.ts</code>
+      </td>
+      <td>跨页面视觉规则与语义 token</td>
+    </tr>
+    <tr>
+      <td>页面组合</td>
+      <td>
+        <code>src/config/blocks.ts</code>、<code>recipes.ts</code>
+      </td>
+      <td>区块 schema、内容和叙事顺序</td>
+    </tr>
+    <tr>
+      <td>交付</td>
+      <td>
+        <code>vite.config.ts</code>、<code>wrangler.jsonc</code>
+      </td>
+      <td>SSR、预渲染、Worker 构建和部署</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="delivery-path">完整交付路径</h2>
+
+1. 明确品牌、受众、页面目标和生产域名是否已知。
+2. 选择手动配置、brief 生成或 clean-room 参考工作流。
+3. 在 `/generated-preview`、`/recipes` 和 `/gallery` 验证内容与组合。
+4. 运行设计、类型、行为、浏览器和生产构建检查。
+5. 设置真实站点 origin 与 Worker 名称，再部署到 Cloudflare。
+6. 上线后检查两种语言、metadata、sitemap、404 和移动端导航。
+
+接下来阅读“快速开始”完成首次运行；如果已经熟悉仓库，可直接进入“项目结构”。

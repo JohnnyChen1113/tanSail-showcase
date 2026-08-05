@@ -25,9 +25,10 @@ import { Route as ZhRouteImport } from './routes/zh'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as DocsIndexRouteImport } from './routes/docs.index'
-import { Route as DocsSlugRouteImport } from './routes/docs.$slug'
 import { Route as RecipesIndexRouteImport } from './routes/recipes.index'
 import { Route as RecipesRecipeIdRouteImport } from './routes/recipes.$recipeId'
+import { Route as DocsLocaleIndexRouteImport } from './routes/docs.$locale.index'
+import { Route as DocsLocaleSlugRouteImport } from './routes/docs.$locale.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -109,11 +110,6 @@ const DocsIndexRoute = DocsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => DocsRoute,
 } as any)
-const DocsSlugRoute = DocsSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => DocsRoute,
-} as any)
 const RecipesIndexRoute = RecipesIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -123,6 +119,16 @@ const RecipesRecipeIdRoute = RecipesRecipeIdRouteImport.update({
   id: '/$recipeId',
   path: '/$recipeId',
   getParentRoute: () => RecipesRoute,
+} as any)
+const DocsLocaleIndexRoute = DocsLocaleIndexRouteImport.update({
+  id: '/$locale/',
+  path: '/$locale/',
+  getParentRoute: () => DocsRoute,
+} as any)
+const DocsLocaleSlugRoute = DocsLocaleSlugRouteImport.update({
+  id: '/$locale/$slug',
+  path: '/$locale/$slug',
+  getParentRoute: () => DocsRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -140,11 +146,12 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/zh': typeof ZhRoute
   '/blog/$slug': typeof BlogSlugRoute
-  '/docs/$slug': typeof DocsSlugRoute
   '/recipes/$recipeId': typeof RecipesRecipeIdRoute
   '/blog/': typeof BlogIndexRoute
   '/docs/': typeof DocsIndexRoute
   '/recipes/': typeof RecipesIndexRoute
+  '/docs/$locale/$slug': typeof DocsLocaleSlugRoute
+  '/docs/$locale/': typeof DocsLocaleIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -158,11 +165,12 @@ export interface FileRoutesByTo {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/zh': typeof ZhRoute
   '/blog/$slug': typeof BlogSlugRoute
-  '/docs/$slug': typeof DocsSlugRoute
   '/recipes/$recipeId': typeof RecipesRecipeIdRoute
   '/blog': typeof BlogIndexRoute
   '/docs': typeof DocsIndexRoute
   '/recipes': typeof RecipesIndexRoute
+  '/docs/$locale/$slug': typeof DocsLocaleSlugRoute
+  '/docs/$locale': typeof DocsLocaleIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -180,11 +188,12 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/zh': typeof ZhRoute
   '/blog/$slug': typeof BlogSlugRoute
-  '/docs/$slug': typeof DocsSlugRoute
   '/recipes/$recipeId': typeof RecipesRecipeIdRoute
   '/blog/': typeof BlogIndexRoute
   '/docs/': typeof DocsIndexRoute
   '/recipes/': typeof RecipesIndexRoute
+  '/docs/$locale/$slug': typeof DocsLocaleSlugRoute
+  '/docs/$locale/': typeof DocsLocaleIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -203,11 +212,12 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/zh'
     | '/blog/$slug'
-    | '/docs/$slug'
     | '/recipes/$recipeId'
     | '/blog/'
     | '/docs/'
     | '/recipes/'
+    | '/docs/$locale/$slug'
+    | '/docs/$locale/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -221,11 +231,12 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/zh'
     | '/blog/$slug'
-    | '/docs/$slug'
     | '/recipes/$recipeId'
     | '/blog'
     | '/docs'
     | '/recipes'
+    | '/docs/$locale/$slug'
+    | '/docs/$locale'
   id:
     | '__root__'
     | '/'
@@ -242,11 +253,12 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/zh'
     | '/blog/$slug'
-    | '/docs/$slug'
     | '/recipes/$recipeId'
     | '/blog/'
     | '/docs/'
     | '/recipes/'
+    | '/docs/$locale/$slug'
+    | '/docs/$locale/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -379,13 +391,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DocsIndexRouteImport
       parentRoute: typeof DocsRoute
     }
-    '/docs/$slug': {
-      id: '/docs/$slug'
-      path: '/$slug'
-      fullPath: '/docs/$slug'
-      preLoaderRoute: typeof DocsSlugRouteImport
-      parentRoute: typeof DocsRoute
-    }
     '/recipes/': {
       id: '/recipes/'
       path: '/'
@@ -399,6 +404,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/recipes/$recipeId'
       preLoaderRoute: typeof RecipesRecipeIdRouteImport
       parentRoute: typeof RecipesRoute
+    }
+    '/docs/$locale/': {
+      id: '/docs/$locale/'
+      path: '/$locale'
+      fullPath: '/docs/$locale/'
+      preLoaderRoute: typeof DocsLocaleIndexRouteImport
+      parentRoute: typeof DocsRoute
+    }
+    '/docs/$locale/$slug': {
+      id: '/docs/$locale/$slug'
+      path: '/$locale/$slug'
+      fullPath: '/docs/$locale/$slug'
+      preLoaderRoute: typeof DocsLocaleSlugRouteImport
+      parentRoute: typeof DocsRoute
     }
   }
 }
@@ -416,13 +435,15 @@ const BlogRouteChildren: BlogRouteChildren = {
 const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
 
 interface DocsRouteChildren {
-  DocsSlugRoute: typeof DocsSlugRoute
   DocsIndexRoute: typeof DocsIndexRoute
+  DocsLocaleSlugRoute: typeof DocsLocaleSlugRoute
+  DocsLocaleIndexRoute: typeof DocsLocaleIndexRoute
 }
 
 const DocsRouteChildren: DocsRouteChildren = {
-  DocsSlugRoute: DocsSlugRoute,
   DocsIndexRoute: DocsIndexRoute,
+  DocsLocaleSlugRoute: DocsLocaleSlugRoute,
+  DocsLocaleIndexRoute: DocsLocaleIndexRoute,
 }
 
 const DocsRouteWithChildren = DocsRoute._addFileChildren(DocsRouteChildren)

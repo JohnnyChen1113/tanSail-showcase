@@ -23,6 +23,11 @@ describe("localization contract", () => {
     expect(getDictionary("zh").meta.title).toContain("TanSail");
     expect(getDictionary("en").a11y.skipToContent).toBeTruthy();
     expect(getDictionary("zh").appearance.light).toBe("浅色");
+    expect(getDictionary("en").paths.items).toHaveLength(3);
+    expect(getDictionary("zh").paths.items).toHaveLength(3);
+    expect(getDictionary("en").paths.items.map((item) => item.command)).toEqual(
+      getDictionary("zh").paths.items.map((item) => item.command),
+    );
   });
 
   it("creates locale-aware paths without stringly-typed route assembly", () => {

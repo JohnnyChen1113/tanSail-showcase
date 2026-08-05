@@ -1,0 +1,112 @@
+export const metadata = {
+  slug: "project-structure",
+  title: "Project structure",
+  description:
+    "Learn TanSail's directory layers, source-of-truth boundaries, generated route behavior, and removable modules before making structural changes.",
+  updatedAt: "2026-08-01",
+  readingMinutes: 9,
+  locale: "en",
+  section: "start",
+  order: 3,
+  keywords: ["directory structure", "configuration", "routes", "MDX", "optional modules"],
+  toc: [
+    { id: "directory-map", label: "Directory map" },
+    { id: "ownership", label: "Change ownership" },
+    { id: "routes", label: "Routes and generated files" },
+    { id: "optional-modules", label: "Optional modules" },
+    { id: "decision-guide", label: "Change decision" },
+  ],
+};
+
+# Project structure
+
+TanSail separates contracts, configuration, components, content, routes, and validation. Find the highest-level source of truth for a change before editing implementation code; this prevents duplicate copy, hard-coded colors, and route-type errors.
+
+<h2 id="directory-map">Directory map</h2>
+
+```text
+.
+├── DESIGN.md                 # Human- and tool-readable design contract
+├── src/config/               # Site, preset, block, recipe, and brief schemas
+├── src/i18n.ts               # Typed English and Chinese dictionaries
+├── src/components/           # Shell, blocks, content templates, UI primitives
+├── src/content/              # MDX docs/blog and their registry
+├── src/routes/               # TanStack Router file routes
+├── src/lib/                  # SEO, structured data, and pure helpers
+├── scripts/                  # Design export and guarded generation
+├── tests/visual/             # Playwright behavior and screenshots
+└── docs/                     # Maintainer-facing engineering guides
+```
+
+Files in `src/content/docs/` are public product documentation. Files in root `docs/` are source-adjacent maintainer guides. They may share facts, but they serve different readers.
+
+<h2 id="ownership">Change ownership</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Change</th>
+      <th>Start here</th>
+      <th>Do not start here</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Brand, navigation, SEO</td>
+      <td>
+        <code>src/config/site.ts</code>
+      </td>
+      <td>Header JSX</td>
+    </tr>
+    <tr>
+      <td>Localized homepage copy</td>
+      <td>
+        <code>src/i18n.ts</code>
+      </td>
+      <td>Route components</td>
+    </tr>
+    <tr>
+      <td>Cross-site color, type, density</td>
+      <td>
+        <code>DESIGN.md</code> and presets
+      </td>
+      <td>One page class</td>
+    </tr>
+    <tr>
+      <td>Block content shape</td>
+      <td>
+        <code>src/config/blocks.ts</code>
+      </td>
+      <td>A copied component</td>
+    </tr>
+    <tr>
+      <td>New public page</td>
+      <td>
+        <code>src/routes/</code>
+      </td>
+      <td>The generated route tree</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="routes">Routes and generated files</h2>
+
+File names containing `$locale`, `$slug`, or `$recipeId` define typed path parameters. Keep the route template in `to` and pass values through `params`:
+
+```tsx
+<Link to="/docs/$locale/$slug/" params={{ locale, slug }}>
+  Read guide
+</Link>
+```
+
+Never interpolate a parameter into the `to` string. `src/routeTree.gen.ts` belongs to the Router plugin; run the dev server or build after route-file changes instead of maintaining it manually.
+
+<h2 id="optional-modules">Optional modules</h2>
+
+Gallery, Recipes, the MDX blog, Changelog, Legal, and Contact are removable examples or content modules. Removing one also requires removing navigation, sitemap entries, tests, and its route. The site shell, presets, and Cloudflare build should continue to work.
+
+Authentication, databases, billing, email, analytics, and CMS integrations do not exist in the core. Future server modules must have explicit server boundaries and must not make secrets mandatory for the starter.
+
+<h2 id="decision-guide">Change decision</h2>
+
+Classify each change as copy, structural configuration, cross-page visual policy, local component behavior, or a new route. Modify the highest valid source of truth. Extend a schema only when a stable requirement cannot be expressed by the current contract; do not add a global token for a one-off adjustment.

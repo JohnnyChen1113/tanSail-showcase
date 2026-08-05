@@ -1,0 +1,102 @@
+export const metadata = {
+  slug: "site-configuration",
+  title: "网站配置",
+  description:
+    "通过 typed site config 管理身份、SEO、导航、动作、页脚和 sitemap，并理解三种链接类型的边界。",
+  updatedAt: "2026-08-01",
+  readingMinutes: 11,
+  locale: "zh",
+  section: "build",
+  order: 7,
+  keywords: ["siteConfig", "SEO", "导航", "sitemap", "canonical", "链接"],
+  toc: [
+    { id: "config-boundary", label: "配置边界" },
+    { id: "metadata", label: "Metadata 与 SEO" },
+    { id: "links", label: "三种链接" },
+    { id: "navigation-footer", label: "导航与页脚" },
+    { id: "discovery", label: "发现文件" },
+  ],
+};
+
+# 网站配置
+
+`src/config/site.ts` 是站点结构配置的 source of truth。它负责身份、metadata、导航、动作、社交链接、页脚和 sitemap；可见的中英文营销文案则由 `src/i18n.ts` 管理。把两者分开可以避免 Header、Footer 和路由组件各自保存一份产品信息。
+
+<h2 id="config-boundary">配置边界</h2>
+
+配置由 `siteConfigSchema` 使用 Zod 验证。`defineSiteConfig` 在应用启动时解析对象，因此无效 URL、空 label、错误 anchor、未知 route 或 sitemap priority 越界会立即失败，而不是上线后才产生坏链接。
+
+Announcement 是可选对象，不应为了填满顶栏而一直存在。只有真正及时、全站相关的消息才设置 `announcement.text` 和可选 action。
+
+<h2 id="metadata">Metadata 与 SEO</h2>
+
+```ts
+metadata: {
+  name: "Your product",
+  title: "A specific 40–60 character search title for the site",
+  description: "A useful 140–160 character description that explains the audience, outcome, differentiator, and next step without keyword stuffing.",
+  siteUrl: "https://example.com",
+  locale,
+  themeColor: { light: "#f4f7fa", dark: "#07111f" },
+}
+```
+
+`siteUrl` 只填写 origin，不带尾部 `/`。starter 故意使用 `https://example.com`，部署正式项目之前必须替换。title schema 强制 40–60 字符，description 强制 140–160 字符；文档文章还会在路由层生成独立的 canonical、Open Graph 和 `hreflang`。
+
+<h2 id="links">三种链接</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>kind</th>
+      <th>适用场景</th>
+      <th>验证</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>route</code>
+      </td>
+      <td>应用内部文件路由</td>
+      <td>
+        <code>to</code> 必须在允许的 route union 中
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>anchor</code>
+      </td>
+      <td>当前页面的 section ID</td>
+      <td>
+        <code>href</code> 必须匹配 <code>#section-id</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>external</code>
+      </td>
+      <td>GitHub、外部文档、邮件以外的绝对地址</td>
+      <td>必须为完整 URL，可控制新窗口</td>
+    </tr>
+  </tbody>
+</table>
+
+增加新的 configured route 时，要同步扩展 `routeLinkSchema`。不要为了绕过类型而把内部路径伪装成 external link。
+
+<h2 id="navigation-footer">导航与页脚</h2>
+
+`navigation` 决定桌面和移动菜单，`actions.primary` 是最明确的页面动作，`socialLinks` 只放真实维护渠道。Footer groups 适合按产品、项目、资源组织，legalLinks 只链接项目确实提供的条款或许可证。每条链接都必须有可见 label；新窗口 external link 会获得安全的 `rel`。
+
+修改链接后同时验证桌面、移动菜单和两种语言。中文 label 通常更短，但不能因此假设容器不会溢出。
+
+<h2 id="discovery">发现文件</h2>
+
+`/sitemap.xml` 和 `/robots.txt` 都从站点配置生成。公开页面加入 sitemap，Gallery 和 generated preview 这类工具页保持 `noindex`。新增文档时，应为英文和中文同时加入路径，并设置合理的 change frequency 与 priority。
+
+```bash
+vp test run
+vp build
+```
+
+构建会预渲染可发现页面。任何 crawled route 无法渲染都应阻止发布。

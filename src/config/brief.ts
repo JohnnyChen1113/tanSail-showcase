@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { presetIdSchema } from "./presets.ts";
+
 export const pageSectionSchema = z.enum([
   "hero",
   "logo-cloud",
@@ -38,7 +40,7 @@ export const siteBriefSchema = z.object({
     .array(z.enum(["warm", "direct", "playful", "technical", "editorial"]))
     .min(1)
     .max(3),
-  preset: z.enum(["harbor", "horizon", "nightwatch"]),
+  preset: presetIdSchema,
   recipe: z.enum([
     "saas-product",
     "ai-tool",

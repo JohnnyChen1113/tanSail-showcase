@@ -1,0 +1,120 @@
+export const metadata = {
+  slug: "blocks-and-recipes",
+  title: "Blocks 与 Recipes",
+  description:
+    "使用 9 类区块、17 个稳定 block ID 和 6 种页面 recipe 组织完整叙事，并安全扩展 schema。",
+  updatedAt: "2026-08-01",
+  readingMinutes: 12,
+  locale: "zh",
+  section: "design",
+  order: 6,
+  keywords: ["LandingBlock", "Hero", "Features", "recipe", "Gallery", "Zod"],
+  toc: [
+    { id: "block-catalog", label: "区块目录" },
+    { id: "recipes", label: "页面配方" },
+    { id: "compose", label: "组合页面" },
+    { id: "add-block", label: "扩展区块" },
+    { id: "gallery", label: "使用 Gallery" },
+  ],
+};
+
+# Blocks 与 Recipes
+
+Block 是由 Zod 验证配置驱动的普通 React 组件；Recipe 是一组按叙事顺序排列的稳定 block ID。两者共同提供方向，但不会引入运行时 page builder、全局 block store 或私有内容格式。
+
+<h2 id="block-catalog">区块目录</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>家族</th>
+      <th>变体或 ID</th>
+      <th>叙事职责</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Hero</td>
+      <td>editorial、product、minimal</td>
+      <td>建立核心承诺和首要动作</td>
+    </tr>
+    <tr>
+      <td>Logo cloud</td>
+      <td>logo-cloud、logo-cloud-rail</td>
+      <td>展示真实生态或客户识别</td>
+    </tr>
+    <tr>
+      <td>Features</td>
+      <td>grid、bento、split</td>
+      <td>以不同信息层级解释能力</td>
+    </tr>
+    <tr>
+      <td>Use cases</td>
+      <td>use-cases、use-cases-catalog</td>
+      <td>把受众连接到具体结果</td>
+    </tr>
+    <tr>
+      <td>Proof</td>
+      <td>testimonials、testimonials-masonry、stats</td>
+      <td>提供可验证的证据</td>
+    </tr>
+    <tr>
+      <td>Commercial</td>
+      <td>pricing、faq</td>
+      <td>解释方案并处理异议</td>
+    </tr>
+    <tr>
+      <td>CTA</td>
+      <td>banner、split</td>
+      <td>用一个清晰下一步收尾</td>
+    </tr>
+  </tbody>
+</table>
+
+仓库一共有 17 个稳定 ID。Logo cloud 支持网格与紧凑生态带，Use cases 支持结果列表与可筛选目录，Testimonials 支持等高网格与瀑布流。评价示例必须携带明确的 `demo` 证据状态和可见示例标记；只有将所有虚构文案和身份替换为已获授权的真实反馈后，才能切换为 `verified`。客户 logo、指标和价格示例同样不能被当作真实产品证据。
+
+<h2 id="recipes">页面配方</h2>
+
+- `saas-product`：价值承诺、能力、证据、价格、异议和 CTA。
+- `ai-tool`：新能力、工作流、信任、方案和安全边界。
+- `open-source`：紧凑介绍、生态、技术证明和采用路径。
+- `indie-product`：个人化故事、聚焦场景、证据和简单价格。
+- `knowledge-business`：权威、结果、课程型能力和人类证明。
+- `consulting-studio`：观点、方法、案例框架、结果和咨询入口。
+
+Recipe 的建议 preset 只是起点，不会覆盖访客已经保存的选择。
+
+<h2 id="compose">组合页面</h2>
+
+```tsx
+import { LandingBlock } from "#/components/blocks/landing-block";
+import { defineLandingBlocks } from "#/config/blocks";
+
+const pageBlocks = defineLandingBlocks([
+  {
+    kind: "hero",
+    id: "launch-hero",
+    variant: "product",
+    eyebrow: "New release",
+    title: "A clear product promise.",
+    description: "Explain the outcome in one short paragraph.",
+    primaryAction: { label: "Start now", href: "#launch-cta" },
+  },
+]);
+
+export function LandingPage() {
+  return pageBlocks.map((block) => <LandingBlock key={block.id} block={block} />);
+}
+```
+
+Schema 是类型来源。不要再维护一套平行 interface，也不要在组件里用不受约束的 `Record<string, unknown>` 接收内容。
+
+<h2 id="add-block">扩展区块</h2>
+
+先判断现有 family 是否只需要新内容或新 variant。确实需要新 family 时，增加 discriminated schema、导出推断类型、实现 `LandingBlock` 分发、补充 semantic styles，再更新 catalog、recipe 约束和测试。任何区块都必须定义移动端顺序、内容上限、空值行为和 reduced-motion 结果。
+
+增加 recipe 时，把 ID 加入 `recipeIdSchema`，确保首块为 Hero、末块为 CTA，并只引用 catalog 中存在的 block ID。链接到详情页时使用 typed params，不要插值路径。
+
+<h2 id="gallery">使用 Gallery</h2>
+
+运行项目后打开 `/gallery/`。这里可以按类别筛选、切换 desktop/tablet/mobile、四种 preset 和三种主题。Gallery 带 `noindex,nofollow` 且不进入 sitemap；项目不需要公开设计实验室时可以删除，但在删除前应保留同等的组件回归覆盖。

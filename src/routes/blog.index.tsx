@@ -16,7 +16,6 @@ export const Route = createFileRoute("/blog/")({
 function BlogIndexPage() {
   return (
     <ContentIndex
-      kind="blog"
       title="TanSail journal"
       description="Notes on design systems, composable pages, and open-source product foundations."
       entries={blogEntries}

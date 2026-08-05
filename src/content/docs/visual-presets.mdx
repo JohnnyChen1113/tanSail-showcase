@@ -1,0 +1,101 @@
+export const metadata = {
+  slug: "visual-presets",
+  title: "Visual presets",
+  description:
+    "Compare Harbor, Horizon, Nightwatch, and Ledger; learn the five-dimensional token contract, runtime selection, extension steps, and regression workflow.",
+  updatedAt: "2026-08-01",
+  readingMinutes: 11,
+  locale: "en",
+  section: "design",
+  order: 5,
+  keywords: ["Harbor", "Horizon", "Nightwatch", "Ledger", "preset", "dark mode"],
+  toc: [
+    { id: "compare", label: "Compare presets" },
+    { id: "token-contract", label: "Five token dimensions" },
+    { id: "runtime", label: "Runtime selection" },
+    { id: "add-preset", label: "Add a preset" },
+    { id: "regression", label: "Regression testing" },
+  ],
+};
+
+# Visual presets
+
+Presets let the same content and components express different product directions. They are more than color schemes: the schema supports controlled changes to typography, density, geometry, and composition while preserving semantics, reading order, and accessibility.
+
+<h2 id="compare">Compare presets</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>UI label</th>
+      <th>Direction</th>
+      <th>Structural character</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>harbor</code>
+      </td>
+      <td>Harbor</td>
+      <td>Editorial, warm, calm</td>
+      <td>Generous rhythm and classic columns</td>
+    </tr>
+    <tr>
+      <td>
+        <code>horizon</code>
+      </td>
+      <td>Luminous</td>
+      <td>Product-led, cool, radiant</td>
+      <td>Stable geometry shared with Harbor</td>
+    </tr>
+    <tr>
+      <td>
+        <code>nightwatch</code>
+      </td>
+      <td>Signal</td>
+      <td>Technical, graphite, violet</td>
+      <td>Stable geometry shared with Harbor</td>
+    </tr>
+    <tr>
+      <td>
+        <code>ledger</code>
+      </td>
+      <td>Ledger</td>
+      <td>Compact, graphic, manual-like</td>
+      <td>Distinct density, type, radii, and composition</td>
+    </tr>
+  </tbody>
+</table>
+
+Horizon and Nightwatch demonstrate atmosphere changes. Ledger demonstrates real structural range. Documentation uses its own neutral reading template so selecting Ledger no longer turns technical articles into poster layouts.
+
+<h2 id="token-contract">Five token dimensions</h2>
+
+Every preset defines: light and dark semantic colors; body and heading typography; shell and section density; control, panel, border, and ornament geometry; and Hero, section, footer, and ornament composition. `createPresetStyleSheet` converts the catalog to CSS custom properties, so components never import a preset directly.
+
+<h2 id="runtime">Runtime selection</h2>
+
+`defaultPreset` controls the first server render. A visitor choice is stored in `localStorage`, and `ScriptOnce` restores `data-preset` before hydration to avoid a flash. Theme selection is independent: every preset needs readable light and dark roles.
+
+Projects may remove `PresetToggle`, but should retain one valid default and the typed catalog rather than distributing preset values back into components.
+
+<h2 id="add-preset">Add a preset</h2>
+
+1. Add a stable ID to `presetIdSchema`.
+2. Add a complete five-dimensional catalog entry.
+3. Add English and Chinese appearance descriptions.
+4. Update tests for unique IDs, complete tokens, and a valid default.
+5. Inspect every block in Gallery at desktop, tablet, and mobile widths in both themes.
+
+Renaming an ID affects persisted preferences, recipes, generated briefs, and fixtures. Treat it as a migration, not a label change.
+
+<h2 id="regression">Regression testing</h2>
+
+```bash
+pnpm test:browser
+pnpm test:visual
+```
+
+The browser suite validates behavior and layout boundaries. Visual tests cover four presets at desktop and mobile sizes. Pixel output varies by operating system, font rasterization, and browser build, so baseline updates always require human review.

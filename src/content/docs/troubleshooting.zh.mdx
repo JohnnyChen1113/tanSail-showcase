@@ -1,0 +1,124 @@
+export const metadata = {
+  slug: "troubleshooting",
+  title: "命令与故障排查",
+  description:
+    "集中查询 TanSail 常用命令，并诊断工具链、路由、MDX、设计契约、浏览器测试和 Cloudflare 部署问题。",
+  updatedAt: "2026-08-01",
+  readingMinutes: 13,
+  locale: "zh",
+  section: "reference",
+  order: 13,
+  keywords: ["故障排查", "命令参考", "routeTree", "MDX 错误", "Wrangler", "Vite+"],
+  toc: [
+    { id: "commands", label: "命令参考" },
+    { id: "toolchain", label: "工具链问题" },
+    { id: "routes-and-mdx", label: "路由与 MDX" },
+    { id: "design-and-browser", label: "设计与浏览器测试" },
+    { id: "deployment", label: "部署问题" },
+  ],
+};
+
+# 命令与故障排查
+
+本页按症状定位 TanSail 的常见问题。先保留完整错误输出，再修最早出现的根因；不要同时更新依赖、截图基线和业务代码，否则很难判断哪项变化解决了问题。
+
+<h2 id="commands">命令参考</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>任务</th>
+      <th>命令</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>开发服务器</td>
+      <td>
+        <code>vpr dev</code>
+      </td>
+    </tr>
+    <tr>
+      <td>格式、lint、类型</td>
+      <td>
+        <code>vp check</code>
+      </td>
+    </tr>
+    <tr>
+      <td>单元测试</td>
+      <td>
+        <code>vp test run</code>
+      </td>
+    </tr>
+    <tr>
+      <td>设计契约</td>
+      <td>
+        <code>vp run design:check</code>
+      </td>
+    </tr>
+    <tr>
+      <td>浏览器行为</td>
+      <td>
+        <code>pnpm test:browser</code>
+      </td>
+    </tr>
+    <tr>
+      <td>全部视觉测试</td>
+      <td>
+        <code>pnpm test:visual</code>
+      </td>
+    </tr>
+    <tr>
+      <td>生产构建</td>
+      <td>
+        <code>vp build</code>
+      </td>
+    </tr>
+    <tr>
+      <td>Cloudflare 发布</td>
+      <td>
+        <code>pnpm deploy</code>
+      </td>
+    </tr>
+    <tr>
+      <td>站点 brief dry run</td>
+      <td>
+        <code>vp run generate:site -- --brief &lt;file&gt;</code>
+      </td>
+    </tr>
+    <tr>
+      <td>参考 brief dry run</td>
+      <td>
+        <code>vp run reference:brief -- --input &lt;file&gt;</code>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="toolchain">工具链问题</h2>
+
+**`vp`、`vpr` 或 `vpx` 找不到：**确认安装 Vite+ 且 binary 在 PATH；再检查 Node.js ≥24、pnpm ≥11。仓库脚本也可通过 `pnpm dev`、`pnpm check` 等 package scripts 调用，但贡献流程仍以 Vite+ 行为为准。
+
+**依赖或 lockfile 不一致：**不要删除 lockfile 试运气。运行 `vp install` 或项目 package manager install，查看是 registry、Node engine 还是 catalog resolution 失败。依赖变更后重新跑全套门禁。
+
+<h2 id="routes-and-mdx">路由与 MDX</h2>
+
+**新增 route 后类型找不到：**运行开发服务器或 build 让 TanStack Router plugin 更新 `src/routeTree.gen.ts`。不要手改生成文件。
+
+**动态 Link 报错：**保留 `to="/docs/$locale/$slug/"`，通过 `params={{ locale, slug }}` 传值；不要使用模板字符串拼接。
+
+**MDX 构建失败：**检查 metadata 是否满足 schema、JSX tag 是否闭合、TOC ID 是否为小写 kebab-case、代码 fence 是否成对。中英文 slug 和 order 必须匹配；同 locale 下 slug 不能重复。
+
+<h2 id="design-and-browser">设计与浏览器测试</h2>
+
+**`design:check` 报 stale export：**如果 `DESIGN.md` 的变化是有意的，先运行 `vp run design:export` 再检查；如果只改了生成 CSS，应撤销那种方向并修改契约源。
+
+**Playwright 找不到浏览器：**运行 `pnpm exec playwright install chromium`，或设置仓库支持的 `TANSAIL_BROWSER_CHANNEL=chrome`。端口占用时先定位现有 dev server，不要随意终止无关进程。
+
+**截图差异：**先看是字体/OS 噪声还是实际 layout 回归。只有人工确认新结果正确后，才运行 `pnpm test:visual:update`。
+
+<h2 id="deployment">部署问题</h2>
+
+**Wrangler 未认证：**运行 `pnpm wrangler login`，CI 则检查 API token scope。**Worker 构建正常但 URL 内容错误：**检查 Worker name、部署环境、生产 origin 和缓存。**Canonical 仍是 example.com：**修改 `siteConfig.metadata.siteUrl` 并重新 build/deploy。**某个文档 404：**确认 content registry 已导入对应 locale、slug 在 route params 中正确、sitemap 路径与真实 trailing slash 行为一致。
+
+如果问题仍无法定位，保存命令、完整错误、Node/pnpm/Vite+ 版本、操作系统、浏览器 channel 和最小复现路径；这些信息比单张错误截图更有诊断价值。

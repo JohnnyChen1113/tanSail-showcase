@@ -1,0 +1,109 @@
+export const metadata = {
+  slug: "visual-presets",
+  title: "视觉预设",
+  description:
+    "比较 Harbor、Horizon、Nightwatch 与 Ledger，理解 preset 的五个设计维度、默认值和扩展步骤。",
+  updatedAt: "2026-08-01",
+  readingMinutes: 11,
+  locale: "zh",
+  section: "design",
+  order: 5,
+  keywords: ["Harbor", "Horizon", "Nightwatch", "Ledger", "preset", "暗色模式"],
+  toc: [
+    { id: "compare", label: "四种预设" },
+    { id: "token-contract", label: "五维 token 契约" },
+    { id: "runtime", label: "运行时切换" },
+    { id: "add-preset", label: "增加预设" },
+    { id: "regression", label: "回归验证" },
+  ],
+};
+
+# 视觉预设
+
+Preset 让同一份站点内容和组件呈现出不同气质。它不是三种配色按钮：除颜色外，schema 还允许排版、密度、几何和页面组合发生受控变化，同时保持语义、阅读顺序和可访问性稳定。
+
+<h2 id="compare">四种预设</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>界面名称</th>
+      <th>适合方向</th>
+      <th>结构特点</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>harbor</code>
+      </td>
+      <td>Harbor</td>
+      <td>编辑型、温暖、从容</td>
+      <td>宽松节奏与经典分栏</td>
+    </tr>
+    <tr>
+      <td>
+        <code>horizon</code>
+      </td>
+      <td>Luminous</td>
+      <td>产品型、清爽、冷色光感</td>
+      <td>与 Harbor 共享稳定几何</td>
+    </tr>
+    <tr>
+      <td>
+        <code>nightwatch</code>
+      </td>
+      <td>Signal</td>
+      <td>技术型、高对比、石墨紫</td>
+      <td>与 Harbor 共享稳定几何</td>
+    </tr>
+    <tr>
+      <td>
+        <code>ledger</code>
+      </td>
+      <td>Ledger</td>
+      <td>手册型、紧凑、图形化</td>
+      <td>密度、字体、圆角和组合均不同</td>
+    </tr>
+  </tbody>
+</table>
+
+Horizon 和 Nightwatch 证明可以只改变氛围；Ledger 证明 schema 也支持真正的结构方向。文档站自身使用独立的中性阅读模板，不再因为访客切换 Ledger 而变成海报式手册。
+
+<h2 id="token-contract">五维 token 契约</h2>
+
+每个 preset 都必须完整定义：
+
+1. `colors`：light 和 dark 的 background、foreground、card、primary、secondary、accent、border。
+2. `typography`：body、heading 字体、字重、字距和 eyebrow 规则。
+3. `density`：内容最大宽度、shell gutter、header、hero 与 section 间距。
+4. `geometry`：control、panel、border 和 ornament 形状。
+5. `composition`：Hero 宽度与对齐、section columns、footer columns 和 ornament 强度。
+
+`createPresetStyleSheet` 把 catalog 转成 CSS variables。组件只消费这些变量，因此新增 preset 不需要复制所有 blocks。
+
+<h2 id="runtime">运行时切换</h2>
+
+`defaultPreset` 决定首次服务端渲染。访客的选择保存在 `localStorage`，根文档通过 `ScriptOnce` 在 hydration 前恢复 `data-preset`，避免先闪现默认样式。主题 light、dark、system 独立于 preset：一个 preset 必须同时提供可读的明暗色角色。
+
+如果产品不需要访客切换，可移除 `PresetToggle`，但仍应保留 typed catalog 和一个有效的 `defaultPreset`，不要把选中 preset 的颜色散落回组件。
+
+<h2 id="add-preset">增加预设</h2>
+
+1. 在 `presetIdSchema` 增加稳定 ID。
+2. 在 `presetCatalog.presets` 提供完整五维定义。
+3. 为中英文 appearance descriptions 补齐文案。
+4. 更新 preset 单元测试，确认 ID 唯一、token 完整、默认值有效。
+5. 在 Gallery 的 desktop、tablet、mobile 宽度以及 light、dark 下检查全部 block。
+
+重命名 ID 会影响 localStorage、recipe、generated brief 和测试 fixture，应视为迁移，而不是纯文案修改。
+
+<h2 id="regression">回归验证</h2>
+
+```bash
+pnpm test:browser
+pnpm test:visual
+```
+
+浏览器套件验证行为和布局边界；视觉套件覆盖四个 preset 的桌面与移动截图。像素结果会受操作系统和浏览器构建影响，所以截图更新必须人工检查，不能因为测试失败就直接覆盖基线。

@@ -1,0 +1,104 @@
+export const metadata = {
+  slug: "introduction",
+  title: "Introducing TanSail",
+  description:
+    "Understand TanSail's scope, technical foundation, optional boundaries, and complete path from a design brief to a Cloudflare release.",
+  updatedAt: "2026-08-01",
+  readingMinutes: 8,
+  locale: "en",
+  section: "start",
+  order: 1,
+  keywords: ["TanStack Start", "React 19", "Cloudflare Workers", "design-first", "bilingual"],
+  toc: [
+    { id: "what-is-tansail", label: "What TanSail is" },
+    { id: "included", label: "What is included" },
+    { id: "not-in-core", label: "What stays optional" },
+    { id: "architecture", label: "Architecture" },
+    { id: "delivery-path", label: "Delivery path" },
+  ],
+};
+
+# Introducing TanSail
+
+TanSail is a design-first TanStack Start starter for product, marketing, and content websites. It connects a governed design system, bilingual routes, composable landing blocks, quality checks, and Cloudflare Workers delivery. Its goal is not to bundle every possible backend service; it is to give a new website a clear visual direction and maintainable engineering boundaries from day one.
+
+<h2 id="what-is-tansail">What TanSail is</h2>
+
+TanSail supports open-source projects, SaaS products, AI tools, independent products, knowledge businesses, and consulting studios. Start from a maintained page recipe or turn a natural-language brief into validated configuration with the repository skills. Both paths end in the same typed config, React components, routes, and tests—there is no private page format understood only by a generator.
+
+The operating principles are simple: content has an owner, visual decisions have a contract, routes are type-safe, and releases are verified. Copy lives in dictionaries, config, or MDX. Cross-site visual rules live in `DESIGN.md` and preset tokens. Internal links use TanStack Router, while public pages are prerendered into a Cloudflare Worker build.
+
+<h2 id="included">What is included</h2>
+
+- React 19, the React Compiler, TanStack Start, and TanStack Router.
+- Tailwind CSS 4, shadcn/ui, Base UI, and Lucide icons.
+- Harbor, Horizon, Nightwatch, and Ledger presets with light, dark, and system themes.
+- Seventeen stable block IDs across nine block families and six page recipes.
+- English and Simplified Chinese routes, dictionaries, canonical links, `hreflang`, sitemap, and robots output.
+- Optional MDX docs/blog, Changelog, Legal, Contact, and JSON-LD recipes.
+- Design-contract checks, static checks, unit tests, browser tests, visual regression, and production builds.
+- The official Cloudflare Vite plugin, Wrangler configuration, and Worker deployment scripts.
+
+<h2 id="not-in-core">What stays optional</h2>
+
+The default starter has no database, authentication, billing, email, analytics, object storage, or CMS, and it needs no `.env` file. Add those capabilities only when a product requires them, preferably as removable modules. This keeps the starter understandable and deployable without credentials or vendor lock-in.
+
+> Documentation that claims TanSail already includes user tables, payment webhooks, or a credit ledger is incorrect. Those capabilities are future optional recipes, not part of the current core.
+
+<h2 id="architecture">Architecture</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Layer</th>
+      <th>Primary source</th>
+      <th>Responsibility</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Site contract</td>
+      <td>
+        <code>src/config/site.ts</code>
+      </td>
+      <td>Metadata, navigation, actions, footer, and sitemap</td>
+    </tr>
+    <tr>
+      <td>Localized copy</td>
+      <td>
+        <code>src/i18n.ts</code>
+      </td>
+      <td>English and Chinese content and accessible labels</td>
+    </tr>
+    <tr>
+      <td>Design system</td>
+      <td>
+        <code>DESIGN.md</code>, <code>presets.ts</code>
+      </td>
+      <td>Shared rules and semantic tokens</td>
+    </tr>
+    <tr>
+      <td>Composition</td>
+      <td>
+        <code>blocks.ts</code>, <code>recipes.ts</code>
+      </td>
+      <td>Validated sections and narrative order</td>
+    </tr>
+    <tr>
+      <td>Delivery</td>
+      <td>
+        <code>vite.config.ts</code>, <code>wrangler.jsonc</code>
+      </td>
+      <td>SSR, prerendering, Worker build, and deploy</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="delivery-path">Delivery path</h2>
+
+1. Define the brand, audience, page goal, and whether the production domain is known.
+2. Choose manual configuration, brief generation, or the clean-room reference workflow.
+3. Validate composition in `/generated-preview`, `/recipes`, and `/gallery`.
+4. Run design, static, unit, browser, and production-build gates.
+5. Set the real origin and Worker name, then deploy to Cloudflare.
+6. Verify both locales, metadata, sitemap, 404 behavior, and mobile navigation in production.

@@ -1,0 +1,108 @@
+export const metadata = {
+  slug: "content-and-i18n",
+  title: "Content and internationalization",
+  description:
+    "Manage typed dictionaries, English and Chinese routes, MDX metadata, language-aware typography, canonical links, and hreflang parity.",
+  updatedAt: "2026-08-01",
+  readingMinutes: 12,
+  locale: "en",
+  section: "build",
+  order: 8,
+  keywords: ["i18n", "Chinese", "locale", "MDX", "hreflang", "typed dictionary"],
+  toc: [
+    { id: "content-owners", label: "Content ownership" },
+    { id: "locale-routes", label: "Locale routes" },
+    { id: "mdx-metadata", label: "MDX metadata" },
+    { id: "typography", label: "Language typography" },
+    { id: "add-locale", label: "Add a locale" },
+  ],
+};
+
+# Content and internationalization
+
+TanSail treats English and Simplified Chinese as equal public routes, not as a client-side translation patch. Each locale has an explicit URL, complete dictionary, correct `<html lang>`, independent metadata, and matching `hreflang` links.
+
+<h2 id="content-owners">Content ownership</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Content</th>
+      <th>Source of truth</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Homepage, navigation, actions, FAQ, accessible copy</td>
+      <td>
+        <code>src/i18n.ts</code>
+      </td>
+    </tr>
+    <tr>
+      <td>Site structure, links, SEO origin, sitemap</td>
+      <td>
+        <code>src/config/site.ts</code>
+      </td>
+    </tr>
+    <tr>
+      <td>Long-form docs and blog posts</td>
+      <td>
+        <code>src/content/**/*.mdx</code>
+      </td>
+    </tr>
+    <tr>
+      <td>Block catalog example content</td>
+      <td>
+        <code>src/config/blocks.ts</code>
+      </td>
+    </tr>
+    <tr>
+      <td>Generated preview input</td>
+      <td>
+        <code>src/config/generated/*.json</code>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+Locales should communicate the same facts without preserving sentence structure. Keep product terminology natural in English and use appropriate line breaks and concise headings in Chinese. Avoid large `locale === "zh"` copy branches inside JSX; reserve those for small template UI labels.
+
+<h2 id="locale-routes">Locale routes</h2>
+
+Homepages use `/en/` and `/zh/`; documentation uses `/docs/en/` and `/docs/zh/`. The `Locale` union and `isLocale` validate dynamic params. Invalid docs locales return not found, and public links always use explicit locale paths.
+
+A language switch preserves the article slug: `/docs/en/design-contract/` maps to `/docs/zh/design-contract/`. Links keep the route template and pass locale and slug through typed `params`.
+
+<h2 id="mdx-metadata">MDX metadata</h2>
+
+```js
+export const metadata = {
+  slug: "design-contract",
+  title: "Design contract",
+  description: "A concise card and search summary.",
+  updatedAt: "2026-08-01",
+  readingMinutes: 10,
+  locale: "en",
+  section: "design",
+  order: 4,
+  keywords: ["DESIGN.md", "tokens"],
+  toc: [{ id: "commands", label: "Validation commands" }],
+};
+```
+
+Both locales share slug, order, and section. Every TOC ID corresponds to an explicit heading ID. Routes generate SEO-length titles and descriptions, with optional `seoTitle` and `seoDescription` overrides.
+
+<h2 id="typography">Language typography</h2>
+
+CJK display text uses system fallbacks, a smaller maximum size, more line height, and less negative tracking than Latin. Target roughly 28–36 Han characters or 60–72 Latin characters per body line. Inspect button wrapping, long English tokens, Chinese punctuation, code terms, and fallback fonts.
+
+<h2 id="add-locale">Add a locale</h2>
+
+1. Extend `locales` and all `Locale`-dependent types.
+2. Add a complete dictionary instead of relying on English fallback.
+3. Add homepage routes, documentation content, and language-switch mapping.
+4. Update canonical, `hreflang`, sitemap, `<html lang>`, and metadata.
+5. Define suitable font fallbacks and display metrics.
+6. Add unit and Playwright coverage for routing, metadata, overflow, and mobile navigation.
+
+Only then is the locale first-class.

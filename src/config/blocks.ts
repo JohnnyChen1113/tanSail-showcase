@@ -20,11 +20,22 @@ const heroBlockSchema = blockBaseSchema.extend({
   note: z.string().min(1).optional(),
 });
 
+const logoItemSchema = z.union([
+  z.string().min(1),
+  z.object({
+    name: z.string().min(1),
+    mark: z.string().min(1).max(4),
+    category: z.string().min(1).optional(),
+    tone: z.enum(["neutral", "blue", "aqua", "amber", "violet"]).default("neutral"),
+  }),
+]);
+
 const logoCloudBlockSchema = z.object({
   kind: z.literal("logo-cloud"),
   id: z.string().regex(/^[a-z][a-z0-9-]*$/),
+  variant: z.enum(["grid", "compact-rail"]).default("grid"),
   title: z.string().min(1),
-  logos: z.array(z.string().min(1)).min(4),
+  logos: z.array(logoItemSchema).min(4),
 });
 
 const featureItemSchema = z.object({
@@ -42,24 +53,53 @@ const featureBlockSchema = blockBaseSchema.extend({
 
 const useCaseBlockSchema = blockBaseSchema.extend({
   kind: z.literal("use-cases"),
-  items: z.array(
-    z.object({
-      audience: z.string().min(1),
-      outcome: z.string().min(1),
-      description: z.string().min(1),
-    }),
-  ),
+  variant: z.enum(["list", "catalog"]).default("list"),
+  filterLabel: z.string().min(1).default("Filter scenarios"),
+  allLabel: z.string().min(1).default("All"),
+  items: z
+    .array(
+      z.object({
+        audience: z.string().min(1),
+        outcome: z.string().min(1),
+        description: z.string().min(1),
+        category: z.string().min(1).optional(),
+        icon: z
+          .enum(["app-window", "bot", "book-open", "flask", "globe", "rocket", "users"])
+          .optional(),
+        tags: z.array(z.string().min(1)).max(4).default([]),
+      }),
+    )
+    .min(3),
 });
 
 const testimonialBlockSchema = blockBaseSchema.extend({
   kind: z.literal("testimonials"),
-  items: z.array(
-    z.object({
-      quote: z.string().min(1),
-      name: z.string().min(1),
-      role: z.string().min(1),
-    }),
-  ),
+  variant: z.enum(["grid", "masonry"]).default("grid"),
+  evidence: z
+    .discriminatedUnion("status", [
+      z.object({
+        status: z.literal("demo"),
+        label: z.string().min(1),
+      }),
+      z.object({
+        status: z.literal("verified"),
+        label: z.string().min(1).optional(),
+        sourceUrl: z.url().optional(),
+      }),
+    ])
+    .default({ status: "demo", label: "Sample content — replace before publishing" }),
+  items: z
+    .array(
+      z.object({
+        quote: z.string().min(1),
+        name: z.string().min(1),
+        role: z.string().min(1),
+        initials: z.string().min(1).max(3).optional(),
+        size: z.enum(["short", "medium", "long"]).default("medium"),
+      }),
+    )
+    .min(3)
+    .max(12),
 });
 
 const pricingBlockSchema = blockBaseSchema.extend({
@@ -128,13 +168,14 @@ export type FaqBlockConfig = z.infer<typeof faqBlockSchema>;
 export type FeatureBlockConfig = z.infer<typeof featureBlockSchema>;
 export type HeroBlockConfig = z.infer<typeof heroBlockSchema>;
 export type LandingBlockConfig = z.infer<typeof landingBlockSchema>;
+export type LandingBlockInput = z.input<typeof landingBlockSchema>;
 export type LogoCloudBlockConfig = z.infer<typeof logoCloudBlockSchema>;
 export type PricingBlockConfig = z.infer<typeof pricingBlockSchema>;
 export type StatsBlockConfig = z.infer<typeof statsBlockSchema>;
 export type TestimonialBlockConfig = z.infer<typeof testimonialBlockSchema>;
 export type UseCaseBlockConfig = z.infer<typeof useCaseBlockSchema>;
 
-export function defineLandingBlocks(blocks: Array<LandingBlockConfig>) {
+export function defineLandingBlocks(blocks: Array<LandingBlockInput>) {
   return blockCatalogSchema.parse({ blocks }).blocks;
 }
 
@@ -176,8 +217,25 @@ export const blockCatalog = defineLandingBlocks([
   {
     kind: "logo-cloud",
     id: "logo-cloud",
+    variant: "grid",
     title: "Built with a modern, durable web stack",
     logos: ["TanStack", "React", "Cloudflare", "Tailwind CSS", "shadcn/ui", "Vite+"],
+  },
+  {
+    kind: "logo-cloud",
+    id: "logo-cloud-rail",
+    variant: "compact-rail",
+    title: "Verified technology, presented without borrowed brand assets",
+    logos: [
+      { name: "TanStack Start", mark: "TS", category: "Framework", tone: "amber" },
+      { name: "React 19", mark: "R19", category: "UI", tone: "aqua" },
+      { name: "TypeScript", mark: "TS", category: "Language", tone: "blue" },
+      { name: "Tailwind CSS", mark: "TW", category: "Styles", tone: "aqua" },
+      { name: "shadcn/ui", mark: "UI", category: "Components", tone: "neutral" },
+      { name: "Vite+", mark: "V+", category: "Toolchain", tone: "violet" },
+      { name: "Cloudflare Workers", mark: "CF", category: "Runtime", tone: "amber" },
+      { name: "Playwright", mark: "PW", category: "Browser tests", tone: "blue" },
+    ],
   },
   {
     kind: "features",
@@ -221,9 +279,9 @@ export const blockCatalog = defineLandingBlocks([
     items: [
       {
         icon: "sparkles",
-        title: "Three visual directions",
-        description: "Harbor, Horizon, and Nightwatch reshape the entire experience.",
-        metric: "3 presets",
+        title: "Four visual directions",
+        description: "Harbor, Horizon, Nightwatch, and Ledger reshape the entire experience.",
+        metric: "4 presets",
       },
       {
         icon: "layout",
@@ -271,6 +329,7 @@ export const blockCatalog = defineLandingBlocks([
   {
     kind: "use-cases",
     id: "use-cases",
+    variant: "list",
     eyebrow: "Use cases",
     title: "One foundation, several ways to ship.",
     description: "Start with the audience and make the desired outcome unmistakable.",
@@ -295,11 +354,75 @@ export const blockCatalog = defineLandingBlocks([
     ],
   },
   {
+    kind: "use-cases",
+    id: "use-cases-catalog",
+    variant: "catalog",
+    eyebrow: "Scenario catalog",
+    title: "Start with the kind of site you need to explain.",
+    description:
+      "Filter a practical set of launch paths without turning the starter into a page-builder runtime.",
+    filterLabel: "Filter site scenarios",
+    allLabel: "All scenarios",
+    items: [
+      {
+        audience: "Product",
+        category: "Product",
+        icon: "app-window",
+        outcome: "SaaS launch",
+        description: "Lead with value, capabilities, plans, objections, and a direct action.",
+        tags: ["Product-led", "Pricing"],
+      },
+      {
+        audience: "Open source",
+        category: "Open source",
+        icon: "globe",
+        outcome: "Community project",
+        description: "Explain the foundation, technical proof, adoption path, and documentation.",
+        tags: ["Docs", "Community"],
+      },
+      {
+        audience: "AI",
+        category: "AI",
+        icon: "bot",
+        outcome: "AI tool",
+        description: "Make a new capability, workflow, trust boundary, and next step concrete.",
+        tags: ["Workflow", "Trust"],
+      },
+      {
+        audience: "Research",
+        category: "Research",
+        icon: "flask",
+        outcome: "Lab or research site",
+        description: "Present methods, tools, project evidence, and bilingual research context.",
+        tags: ["Methods", "Bilingual"],
+      },
+      {
+        audience: "Knowledge",
+        category: "Knowledge",
+        icon: "book-open",
+        outcome: "Expert-led product",
+        description:
+          "Build authority through outcomes, structured learning, and replaceable proof.",
+        tags: ["Editorial", "Learning"],
+      },
+      {
+        audience: "Studio",
+        category: "Studio",
+        icon: "users",
+        outcome: "Consulting studio",
+        description: "Frame a point of view, demonstrate the method, and invite a conversation.",
+        tags: ["Services", "Evidence"],
+      },
+    ],
+  },
+  {
     kind: "testimonials",
     id: "testimonials",
+    variant: "grid",
     eyebrow: "Social proof",
     title: "Let specific outcomes carry the recommendation.",
-    description: "Short, concrete quotes are easier to trust than broad praise.",
+    description: "This gallery example is sample content and must be replaced before publishing.",
+    evidence: { status: "demo", label: "Sample content — replace before publishing" },
     items: [
       {
         quote: "We replaced a week of setup with one focused afternoon.",
@@ -319,6 +442,64 @@ export const blockCatalog = defineLandingBlocks([
     ],
   },
   {
+    kind: "testimonials",
+    id: "testimonials-masonry",
+    variant: "masonry",
+    eyebrow: "Replaceable proof pattern",
+    title: "A testimonial wall that tells the truth about its data.",
+    description:
+      "These fictional people demonstrate the composition only. Replace every card with verified feedback before changing its evidence status.",
+    evidence: { status: "demo", label: "Template example · fictional feedback" },
+    items: [
+      {
+        quote:
+          "The block system gave our launch a clear order while leaving the implementation ordinary React.",
+        name: "Maya Chen",
+        role: "Independent builder · example",
+        initials: "MC",
+        size: "medium",
+      },
+      {
+        quote: "We could discuss the design contract before debating individual components.",
+        name: "Alex Morgan",
+        role: "Design engineer · example",
+        initials: "AM",
+        size: "short",
+      },
+      {
+        quote:
+          "The research-site recipe made methods, tools, and bilingual context easier to organize without adding a CMS.",
+        name: "Professor Li",
+        role: "University researcher · example",
+        initials: "LI",
+        size: "long",
+      },
+      {
+        quote: "The Cloudflare target stayed explicit from the first brief to the final build.",
+        name: "Jordan Lee",
+        role: "Product developer · example",
+        initials: "JL",
+        size: "short",
+      },
+      {
+        quote:
+          "English and Chinese felt like two designed routes rather than one page passed through a translation layer.",
+        name: "Lab member Wang",
+        role: "Research team · example",
+        initials: "W",
+        size: "medium",
+      },
+      {
+        quote:
+          "Gallery previews made responsive decisions visible before they reached a production page.",
+        name: "Noah Patel",
+        role: "Frontend contributor · example",
+        initials: "NP",
+        size: "medium",
+      },
+    ],
+  },
+  {
     kind: "pricing",
     id: "pricing",
     eyebrow: "Simple pricing",
@@ -330,7 +511,7 @@ export const blockCatalog = defineLandingBlocks([
         price: "$0",
         cadence: "forever",
         description: "For experiments and open-source work.",
-        features: ["Core blocks", "Three presets", "Cloudflare build"],
+        features: ["Core blocks", "Four presets", "Cloudflare build"],
         action: { label: "Use the starter", href: "#cta-banner" },
         featured: false,
       },
@@ -374,7 +555,7 @@ export const blockCatalog = defineLandingBlocks([
       {
         question: "Do all blocks work with every preset?",
         answer:
-          "Yes. Components consume semantic tokens instead of checking for Harbor, Horizon, or Nightwatch directly.",
+          "Yes. Components consume semantic tokens instead of checking individual preset IDs directly.",
       },
       {
         question: "Does the starter require a backend?",
@@ -388,7 +569,7 @@ export const blockCatalog = defineLandingBlocks([
     id: "stats",
     title: "A compact layer with measurable coverage",
     items: [
-      { value: "3", label: "visual presets" },
+      { value: "4", label: "visual presets" },
       { value: "9", label: "block families" },
       { value: "2", label: "responsive baselines" },
       { value: "0", label: "required secrets" },

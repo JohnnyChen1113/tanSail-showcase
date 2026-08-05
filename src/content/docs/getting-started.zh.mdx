@@ -1,0 +1,135 @@
+export const metadata = {
+  slug: "getting-started",
+  title: "快速开始",
+  description:
+    "安装并运行 TanSail，选择合适的建站入口，完成第一次配置修改并用仓库质量门禁验证结果。",
+  updatedAt: "2026-08-01",
+  readingMinutes: 10,
+  locale: "zh",
+  section: "start",
+  order: 2,
+  keywords: ["安装", "Vite+", "pnpm", "开发服务器", "generated preview"],
+  toc: [
+    { id: "requirements", label: "环境要求" },
+    { id: "install-and-run", label: "安装并运行" },
+    { id: "choose-path", label: "选择建站路径" },
+    { id: "first-change", label: "第一次修改" },
+    { id: "verify", label: "验证结果" },
+  ],
+};
+
+# 快速开始
+
+默认 TanSail 可以在没有账号、数据库、密钥和外部服务的情况下启动。本页会先得到一个可运行基线，再帮助你选择手动配置、自然语言 brief 或参考网站三种路径。
+
+<h2 id="requirements">环境要求</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>工具</th>
+      <th>最低要求</th>
+      <th>用途</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Node.js</td>
+      <td>24 或更新</td>
+      <td>运行 TanStack Start、脚本与测试</td>
+    </tr>
+    <tr>
+      <td>pnpm</td>
+      <td>11 或更新</td>
+      <td>安装锁定依赖</td>
+    </tr>
+    <tr>
+      <td>Vite+</td>
+      <td>
+        提供 <code>vp</code>、<code>vpr</code>、<code>vpx</code>
+      </td>
+      <td>统一开发、检查、测试和构建命令</td>
+    </tr>
+  </tbody>
+</table>
+
+先确认版本：
+
+```bash
+node --version
+pnpm --version
+vp --version
+```
+
+<h2 id="install-and-run">安装并运行</h2>
+
+```bash
+pnpm install
+pnpm dev
+```
+
+开发服务器默认位于 `http://localhost:3000`。访问 `/en/` 与 `/zh/` 检查双语首页，访问 `/docs/zh/` 检查文档，访问 `/recipes/` 比较完整叙事，访问 `/gallery/` 单独检查区块。首次启动不需要创建 `.env`。
+
+如果你使用仓库约定的 Vite+ 简写，同一条启动命令也可以写成：
+
+```bash
+vpr dev
+```
+
+<h2 id="choose-path">选择建站路径</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>你已经有什么</th>
+      <th>推荐路径</th>
+      <th>首先阅读</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>明确文案和页面结构</td>
+      <td>手动修改 typed config</td>
+      <td>网站配置、Blocks 与 Recipes</td>
+    </tr>
+    <tr>
+      <td>品牌、受众和目标的自然语言描述</td>
+      <td>
+        <code>build-tansail-site</code>
+      </td>
+      <td>Agent 工作流</td>
+    </tr>
+    <tr>
+      <td>参考 URL 或截图</td>
+      <td>
+        <code>reference-to-tansail</code>
+      </td>
+      <td>Clean-room 参考流程</td>
+    </tr>
+  </tbody>
+</table>
+
+三条路径不是三套技术栈。它们只影响如何形成配置，最后都使用相同的 blocks、routes、tokens 和质量门禁。
+
+<h2 id="first-change">第一次修改</h2>
+
+先从内容边界开始，不要直接改 Hero JSX：
+
+1. 在 `src/config/site.ts` 修改站点名、生产 origin、导航、动作和页脚。
+2. 在 `src/i18n.ts` 同步修改英文和中文文案。
+3. 在 `src/config/presets.ts` 设置默认 preset，或保留访客可切换行为。
+4. 刷新 `/en/`、`/zh/`，确认标题、按钮和页脚没有语言错位。
+
+站点 metadata schema 会拒绝短于 40 字符的 title、短于 140 字符的 description、带尾部 `/` 的 origin 和无效链接。验证失败时应修正配置，而不是绕过 schema。
+
+<h2 id="verify">验证结果</h2>
+
+完成一个小改动后先运行快速门禁：
+
+```bash
+vp check
+vp test run
+vp build
+```
+
+`vp check` 覆盖格式、lint 和类型；测试检查 schema、路由和内容不变量；构建会生成 Cloudflare Worker 并预渲染公开页面。若只想确认应用是否能启动，仍应在提交或部署前补跑完整门禁。

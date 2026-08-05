@@ -4,7 +4,7 @@ import { presetCatalog, presetIds } from "#/config/presets";
 import { createPresetStyleSheet, isPresetId } from "#/lib/presets";
 
 describe("visual preset catalog", () => {
-  it("keeps atmosphere distinct while preserving layout-safe geometry", () => {
+  it("keeps every atmosphere distinct and allows intentional structural systems", () => {
     expect(presetCatalog.presets.map((preset) => preset.id)).toEqual(presetIds);
 
     const atmosphericDimensions = [
@@ -16,11 +16,14 @@ describe("visual preset catalog", () => {
       expect(new Set(definitions).size).toBe(presetIds.length);
     }
 
+    const harbor = presetCatalog.presets.find((preset) => preset.id === "harbor");
+    const ledger = presetCatalog.presets.find((preset) => preset.id === "ledger");
+
+    expect(harbor).toBeDefined();
+    expect(ledger).toBeDefined();
+
     for (const dimension of ["density", "geometry", "composition"] as const) {
-      const definitions = presetCatalog.presets.map((preset) =>
-        JSON.stringify(preset.tokens[dimension]),
-      );
-      expect(new Set(definitions).size).toBe(1);
+      expect(ledger?.tokens[dimension]).not.toEqual(harbor?.tokens[dimension]);
     }
   });
 
@@ -28,6 +31,7 @@ describe("visual preset catalog", () => {
     expect(isPresetId("harbor", presetCatalog)).toBe(true);
     expect(isPresetId("horizon", presetCatalog)).toBe(true);
     expect(isPresetId("nightwatch", presetCatalog)).toBe(true);
+    expect(isPresetId("ledger", presetCatalog)).toBe(true);
     expect(isPresetId("unknown", presetCatalog)).toBe(false);
   });
 

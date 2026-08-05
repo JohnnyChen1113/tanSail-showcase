@@ -1,0 +1,95 @@
+export const metadata = {
+  slug: "site-configuration",
+  title: "Site configuration",
+  description:
+    "Manage identity, SEO, navigation, actions, footer groups, and sitemap through validated site configuration and three explicit link types.",
+  updatedAt: "2026-08-01",
+  readingMinutes: 11,
+  locale: "en",
+  section: "build",
+  order: 7,
+  keywords: ["siteConfig", "SEO", "navigation", "sitemap", "canonical", "links"],
+  toc: [
+    { id: "config-boundary", label: "Configuration boundary" },
+    { id: "metadata", label: "Metadata and SEO" },
+    { id: "links", label: "Three link types" },
+    { id: "navigation-footer", label: "Navigation and footer" },
+    { id: "discovery", label: "Discovery files" },
+  ],
+};
+
+# Site configuration
+
+`src/config/site.ts` is the source of truth for structural site configuration: identity, metadata, navigation, actions, social links, footer groups, and sitemap. Visible localized marketing copy belongs in `src/i18n.ts`. Keeping those boundaries explicit prevents the header, footer, and routes from owning conflicting product facts.
+
+<h2 id="config-boundary">Configuration boundary</h2>
+
+`siteConfigSchema` validates the contract with Zod. `defineSiteConfig` rejects invalid URLs, empty labels, malformed anchors, unknown configured routes, and sitemap priorities outside the valid range. Fix the source object instead of weakening component types.
+
+Announcements are optional. Add one only for timely information that deserves site-wide space, with an optional validated action.
+
+<h2 id="metadata">Metadata and SEO</h2>
+
+```ts
+metadata: {
+  name: "Your product",
+  title: "A specific 40–60 character search title for the site",
+  description: "A useful 140–160 character description that explains the audience, outcome, differentiator, and next step without keyword stuffing.",
+  siteUrl: "https://example.com",
+  locale,
+  themeColor: { light: "#f4f7fa", dark: "#07111f" },
+}
+```
+
+Use the production origin without a trailing slash. The starter intentionally uses `https://example.com`; replace it before deploying. The schema enforces title and description lengths. Documentation routes also generate page-specific canonical, Open Graph, and `hreflang` output.
+
+<h2 id="links">Three link types</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Kind</th>
+      <th>Use</th>
+      <th>Validation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>route</code>
+      </td>
+      <td>Internal file routes</td>
+      <td>
+        <code>to</code> belongs to the supported route union
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>anchor</code>
+      </td>
+      <td>A section on the current page</td>
+      <td>
+        <code>href</code> matches a section ID
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>external</code>
+      </td>
+      <td>GitHub and other absolute URLs</td>
+      <td>Valid URL with controlled new-tab behavior</td>
+    </tr>
+  </tbody>
+</table>
+
+Extend `routeLinkSchema` when adding a configured internal page. Do not disguise an internal path as an external link to bypass types.
+
+<h2 id="navigation-footer">Navigation and footer</h2>
+
+`navigation` feeds desktop and mobile menus. `actions.primary` should be the clearest next step. Social links must reference real maintained channels. Footer groups organize product, project, and resource links; legal links should only point to policies the project actually provides. Every link has a visible label, and new-tab external links receive a safe `rel` value.
+
+Inspect both locales and mobile navigation after link changes. Short Chinese labels do not guarantee that longer English text will fit.
+
+<h2 id="discovery">Discovery files</h2>
+
+`/sitemap.xml` and `/robots.txt` are generated from the site contract. Include public pages, while keeping Gallery and generated preview tools out of discovery. Add both locale paths for every documentation article. Run `vp test run` and `vp build`; prerender failures should block release.

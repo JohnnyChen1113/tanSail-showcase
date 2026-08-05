@@ -1,0 +1,74 @@
+export const metadata = {
+  slug: "cloudflare-deployment",
+  title: "Deploy to Cloudflare Workers",
+  description:
+    "Use the official Cloudflare Vite plugin and Wrangler for authentication, production configuration, build and deploy, post-release verification, and safe rollback.",
+  updatedAt: "2026-08-01",
+  readingMinutes: 12,
+  locale: "en",
+  section: "ship",
+  order: 12,
+  keywords: ["Cloudflare Workers", "Wrangler", "Vite plugin", "deploy", "prerender", "rollback"],
+  toc: [
+    { id: "deployment-model", label: "Deployment model" },
+    { id: "prepare", label: "Production preparation" },
+    { id: "authenticate", label: "Authenticate and deploy" },
+    { id: "bindings", label: "Bindings and secrets" },
+    { id: "verify-and-rollback", label: "Verify and roll back" },
+  ],
+};
+
+# Deploy to Cloudflare Workers
+
+TanSail uses the official `@cloudflare/vite-plugin` to build a TanStack Start SSR Worker and Wrangler to publish it. Public pages are prerendered during the build while the Worker server entry handles dynamic requests. The core needs no binding or secret.
+
+<h2 id="deployment-model">Deployment model</h2>
+
+The Cloudflare, TanStack Start, and React plugins work together in `vite.config.ts`. `wrangler.jsonc` points to `@tanstack/react-start/server-entry`, enables `nodejs_compat`, and defines the compatibility date and assets binding.
+
+```text
+typed config + routes + MDX
+          │ vp build
+          ▼
+prerendered assets + SSR Worker bundle
+          │ wrangler deploy
+          ▼
+Cloudflare Worker version + workers.dev/custom domain
+```
+
+This is not just a static-directory upload; the server entry, SSR environment, and assets are all part of the output.
+
+<h2 id="prepare">Production preparation</h2>
+
+1. Replace `https://example.com` in `src/config/site.ts` with the production origin, without a trailing slash.
+2. Set a project-owned Worker name in `wrangler.jsonc`; the starter core does not ship a custom domain.
+3. Confirm canonical, Open Graph, sitemap, and robots output share the origin.
+4. Run design, static, unit, and production-build gates.
+
+```bash
+vp run design:check
+vp check
+vp test run
+vp build
+```
+
+<h2 id="authenticate">Authenticate and deploy</h2>
+
+```bash
+pnpm wrangler login
+pnpm deploy
+```
+
+The deploy script builds first, then runs `wrangler deploy`. Successful output includes the Worker version and URL. CI should use a narrowly scoped Cloudflare API token; never commit tokens or real secrets.
+
+<h2 id="bindings">Bindings and secrets</h2>
+
+The default project defines no application binding. Add KV, D1, R2, Queues, or environment variables only for a module that needs them, and update Wrangler types. Store secrets through Wrangler or the deployment platform, not Git.
+
+Cloudflare environment values are request-scoped. Read server-only values inside server functions or middleware, or through the `cloudflare:workers` env boundary. Do not access secrets at module scope where code may enter the client bundle.
+
+<h2 id="verify-and-rollback">Verify and roll back</h2>
+
+Request `/en/`, `/zh/`, both docs indexes, a dynamic docs slug, `/sitemap.xml`, and `/robots.txt`. Check status codes, language, canonical tags, assets, mobile navigation, and 404 behavior. A working workers.dev URL does not prove custom-domain or cache correctness.
+
+Record the current known-good Worker version before release. If a severe regression appears, restore that version through Cloudflare's version/rollback controls, then fix and revalidate locally. Do not make an untracked production-console code edit.

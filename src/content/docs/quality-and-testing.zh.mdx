@@ -1,0 +1,111 @@
+export const metadata = {
+  slug: "quality-and-testing",
+  title: "质量与测试",
+  description:
+    "理解静态检查、设计契约、单元测试、浏览器行为、视觉回归和生产构建各自证明什么以及如何排错。",
+  updatedAt: "2026-08-01",
+  readingMinutes: 11,
+  locale: "zh",
+  section: "ship",
+  order: 11,
+  keywords: ["vp check", "Vitest", "Playwright", "视觉回归", "可访问性", "CI"],
+  toc: [
+    { id: "gate-matrix", label: "质量门禁" },
+    { id: "static-and-unit", label: "静态与单元测试" },
+    { id: "browser", label: "浏览器测试" },
+    { id: "visual", label: "视觉回归" },
+    { id: "release-order", label: "发布前顺序" },
+  ],
+};
+
+# 质量与测试
+
+TanSail 不把“构建成功”当作全部质量。类型、schema、设计契约、路由行为、响应式边界、metadata 和 Cloudflare bundle 分属不同门禁；跳过其中一层会留下另一层无法发现的问题。
+
+<h2 id="gate-matrix">质量门禁</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>命令</th>
+      <th>主要证明</th>
+      <th>不能证明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>vp check</code>
+      </td>
+      <td>格式、lint、TypeScript</td>
+      <td>真实浏览器布局</td>
+    </tr>
+    <tr>
+      <td>
+        <code>vp run design:check</code>
+      </td>
+      <td>DESIGN.md 有效且 CSS export 同步</td>
+      <td>页面是否好看</td>
+    </tr>
+    <tr>
+      <td>
+        <code>vp test run</code>
+      </td>
+      <td>schema、纯函数、内容与路由不变量</td>
+      <td>触摸和 viewport 行为</td>
+    </tr>
+    <tr>
+      <td>
+        <code>pnpm test:browser</code>
+      </td>
+      <td>跨页面导航、locale、metadata、overflow</td>
+      <td>逐像素差异</td>
+    </tr>
+    <tr>
+      <td>
+        <code>pnpm test:visual</code>
+      </td>
+      <td>受控环境中的视觉变化</td>
+      <td>跨 OS 像素一致</td>
+    </tr>
+    <tr>
+      <td>
+        <code>vp build</code>
+      </td>
+      <td>预渲染与 Worker 生产 bundle</td>
+      <td>线上 DNS 和自定义域名</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="static-and-unit">静态与单元测试</h2>
+
+`vp check` 是最快反馈，优先修复 source-level 问题。单元测试使用 Vite+ test API，覆盖 site config、preset、recipe、block、brief、reference brief、i18n、SEO 和结构化数据。文档测试还应确保中英文 slug/order 对齐、TOC 不为空、SEO 输出长度符合契约。
+
+测试失败时不要立即更新 expectation。先判断失败是在暴露回归、测试依据已过期，还是实现与 schema 不一致。
+
+<h2 id="browser">浏览器测试</h2>
+
+Playwright 行为套件验证真实 DOM：双语导航、`html lang`、文档目录、代码复制、mobile drawer、无水平溢出、canonical 和公开页面可达。测试固定 light mode、reduced motion 和 preset，减少与目标无关的随机变化。
+
+```bash
+pnpm exec playwright install chromium
+pnpm test:browser
+```
+
+本机已有稳定 Chrome 时，可以通过项目约定的 `TANSAIL_BROWSER_CHANNEL=chrome` 使用它。
+
+<h2 id="visual">视觉回归</h2>
+
+视觉套件覆盖四个 preset 的 desktop 和 mobile。它适合发现 padding、字体、卡片密度和 responsive composition 的意外变化，但 macOS、Linux、字体光栅化和浏览器版本会造成像素差异。
+
+```bash
+pnpm test:visual
+pnpm test:visual:update
+```
+
+只在设计变化已经人工确认后运行 update。计划中的 Apple Container 流程完成前，macOS baseline 保留为本地检查，CI 以可移植行为测试为主。
+
+<h2 id="release-order">发布前顺序</h2>
+
+推荐顺序是 design check → `vp check` → `vp test run` → browser suite → `vp build`。涉及视觉系统时追加 visual suite；涉及依赖变更时先运行 `vp install`；任何检查修改了 tracked 文件，都应重新查看 diff 后再继续部署。

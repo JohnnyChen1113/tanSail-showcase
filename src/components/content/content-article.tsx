@@ -5,10 +5,10 @@ import { StructuredData } from "#/components/content/structured-data";
 import { PresetToggle } from "#/components/preset-toggle";
 import { ThemeToggle } from "#/components/theme-toggle";
 import { siteConfig } from "#/config/site";
-import type { ContentEntry } from "#/content/content";
+import type { BlogEntry } from "#/content/content";
 import { createArticleJsonLd } from "#/lib/structured-data";
 
-export function ContentArticle({ entry }: { readonly entry: ContentEntry }) {
+export function ContentArticle({ entry }: { readonly entry: BlogEntry }) {
   const { Component, metadata } = entry;
   const jsonLd = createArticleJsonLd({
     title: metadata.title,
@@ -23,8 +23,8 @@ export function ContentArticle({ entry }: { readonly entry: ContentEntry }) {
     <div className="content-article-page">
       <StructuredData data={jsonLd} />
       <header className="content-article-toolbar">
-        <Link to={entry.kind === "blog" ? "/blog/" : "/docs/"}>
-          <ArrowLeftIcon aria-hidden="true" /> Back to {entry.kind}
+        <Link to="/blog/">
+          <ArrowLeftIcon aria-hidden="true" /> Back to blog
         </Link>
         <div>
           <PresetToggle />

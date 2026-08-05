@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { blockCatalog } from "#/config/blocks";
+import { presetIdSchema } from "#/config/presets";
 
 const recipeIdSchema = z.enum([
   "saas-product",
@@ -16,11 +17,14 @@ const blockIdSchema = z.enum([
   "hero-product",
   "hero-minimal",
   "logo-cloud",
+  "logo-cloud-rail",
   "features-grid",
   "features-bento",
   "features-split",
   "use-cases",
+  "use-cases-catalog",
   "testimonials",
+  "testimonials-masonry",
   "pricing",
   "faq",
   "stats",
@@ -33,7 +37,7 @@ const recipeSchema = z.object({
   label: z.string().min(1),
   audience: z.string().min(1),
   summary: z.string().min(1),
-  preset: z.enum(["harbor", "horizon", "nightwatch"]),
+  preset: presetIdSchema,
   blockIds: z.array(blockIdSchema).min(4),
 });
 
@@ -57,11 +61,11 @@ export const recipeCatalog = recipeCatalogSchema.parse({
       preset: "horizon",
       blockIds: [
         "hero-product",
-        "logo-cloud",
+        "logo-cloud-rail",
         "features-grid",
-        "use-cases",
+        "use-cases-catalog",
         "stats",
-        "testimonials",
+        "testimonials-masonry",
         "pricing",
         "faq",
         "cta-banner",
@@ -92,7 +96,7 @@ export const recipeCatalog = recipeCatalogSchema.parse({
       preset: "nightwatch",
       blockIds: [
         "hero-minimal",
-        "logo-cloud",
+        "logo-cloud-rail",
         "features-split",
         "stats",
         "testimonials",
@@ -124,10 +128,10 @@ export const recipeCatalog = recipeCatalogSchema.parse({
       preset: "harbor",
       blockIds: [
         "hero-editorial",
-        "logo-cloud",
-        "use-cases",
+        "logo-cloud-rail",
+        "use-cases-catalog",
         "features-grid",
-        "testimonials",
+        "testimonials-masonry",
         "pricing",
         "faq",
         "cta-banner",
@@ -139,7 +143,7 @@ export const recipeCatalog = recipeCatalogSchema.parse({
       audience: "Specialist consultancies and product studios",
       summary:
         "Frame the point of view, demonstrate the method, and invite a high-intent conversation.",
-      preset: "harbor",
+      preset: "ledger",
       blockIds: [
         "hero-editorial",
         "logo-cloud",

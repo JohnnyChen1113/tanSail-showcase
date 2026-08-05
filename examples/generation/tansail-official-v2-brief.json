@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "brand": {
+    "name": "TanSail",
+    "tagline": "Design the direction. Ship the whole site.",
+    "description": "A design-governed, bilingual TanStack Start foundation built for original product websites on Cloudflare Workers."
+  },
+  "audience": {
+    "primary": "Independent builders, open-source teams, and product studios",
+    "problem": "Teams lose product time rebuilding design systems, multilingual structure, and deployment foundations for every website.",
+    "outcome": "Move from a clear brief to an original, bilingual, production-ready website through one governed workflow."
+  },
+  "pages": [
+    {
+      "name": "English home",
+      "path": "/en",
+      "goal": "Explain the TanSail v0.2.0 workflow and move builders toward the starter repository.",
+      "sections": ["hero", "logo-cloud", "features", "use-cases", "stats", "faq", "cta"]
+    },
+    {
+      "name": "Chinese home",
+      "path": "/zh",
+      "goal": "用自然的中文说明 TanSail v0.2.0 工作流，并引导开发者访问 starter 仓库。",
+      "sections": ["hero", "logo-cloud", "features", "use-cases", "stats", "faq", "cta"]
+    }
+  ],
+  "tone": ["direct", "technical", "editorial"],
+  "preset": "horizon",
+  "recipe": "open-source",
+  "deployment": {
+    "target": "cloudflare-workers",
+    "domain": "tansail-official.bioinfoark.workers.dev"
+  }
+}

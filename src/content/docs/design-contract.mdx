@@ -1,0 +1,103 @@
+export const metadata = {
+  slug: "design-contract",
+  title: "Design contract",
+  description:
+    "Treat DESIGN.md as a versioned interface by understanding its token source, generated CSS, validation commands, and safe cross-component change workflow.",
+  updatedAt: "2026-08-01",
+  readingMinutes: 10,
+  locale: "en",
+  section: "design",
+  order: 4,
+  keywords: ["DESIGN.md", "design tokens", "design check", "semantic variables", "contrast"],
+  toc: [
+    { id: "contract-role", label: "Role of the contract" },
+    { id: "source-and-output", label: "Source and output" },
+    { id: "commands", label: "Validation commands" },
+    { id: "when-to-edit", label: "When to edit it" },
+    { id: "safe-change", label: "Safe change workflow" },
+  ],
+};
+
+# Design contract
+
+Root `DESIGN.md` is a versioned design interface, not a mood board. Its YAML frontmatter stores machine-readable colors, typography, radii, spacing, and component references. Its prose records why the constraints exist and what would break the intended direction.
+
+<h2 id="contract-role">Role of the contract</h2>
+
+The contract owns stable cross-page rules: semantic color roles, body and heading scales, content measure, material boundaries, Chinese typography, and accessibility expectations. It does not record every local margin and it does not replace component APIs.
+
+The current Luminous Harbor contract keeps content opaque and readable, reserves glass for controls and overlays, uses separate Latin and CJK display metrics, and requires decoration to explain hierarchy or interaction.
+
+<h2 id="source-and-output">Source and output</h2>
+
+`DESIGN.md` is the source of truth. `src/styles/design.generated.css` is generated for Tailwind CSS. Editing only the generated file is unsafe because the next export overwrites it and CI reports the contract as stale.
+
+```text
+DESIGN.md
+   │  vp run design:export
+   ▼
+src/styles/design.generated.css
+   │  imported by src/styles.css
+   ▼
+semantic variables consumed by components
+```
+
+<h2 id="commands">Validation commands</h2>
+
+```bash
+vp run design:lint
+vp run design:export
+vp run design:check
+vp run design:diff -- DESIGN.before.md DESIGN.md
+```
+
+<table>
+  <thead>
+    <tr>
+      <th>Command</th>
+      <th>What it checks</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>design:lint</code>
+      </td>
+      <td>Contract structure, references, color, and contrast findings</td>
+    </tr>
+    <tr>
+      <td>
+        <code>design:export</code>
+      </td>
+      <td>Regenerates the CSS token artifact</td>
+    </tr>
+    <tr>
+      <td>
+        <code>design:check</code>
+      </td>
+      <td>Valid contract and synchronized generated CSS</td>
+    </tr>
+    <tr>
+      <td>
+        <code>design:diff</code>
+      </td>
+      <td>Token and prose differences between contracts</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="when-to-edit">When to edit it</h2>
+
+Edit the contract first when a change affects identity, palette, type scale, spacing, shape, depth, or behavior shared by multiple components. A local component repair normally needs no new token. If the same visual role appears across several components, promote it to a semantic token.
+
+Blocks must not branch on preset IDs or hard-code brand colors. They consume roles such as `--background`, `--foreground`, `--accent`, and `--section-space`.
+
+<h2 id="safe-change">Safe change workflow</h2>
+
+1. Preserve the previous contract for comparison.
+2. Change the token and its design rationale in `DESIGN.md`.
+3. Run lint, export, and check.
+4. Inspect all presets, themes, and both locales.
+5. Run browser and visual tests; update baselines only after reviewing the intended change.
+
+A direction that belongs to one preset should be implemented in `src/config/presets.ts`, not elevated into a universal rule.

@@ -1,0 +1,109 @@
+export const metadata = {
+  slug: "quality-and-testing",
+  title: "Quality and testing",
+  description:
+    "Understand what static checks, design validation, unit tests, browser behavior, visual regression, and production builds each prove and how to diagnose failures.",
+  updatedAt: "2026-08-01",
+  readingMinutes: 11,
+  locale: "en",
+  section: "ship",
+  order: 11,
+  keywords: ["vp check", "Vitest", "Playwright", "visual regression", "accessibility", "CI"],
+  toc: [
+    { id: "gate-matrix", label: "Quality gate matrix" },
+    { id: "static-and-unit", label: "Static and unit tests" },
+    { id: "browser", label: "Browser tests" },
+    { id: "visual", label: "Visual regression" },
+    { id: "release-order", label: "Release order" },
+  ],
+};
+
+# Quality and testing
+
+TanSail does not treat a successful build as the entire quality story. Types, schemas, the design contract, route behavior, responsive boundaries, metadata, and the Cloudflare bundle belong to different gates.
+
+<h2 id="gate-matrix">Quality gate matrix</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Command</th>
+      <th>Primarily proves</th>
+      <th>Does not prove</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>vp check</code>
+      </td>
+      <td>Formatting, lint, TypeScript</td>
+      <td>Real browser layout</td>
+    </tr>
+    <tr>
+      <td>
+        <code>vp run design:check</code>
+      </td>
+      <td>Valid contract and synchronized CSS</td>
+      <td>Subjective design quality</td>
+    </tr>
+    <tr>
+      <td>
+        <code>vp test run</code>
+      </td>
+      <td>Schemas, pure functions, content invariants</td>
+      <td>Touch and viewport behavior</td>
+    </tr>
+    <tr>
+      <td>
+        <code>pnpm test:browser</code>
+      </td>
+      <td>Navigation, locale, metadata, overflow</td>
+      <td>Pixel differences</td>
+    </tr>
+    <tr>
+      <td>
+        <code>pnpm test:visual</code>
+      </td>
+      <td>Controlled visual changes</td>
+      <td>Cross-OS pixel identity</td>
+    </tr>
+    <tr>
+      <td>
+        <code>vp build</code>
+      </td>
+      <td>Prerendering and Worker bundle</td>
+      <td>Production DNS</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="static-and-unit">Static and unit tests</h2>
+
+Run `vp check` for the fastest source feedback. Unit tests cover site config, presets, recipes, blocks, briefs, reference briefs, i18n, SEO, and structured data. Documentation tests verify locale parity, TOC coverage, and SEO output length. Investigate whether a failure is a regression, a stale expectation, or an implementation/schema mismatch before editing expectations.
+
+<h2 id="browser">Browser tests</h2>
+
+Playwright validates real DOM behavior: bilingual navigation, `html lang`, docs TOC, code copying, mobile navigation, horizontal overflow, canonical tags, and public routes. Tests fix light mode, reduced motion, and preset values to reduce noise.
+
+```bash
+pnpm exec playwright install chromium
+pnpm test:browser
+```
+
+Use `TANSAIL_BROWSER_CHANNEL=chrome` when the project should run against an installed stable Chrome.
+
+<h2 id="visual">Visual regression</h2>
+
+Visual tests cover four presets at desktop and mobile widths. They reveal accidental typography, spacing, and composition changes, but operating systems and browser builds affect pixels.
+
+```bash
+pnpm test:visual
+pnpm test:visual:update
+```
+
+Update baselines only after reviewing the intended design. Until the Apple Container workflow provides standardized Linux captures, portable behavior tests remain the CI gate and macOS baselines remain a local design check.
+
+<h2 id="release-order">Release order</h2>
+
+Run design check, `vp check`, `vp test run`, the browser suite, and `vp build` in that order. Add visual tests for design changes. Run `vp install` after dependency changes. If any command rewrites tracked files, inspect the diff before deployment.

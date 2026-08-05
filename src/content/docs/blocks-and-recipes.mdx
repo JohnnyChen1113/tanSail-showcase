@@ -1,0 +1,113 @@
+export const metadata = {
+  slug: "blocks-and-recipes",
+  title: "Blocks and recipes",
+  description:
+    "Use nine block families, seventeen stable block IDs, and six page recipes to build a complete narrative and extend the validated schema safely.",
+  updatedAt: "2026-08-01",
+  readingMinutes: 12,
+  locale: "en",
+  section: "design",
+  order: 6,
+  keywords: ["LandingBlock", "Hero", "Features", "recipe", "Gallery", "Zod"],
+  toc: [
+    { id: "block-catalog", label: "Block catalog" },
+    { id: "recipes", label: "Page recipes" },
+    { id: "compose", label: "Compose a page" },
+    { id: "add-block", label: "Extend the system" },
+    { id: "gallery", label: "Use Gallery" },
+  ],
+};
+
+# Blocks and recipes
+
+A block is a normal React component driven by Zod-validated configuration. A recipe is an ordered list of stable block IDs. Together they provide direction without a runtime page builder, global block store, or proprietary content format.
+
+<h2 id="block-catalog">Block catalog</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Family</th>
+      <th>Variants or IDs</th>
+      <th>Narrative role</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Hero</td>
+      <td>editorial, product, minimal</td>
+      <td>Establish the promise and primary action</td>
+    </tr>
+    <tr>
+      <td>Logo cloud</td>
+      <td>logo-cloud, logo-cloud-rail</td>
+      <td>Show a real ecosystem or recognition</td>
+    </tr>
+    <tr>
+      <td>Features</td>
+      <td>grid, bento, split</td>
+      <td>Explain capabilities with different hierarchy</td>
+    </tr>
+    <tr>
+      <td>Use cases</td>
+      <td>use-cases, use-cases-catalog</td>
+      <td>Connect an audience to an outcome</td>
+    </tr>
+    <tr>
+      <td>Proof</td>
+      <td>testimonials, testimonials-masonry, stats</td>
+      <td>Provide verifiable evidence</td>
+    </tr>
+    <tr>
+      <td>Commercial</td>
+      <td>pricing, faq</td>
+      <td>Explain plans and resolve objections</td>
+    </tr>
+    <tr>
+      <td>CTA</td>
+      <td>banner, split</td>
+      <td>Close with one focused next step</td>
+    </tr>
+  </tbody>
+</table>
+
+The catalog contains seventeen stable IDs. Logo clouds support grids and compact rails, use cases support rows and filterable catalogs, and testimonials support grids and masonry walls. Testimonial examples carry an explicit `demo` evidence state and visible sample label; switch to `verified` only after replacing every fictional quote and identity with permissioned feedback. Replace example logos, metrics, and prices with verified facts before publishing a real product site.
+
+<h2 id="recipes">Page recipes</h2>
+
+TanSail includes `saas-product`, `ai-tool`, `open-source`, `indie-product`, `knowledge-business`, and `consulting-studio`. Each encodes a maintained narrative order and suggested preset. The preset is guidance, not an override of a visitor's saved choice.
+
+<h2 id="compose">Compose a page</h2>
+
+```tsx
+import { LandingBlock } from "#/components/blocks/landing-block";
+import { defineLandingBlocks } from "#/config/blocks";
+
+const pageBlocks = defineLandingBlocks([
+  {
+    kind: "hero",
+    id: "launch-hero",
+    variant: "product",
+    eyebrow: "New release",
+    title: "A clear product promise.",
+    description: "Explain the outcome in one short paragraph.",
+    primaryAction: { label: "Start now", href: "#launch-cta" },
+  },
+]);
+
+export function LandingPage() {
+  return pageBlocks.map((block) => <LandingBlock key={block.id} block={block} />);
+}
+```
+
+The schema is the type source. Do not maintain parallel interfaces or accept unbounded content objects in block components.
+
+<h2 id="add-block">Extend the system</h2>
+
+First decide whether an existing family only needs new content or a new variant. A new family requires a discriminated schema, inferred exported type, `LandingBlock` dispatch, semantic styles, catalog data, recipe constraints, and tests. Define mobile order, content limits, empty behavior, and reduced-motion behavior.
+
+A new recipe must start with a Hero, end with a CTA, and reference only catalog IDs. Navigate to recipe detail routes with typed params instead of path interpolation.
+
+<h2 id="gallery">Use Gallery</h2>
+
+Open `/gallery/` to filter categories and compare desktop, tablet, and mobile widths across four presets and three theme settings. Gallery is `noindex,nofollow` and excluded from the sitemap. A project may remove it, but should retain equivalent regression coverage.

@@ -15,6 +15,10 @@ builder or copy the block data into a second format.
 
 Run the project and open `/recipes` to compare them. Each detail route uses a typed path parameter:
 
+Product-led and knowledge recipes use the compact ecosystem rail, filterable scenario catalog,
+and masonry testimonial composition. Their bundled testimonial copy remains visibly marked as
+sample content until a project replaces it with verified evidence.
+
 ```tsx
 <Link to="/recipes/$recipeId" params={{ recipeId: recipe.id }}>
   Preview recipe
@@ -30,7 +34,7 @@ encodes the parameter when it is passed through `params`.
 2. Add one validated recipe entry whose first block is a hero and final block is a CTA.
 3. Reference only IDs present in `src/config/blocks.ts`.
 4. Add or update the recipe tests.
-5. Check the result in all three presets at desktop and mobile widths.
+5. Check the result in all four presets at desktop and mobile widths.
 
 The suggested preset is guidance, not an enforced page setting. Visitors can still choose another
 preset, and their persisted preference remains authoritative.

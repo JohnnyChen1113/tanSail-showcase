@@ -1,10 +1,11 @@
 import {
   CheckCircle2Icon,
   CircleIcon,
+  CloudIcon,
   Code2Icon,
-  FileCode2Icon,
+  FileTextIcon,
   Globe2Icon,
-  LayoutTemplateIcon,
+  PaletteIcon,
   PlayIcon,
   SparklesIcon,
 } from "lucide-react";
@@ -32,10 +33,10 @@ export function ProductPreview({ locale }: { readonly locale: Locale }) {
         </div>
         <div className="product-window-title">
           <SparklesIcon aria-hidden="true" />
-          <span>TanSail Studio</span>
+          <span>TanSail Course Control</span>
         </div>
         <span className="product-status">
-          <CircleIcon aria-hidden="true" /> Cloudflare preview
+          <CircleIcon aria-hidden="true" /> v0.2.0 · Cloudflare
         </span>
       </div>
 
@@ -43,32 +44,30 @@ export function ProductPreview({ locale }: { readonly locale: Locale }) {
         <aside className="product-files" aria-label={isChinese ? "项目文件" : "Project files"}>
           <strong>{isChinese ? "项目" : "Project"}</strong>
           <span className="is-active">
-            <SparklesIcon aria-hidden="true" /> DESIGN.md
+            <FileTextIcon aria-hidden="true" /> SITE-BRIEF.md
+          </span>
+          <span>
+            <PaletteIcon aria-hidden="true" /> DESIGN.md
           </span>
           <span>
             <Globe2Icon aria-hidden="true" /> i18n.ts
           </span>
           <span>
-            <LayoutTemplateIcon aria-hidden="true" /> blocks.ts
-          </span>
-          <span>
-            <FileCode2Icon aria-hidden="true" /> index.tsx
+            <CloudIcon aria-hidden="true" /> wrangler.jsonc
           </span>
         </aside>
 
         <div className="product-editor">
           <div className="product-editor-tab">
-            <Code2Icon aria-hidden="true" /> DESIGN.md
+            <Code2Icon aria-hidden="true" /> SITE-BRIEF.md
           </div>
           <pre aria-hidden="true">
             <code>
-              <span>name:</span> Luminous Harbor{"\n"}
-              <span>principles:</span>
-              {"\n"}
-              {"  "}- language-aware type{"\n"}
-              {"  "}- restrained glass{"\n"}
-              {"  "}- real product evidence{"\n"}
-              <span>quality:</span> WCAG AA
+              <span>brand:</span> TanSail{"\n"}
+              <span>direction:</span> Course Control{"\n"}
+              <span>locales:</span> [en, zh]{"\n"}
+              <span>target:</span> cloudflare-workers{"\n"}
+              <span>evidence:</span> repository
             </code>
           </pre>
           <div className="product-checks">
@@ -76,10 +75,10 @@ export function ProductPreview({ locale }: { readonly locale: Locale }) {
               <CheckCircle2Icon aria-hidden="true" /> design:check
             </span>
             <span>
-              <CheckCircle2Icon aria-hidden="true" /> typecheck
+              <CheckCircle2Icon aria-hidden="true" /> test:browser
             </span>
             <span>
-              <CheckCircle2Icon aria-hidden="true" /> browser
+              <CheckCircle2Icon aria-hidden="true" /> build
             </span>
           </div>
         </div>
@@ -90,14 +89,16 @@ export function ProductPreview({ locale }: { readonly locale: Locale }) {
             <PlayIcon aria-hidden="true" />
           </div>
           <div className="product-canvas-page" lang={isChinese ? "zh-CN" : "en"}>
-            <span className="product-mini-label">TANSAIL</span>
+            <span className="product-mini-label">TANSAIL · v0.2.0</span>
             <strong>
-              {isChinese ? "为你的产品，设定更好的航向。" : "Give your product a better course."}
+              {isChinese
+                ? "先定方向，再把整站交付。"
+                : "Design the direction. Ship the whole site."}
             </strong>
             <p>
               {isChinese
-                ? "清楚的系统，真实的产品画面。"
-                : "A clear system with real product evidence."}
+                ? "设计契约、双语路由与可部署的 Worker。"
+                : "A design contract, bilingual routes, and a deployable Worker."}
             </p>
             <i aria-hidden="true" />
           </div>

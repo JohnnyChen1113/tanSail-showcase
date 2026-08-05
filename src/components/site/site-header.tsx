@@ -22,15 +22,16 @@ export function SiteHeader({
 }) {
   return (
     <header className="site-header">
-      <Brand config={config} locale={locale} />
-
-      <div className="desktop-header-actions">
+      <div className="desktop-header-leading">
+        <Brand config={config} locale={locale} />
         <nav className="desktop-navigation" aria-label={dictionary.a11y.primaryNavigation}>
           {config.navigation.map((link) => (
             <SiteLink key={link.label} className="site-navigation-link" link={link} />
           ))}
         </nav>
+      </div>
 
+      <div className="desktop-header-actions">
         <LanguageSwitcher dictionary={dictionary} locale={locale} />
         <PresetToggle dictionary={dictionary} label={dictionary.a11y.themeSwitcher} />
         <ThemeToggle dictionary={dictionary} label={dictionary.a11y.themeSwitcher} />

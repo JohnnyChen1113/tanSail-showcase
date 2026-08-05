@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const presetIdSchema = z.enum(["harbor", "horizon", "nightwatch"]);
+export const presetIdSchema = z.enum(["harbor", "horizon", "nightwatch", "ledger"]);
 const tokenValueSchema = z
   .string()
   .min(1)
@@ -67,7 +67,7 @@ const presetSchema = z.object({
 
 const presetCatalogSchema = z.object({
   defaultPreset: presetIdSchema,
-  presets: z.array(presetSchema).length(3),
+  presets: z.array(presetSchema).length(4),
 });
 
 export type PresetCatalog = z.infer<typeof presetCatalogSchema>;
@@ -77,7 +77,7 @@ export type PresetId = z.infer<typeof presetIdSchema>;
 export const presetIds = presetIdSchema.options;
 
 export const presetCatalog = presetCatalogSchema.parse({
-  defaultPreset: "harbor",
+  defaultPreset: "horizon",
   presets: [
     {
       id: "harbor",
@@ -142,7 +142,7 @@ export const presetCatalog = presetCatalogSchema.parse({
           heroActionsJustify: "flex-start",
           sectionColumns: "minmax(7rem, 1fr) minmax(0, 3fr)",
           sectionTextAlign: "left",
-          footerColumns: "minmax(0, 1.4fr) minmax(0, 2fr)",
+          footerColumns: "minmax(18rem, 1.4fr) minmax(0, 2fr)",
           ornamentOpacity: "1",
         },
       },
@@ -210,7 +210,7 @@ export const presetCatalog = presetCatalogSchema.parse({
           heroActionsJustify: "flex-start",
           sectionColumns: "minmax(7rem, 1fr) minmax(0, 3fr)",
           sectionTextAlign: "left",
-          footerColumns: "minmax(0, 1.4fr) minmax(0, 2fr)",
+          footerColumns: "minmax(18rem, 1.4fr) minmax(0, 2fr)",
           ornamentOpacity: "1",
         },
       },
@@ -278,8 +278,76 @@ export const presetCatalog = presetCatalogSchema.parse({
           heroActionsJustify: "flex-start",
           sectionColumns: "minmax(7rem, 1fr) minmax(0, 3fr)",
           sectionTextAlign: "left",
-          footerColumns: "minmax(0, 1.4fr) minmax(0, 2fr)",
+          footerColumns: "minmax(18rem, 1.4fr) minmax(0, 2fr)",
           ornamentOpacity: "1",
+        },
+      },
+    },
+    {
+      id: "ledger",
+      label: "Ledger",
+      description: "Graphic, compact, and deliberately structured.",
+      tokens: {
+        colors: {
+          light: {
+            background: "oklch(0.97 0.015 95)",
+            foreground: "oklch(0.16 0.01 80)",
+            card: "oklch(0.995 0.008 95)",
+            cardForeground: "oklch(0.16 0.01 80)",
+            primary: "oklch(0.20 0.01 80)",
+            primaryForeground: "oklch(0.98 0.01 95)",
+            secondary: "oklch(0.91 0.02 95)",
+            mutedForeground: "oklch(0.43 0.015 80)",
+            accent: "oklch(0.79 0.19 128)",
+            accentSoft: "oklch(0.92 0.10 128)",
+            border: "oklch(0.25 0.01 80)",
+          },
+          dark: {
+            background: "oklch(0.12 0.01 80)",
+            foreground: "oklch(0.95 0.015 95)",
+            card: "oklch(0.17 0.01 80)",
+            cardForeground: "oklch(0.95 0.015 95)",
+            primary: "oklch(0.91 0.02 95)",
+            primaryForeground: "oklch(0.12 0.01 80)",
+            secondary: "oklch(0.23 0.015 80)",
+            mutedForeground: "oklch(0.70 0.02 95)",
+            accent: "oklch(0.82 0.19 128)",
+            accentSoft: "oklch(0.28 0.08 128)",
+            border: "oklch(0.70 0.02 95)",
+          },
+        },
+        typography: {
+          bodyFont: '"SFMono-Regular", Consolas, "Liberation Mono", monospace',
+          headingFont: '"Arial Black", "Inter Variable", sans-serif',
+          headingWeight: "800",
+          headingTracking: "-0.035em",
+          eyebrowTracking: "0.04em",
+          eyebrowTransform: "none",
+        },
+        density: {
+          contentMax: "82rem",
+          shellGutter: "clamp(1rem, 3vw, 2.25rem)",
+          headerHeight: "4.25rem",
+          heroSpace: "clamp(4rem, 8vw, 7rem)",
+          sectionSpace: "clamp(3.5rem, 6vw, 6rem)",
+        },
+        geometry: {
+          controlRadius: "0.125rem",
+          panelRadius: "0.25rem",
+          borderWidth: "2px",
+          ornamentRadius: "0",
+        },
+        composition: {
+          heroTitleMax: "52rem",
+          heroCopyMax: "36rem",
+          heroMargin: "auto",
+          heroTextAlign: "center",
+          heroItemAlign: "center",
+          heroActionsJustify: "center",
+          sectionColumns: "1fr",
+          sectionTextAlign: "center",
+          footerColumns: "minmax(18rem, 1fr) minmax(0, 1.6fr)",
+          ornamentOpacity: "0",
         },
       },
     },

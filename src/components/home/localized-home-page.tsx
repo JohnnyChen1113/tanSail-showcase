@@ -1,15 +1,27 @@
-import { ArrowDownIcon, ArrowRightIcon, ArrowUpRightIcon } from "lucide-react";
+import {
+  ArrowDownIcon,
+  ArrowRightIcon,
+  ArrowUpRightIcon,
+  MessageSquareTextIcon,
+  PanelsTopLeftIcon,
+  ScanSearchIcon,
+} from "lucide-react";
 
+import { LandingBlock } from "#/components/blocks/landing-block";
 import { CopyCommand } from "#/components/home/copy-command";
 import { SiteLink } from "#/components/site/site-link";
 import { SiteShell } from "#/components/site/site-shell";
 import { buttonVariants } from "#/components/ui/button";
+import { getHomeProofBlocks } from "#/config/home-proof";
 import { createLocalizedSiteConfig } from "#/config/site";
 import { getDictionary, type Locale } from "#/i18n";
+
+const pathIcons = [MessageSquareTextIcon, ScanSearchIcon, PanelsTopLeftIcon] as const;
 
 export function LocalizedHomePage({ locale }: { readonly locale: Locale }) {
   const dictionary = getDictionary(locale);
   const config = createLocalizedSiteConfig(locale, dictionary);
+  const [ecosystemBlock, scenarioBlock, feedbackBlock] = getHomeProofBlocks(locale);
 
   return (
     <SiteShell config={config} dictionary={dictionary} locale={locale}>
@@ -39,13 +51,34 @@ export function LocalizedHomePage({ locale }: { readonly locale: Locale }) {
         </div>
       </section>
 
-      <section className="proof-strip" aria-label={dictionary.proof.label}>
-        <p>{dictionary.proof.label}</p>
-        <ul>
-          {dictionary.proof.values.map((value) => (
-            <li key={value}>{value}</li>
-          ))}
-        </ul>
+      {ecosystemBlock ? <LandingBlock block={ecosystemBlock} /> : null}
+
+      <section id="paths" className="luminous-section paths-section" aria-labelledby="paths-title">
+        <header className="luminous-section-heading">
+          <p>{dictionary.paths.eyebrow}</p>
+          <div>
+            <h2 id="paths-title">{dictionary.paths.title}</h2>
+            <p>{dictionary.paths.description}</p>
+          </div>
+        </header>
+        <div className="course-path-grid">
+          {dictionary.paths.items.map((item, index) => {
+            const PathIcon = pathIcons[index] ?? PanelsTopLeftIcon;
+
+            return (
+              <article key={item.title}>
+                <div className="course-path-meta">
+                  <span>{item.kicker}</span>
+                  <PathIcon aria-hidden="true" />
+                </div>
+                <h3>{item.title}</h3>
+                <p>{item.description}</p>
+                <code>{item.command}</code>
+                <ArrowRightIcon aria-hidden="true" />
+              </article>
+            );
+          })}
+        </div>
       </section>
 
       <section id="system" className="luminous-section" aria-labelledby="system-title">
@@ -74,6 +107,8 @@ export function LocalizedHomePage({ locale }: { readonly locale: Locale }) {
           ))}
         </div>
       </section>
+
+      {scenarioBlock ? <LandingBlock block={scenarioBlock} /> : null}
 
       <section
         id="workflow"
@@ -121,6 +156,8 @@ export function LocalizedHomePage({ locale }: { readonly locale: Locale }) {
           ))}
         </dl>
       </section>
+
+      {feedbackBlock ? <LandingBlock block={feedbackBlock} /> : null}
 
       <section id="faq" className="luminous-section faq-section" aria-labelledby="faq-title">
         <header className="luminous-section-heading">

@@ -6,6 +6,10 @@ import { createHeadLinks, createMetaTags, createRobotsText, createSitemap } from
 describe("site configuration", () => {
   it("keeps the default configuration valid and link labels unique", () => {
     expect(siteConfigSchema.safeParse(siteConfig).success).toBe(true);
+    expect(siteConfig.metadata.title.length).toBeGreaterThanOrEqual(40);
+    expect(siteConfig.metadata.title.length).toBeLessThanOrEqual(60);
+    expect(siteConfig.metadata.description.length).toBeGreaterThanOrEqual(140);
+    expect(siteConfig.metadata.description.length).toBeLessThanOrEqual(160);
 
     const labels = siteConfig.navigation.map((link) => link.label);
     expect(new Set(labels).size).toBe(labels.length);
@@ -19,6 +23,15 @@ describe("site configuration", () => {
     });
 
     expect(result.success).toBe(false);
+  });
+
+  it("rejects SEO copy outside the recommended display ranges", () => {
+    expect(
+      siteConfigSchema.safeParse({
+        ...siteConfig,
+        metadata: { ...siteConfig.metadata, title: "Too short", description: "Too short" },
+      }).success,
+    ).toBe(false);
   });
 });
 
@@ -39,6 +52,7 @@ describe("SEO output", () => {
 
     expect(sitemap).toContain(`<loc>${siteConfig.metadata.siteUrl}/en/</loc>`);
     expect(sitemap).toContain(`<loc>${siteConfig.metadata.siteUrl}/zh/</loc>`);
+    expect(sitemap).toContain(`<loc>${siteConfig.metadata.siteUrl}/docs/zh/troubleshooting</loc>`);
     expect(sitemap).toContain("<priority>1.0</priority>");
     expect(robots).toContain(`Sitemap: ${siteConfig.metadata.siteUrl}/sitemap.xml`);
   });

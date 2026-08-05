@@ -1,13 +1,15 @@
 # Visual presets
 
 TanSail separates the site content contract from its visual system. The same navigation, sections,
-and metadata can render through three deliberately different presets:
+and metadata can render through four deliberately different presets:
 
 - **Harbor** — editorial typography, warm colors, generous spacing, and a classic two-column
   section rhythm.
 - **Luminous** (`horizon`) — cool blue and teal, product-led typography, and a soft radiant
   atmosphere.
 - **Signal** (`nightwatch`) — graphite, violet, and a technically precise atmosphere.
+- **Ledger** — a compact field-manual system with mono body copy, hard geometry, centered recipe
+  compositions, and a high-signal accent.
 
 Visitors can select a preset from the palette control in the header. TanSail stores the choice in
 `localStorage` and restores the `data-preset` attribute with `ScriptOnce` before the application
@@ -23,9 +25,10 @@ hydrates, avoiding a flash of the default preset.
 4. control, panel, border, and ornament geometry;
 5. hero, section, footer, and ornament composition.
 
-Presets intentionally share density, geometry, and composition. Switching atmosphere must not
-move content, change reading order, or create overlap. Colors and typography may differ, while
-language-specific display rules remain authoritative for CJK content.
+Harbor, Luminous, and Signal intentionally preserve density, geometry, and composition so teams can
+compare atmosphere without moving content. Ledger demonstrates the broader contract: a preset may
+also change structural tokens when the design direction calls for materially different density,
+geometry, and composition. Reading order and semantics must remain stable in every case.
 
 `createPresetStyleSheet` converts the typed catalog into semantic CSS custom properties rendered
 in the document head. Components consume names such as `--background`, `--font-heading`,
@@ -34,7 +37,7 @@ brand-specific color values.
 
 ## Change the default
 
-Set `defaultPreset` in `src/config/presets.ts`. Keep its value equal to one of the three preset IDs.
+Set `defaultPreset` in `src/config/presets.ts`. Keep its value equal to one of the four preset IDs.
 The same value is used for server rendering, the initialization script, and the selector state.
 
 ## Add or rename a preset
@@ -65,7 +68,7 @@ Run the portable browser behavior suite used by CI without pixel comparisons:
 pnpm test:browser
 ```
 
-Run all six comparisons—three presets at desktop and mobile widths:
+Run all eight comparisons—four presets at desktop and mobile widths:
 
 ```bash
 pnpm test:visual

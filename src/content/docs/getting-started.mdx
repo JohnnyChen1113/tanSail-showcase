@@ -1,43 +1,123 @@
 export const metadata = {
   slug: "getting-started",
-  title: "Getting started with TanSail",
-  description: "Install the starter, choose a preset, and make the first content changes.",
-  publishedAt: "2026-07-27",
-  readingMinutes: 4,
+  title: "Getting started",
+  description:
+    "Install and run TanSail, choose the right build path, make the first configuration change, and verify the result with repository quality gates.",
+  updatedAt: "2026-08-01",
+  readingMinutes: 10,
+  locale: "en",
+  section: "start",
+  order: 2,
+  keywords: ["install", "Vite+", "pnpm", "development server", "generated preview"],
+  toc: [
+    { id: "requirements", label: "Requirements" },
+    { id: "install-and-run", label: "Install and run" },
+    { id: "choose-path", label: "Choose a build path" },
+    { id: "first-change", label: "Make the first change" },
+    { id: "verify", label: "Verify the result" },
+  ],
 };
 
-# Getting started with TanSail
+# Getting started
 
-TanSail starts with a small TanStack Start core, a typed site shell, and three complete visual
-directions. It does not require authentication, a database, billing, or environment variables.
+TanSail runs without an account, database, secret, or external service. This guide establishes a working baseline, then helps you choose between manual configuration, a natural-language site brief, and a clean-room reference workflow.
 
-## Run the project
+<h2 id="requirements">Requirements</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Tool</th>
+      <th>Minimum</th>
+      <th>Purpose</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Node.js</td>
+      <td>24 or newer</td>
+      <td>Run TanStack Start, scripts, and tests</td>
+    </tr>
+    <tr>
+      <td>pnpm</td>
+      <td>11 or newer</td>
+      <td>Install the locked dependency graph</td>
+    </tr>
+    <tr>
+      <td>Vite+</td>
+      <td>
+        Provides <code>vp</code>, <code>vpr</code>, and <code>vpx</code>
+      </td>
+      <td>Unified development and validation commands</td>
+    </tr>
+  </tbody>
+</table>
+
+```bash
+node --version
+pnpm --version
+vp --version
+```
+
+<h2 id="install-and-run">Install and run</h2>
 
 ```bash
 pnpm install
 pnpm dev
 ```
 
-Open the local URL printed by Vite+, then use the palette control to compare Harbor, Horizon, and
-Nightwatch.
+The development server is normally available at `http://localhost:3000`. Visit `/en/` and `/zh/` for the localized homepages, `/docs/en/` for documentation, `/recipes/` for complete narratives, and `/gallery/` for isolated blocks. No `.env` file is required for the first run. The repository shorthand for the same server is `vpr dev`.
 
-## Change the identity first
+<h2 id="choose-path">Choose a build path</h2>
 
-Edit `src/config/site.ts` before changing components. The configuration owns metadata, navigation,
-actions, social links, footer groups, and sitemap entries.
+<table>
+  <thead>
+    <tr>
+      <th>What you have</th>
+      <th>Recommended path</th>
+      <th>Read next</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Final copy and page structure</td>
+      <td>Edit typed configuration manually</td>
+      <td>Site configuration; Blocks and recipes</td>
+    </tr>
+    <tr>
+      <td>A natural-language brand and audience brief</td>
+      <td>
+        <code>build-tansail-site</code>
+      </td>
+      <td>Agent workflows</td>
+    </tr>
+    <tr>
+      <td>A reference URL or screenshot</td>
+      <td>
+        <code>reference-to-tansail</code>
+      </td>
+      <td>Clean-room references</td>
+    </tr>
+  </tbody>
+</table>
 
-## Choose a starting composition
+These paths do not create separate stacks. They only change how configuration is formed; all results use the same blocks, routes, tokens, and release gates.
 
-Open `/recipes` to compare complete page narratives, or `/gallery` to inspect each block in
-isolation. Copy the closest recipe and replace content while preserving the validated block shape.
+<h2 id="first-change">Make the first change</h2>
 
-## Verify before shipping
+1. Change the identity, production origin, navigation, actions, and footer in `src/config/site.ts`.
+2. Update both English and Chinese homepage copy in `src/i18n.ts`.
+3. Choose `defaultPreset` in `src/config/presets.ts`, or keep visitor selection enabled.
+4. Refresh both locale routes and inspect the header, actions, and footer.
+
+The site schema rejects titles outside 40–60 characters, descriptions outside 140–160 characters, origins with a trailing slash, malformed anchors, and unsupported internal routes. Correct the source configuration instead of bypassing validation.
+
+<h2 id="verify">Verify the result</h2>
 
 ```bash
-pnpm check
-pnpm test
-pnpm test:visual
-pnpm build
+vp check
+vp test run
+vp build
 ```
 
-The production build prerenders public routes and creates the Cloudflare Worker bundle.
+The first command covers formatting, lint, and TypeScript. Unit tests cover schemas and invariants. The build produces the Cloudflare Worker and prerenders public pages. A successful dev server is useful feedback, but it is not a release gate.

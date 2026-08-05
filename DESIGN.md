@@ -141,6 +141,20 @@ Every landing page should show believable product evidence immediately after the
 Prefer screenshots, live UI compositions, diagrams with a concrete meaning, and measurable proof
 over abstract concentric shapes.
 
+### Official showcase — Course Control
+
+The official showcase uses a course-control narrative: brief, design contract, bilingual routes,
+quality gates, and Worker deployment form one visible delivery path. The hero pairs a short promise
+with an original project workspace rather than a decorative illustration. Subsequent sections show
+three valid starting paths, the governed system behind them, and the exact checks that close the
+loop. English and Chinese preserve the same information architecture while using natural,
+language-specific copy and display metrics.
+
+The composition should feel like an editorial product instrument: calm canvas, strong navigational
+signals, factual status labels, and a small number of luminous controls. Do not turn the page into a
+dashboard, imitate an IDE, or use fake customer evidence. Product proof must come from TanSail's
+versioned contracts, routes, recipes, tests, and Cloudflare output.
+
 ## Elevation & Depth
 
 Depth comes from three layers: the quiet canvas, opaque content surfaces, and a sparse glass control

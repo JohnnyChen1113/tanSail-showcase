@@ -1,0 +1,87 @@
+export const metadata = {
+  slug: "clean-room-references",
+  title: "Clean-room 参考流程",
+  description:
+    "把公开网站或截图转化为可审计的高层设计观察、原创转换和 TanSail brief，而不复制源码、文案或资产。",
+  updatedAt: "2026-08-01",
+  readingMinutes: 12,
+  locale: "zh",
+  section: "build",
+  order: 10,
+  keywords: ["clean-room", "参考网站", "设计研究", "SITE-BRIEF", "DESIGN.proposed"],
+  toc: [
+    { id: "boundary", label: "Clean-room 边界" },
+    { id: "observations", label: "记录观察" },
+    { id: "transformations", label: "原创转换" },
+    { id: "commands", label: "生成命令" },
+    { id: "review", label: "审查清单" },
+  ],
+};
+
+# Clean-room 参考流程
+
+参考网站用于研究层级、排版、节奏和交互原则，不是源码、文案或素材库。TanSail 用结构化 intake 把“观察到什么”和“最终实现什么”分开，使每个参考决策都可审计。
+
+<h2 id="boundary">Clean-room 边界</h2>
+
+任何 reference brief 都必须明确：`copySourceCode: false`、`copyAssets: false`、`exactReproduction: false`。不得迁移 logo、品牌名、客户标记、付费插图、产品截图、长段文案或闭源 bundle；也不能承诺 pixel-perfect reproduction。
+
+允许借鉴的是通用原则，例如三栏文档导航、正文阅读宽度、搜索入口位置、标题层级和移动端目录模式。最终 palette、字体组合、内容、组件和交互细节必须属于目标项目。
+
+<h2 id="observations">记录观察</h2>
+
+每个 URL 或截图分别记录五类信息：
+
+- hierarchy：顶栏、侧栏、正文、页内目录和 CTA 的优先级。
+- typography：标题层级、正文尺寸、行长、代码与 label 关系。
+- color/material：背景、边框、表面、阴影和强调色的角色。
+- interaction：搜索、展开、hover、focus、滚动和响应式行为。
+- avoid：明确不应迁移的品牌特征、资产和实现细节。
+
+描述应是可验证观察，例如“桌面正文约 800px，右侧目录在较窄屏隐藏”，而不是“做得高级一点”。
+
+<h2 id="transformations">原创转换</h2>
+
+Intake 至少需要三项可见转换：不同 grid、原创 palette/type pairing、原创产品画面、不同 section sequence 或不同交互细节。以文档参考为例，可以保留常见三栏信息架构，但使用 TanSail 字标、独立搜索样式、更紧凑卡片和完全原创的 13 页内容。
+
+<table>
+  <thead>
+    <tr>
+      <th>观察</th>
+      <th>可接受转换</th>
+      <th>不可接受做法</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>左侧分组导航便于检索</td>
+      <td>使用 TanSail 自身五组 IA</td>
+      <td>复制对方栏目与标题</td>
+    </tr>
+    <tr>
+      <td>正文含命令和注意事项</td>
+      <td>使用仓库真实脚本写原创教程</td>
+      <td>改几个词后复用原文</td>
+    </tr>
+    <tr>
+      <td>移动端折叠目录</td>
+      <td>实现符合本项目组件系统的 details</td>
+      <td>下载并改造对方前端 bundle</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="commands">生成命令</h2>
+
+```bash
+vp run reference:brief -- --input examples/reference/reference-brief.json
+vp run reference:brief -- --input examples/reference/reference-brief.json --apply
+```
+
+第一条只验证并预览；`--apply` 的固定产物是根目录 `SITE-BRIEF.md` 和 `DESIGN.proposed.md`。输入只允许来自 `examples/reference/` 或 `src/config/generated/`，输出路径不能由 brief 任意指定。
+
+Proposal 不能直接覆盖根 `DESIGN.md`。维护者需要比较两个契约、接受适合本产品的部分，再运行 design export 与 check。
+
+<h2 id="review">审查清单</h2>
+
+确认来源和观察可追溯；至少三项转换在最终页面可见；没有复制文本、资产和品牌；所有产品主张有事实依据；中英文内容属于 TanSail；键盘、触摸、响应式和 reduced motion 已检查；完整质量门禁通过。任何无法确认的客户、指标、域名或许可证都保留为 unresolved requirement。
